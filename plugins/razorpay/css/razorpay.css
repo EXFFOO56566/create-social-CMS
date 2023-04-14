@@ -1,0 +1,21 @@
+.membership-payment-method {
+    text-align: center;
+}
+
+.razorpay-payment-button {
+    background-repeat: no-repeat;
+    background-position: 50% 49%;
+    background-size: 79%;
+    background-color: #FFFFFF;
+    height: 35px;
+    vertical-align: baseline;
+    width: 150px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, .5) inset;
+    color: transparent;
+}
+
+.membership-payment-method li {
+    width: 25% !important;
+}

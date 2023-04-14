@@ -1,0 +1,338 @@
+<div id="marketplace-listing" data-location="<?php echo addslashes($listing['location']) ?>">
+	<div class="row">
+		<div id="marketplace-listing-top-column" class="col-md-12">
+			<a href="<?php echo url() ?>" ajax="true"><?php echo lang('marketplace::home') ?></a>
+			<i class="ion-ios-arrow-right"></i>
+			<a href="<?php echo url_to_pager('marketplace') ?>" ajax="true"><?php echo lang('marketplace::marketplace') ?></a>
+			<i class="ion-ios-arrow-right"></i>
+			<a href="<?php echo url_to_pager('marketplace') ?>?c=<?php echo $listing['category_id'] ?>" ajax="true"><?php echo lang($listing['category_title']) ?></a>
+			<i class="ion-ios-arrow-right"></i>
+			<a href="<?php echo url_to_pager('marketplace-listing', array('slug' => $listing['slug'])) ?>" ajax="true"><?php echo lang($listing['title']) ?></a>
+		</div>
+	</div>
+	<div class="row">
+		<div id="marketplace-listing-left-column" class="col-md-8">
+			<div class="box">
+				<div class="modal fade" id="marketplace-image-preview-modal" tabindex="-1" role="dialog" aria-labelledby="marketplace-image-preview-modal-label" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="marketplace-image-preview-modal-label"><?php echo lang('marketplace::image-preview') ?></h4>
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">&times;</span><span class="sr-only"><?php echo lang('marketplace::close') ?></span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<img src="" id="marketplace-image-preview">
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('marketplace::close') ?></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="marketplace-image-delete-modal" tabindex="-1" role="dialog" aria-labelledby="marketplace-image-delete-modal-label" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="marketplace-image-delete-modal-label"><?php echo lang('marketplace::delete-image') ?></h4>
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">&times;</span><span class="sr-only"><?php echo lang('marketplace::close') ?></span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form id="marketplace-image-delete-form" action="<?php echo url_to_pager('marketplace-delete-image') ?>?listing_id=<?php $listing['id'] ?>" method="post" class="adm ajax-form">
+									<?php CSRFProtection::embed() ?>
+									<div class="alert alert-warning">
+										<img src="" id="image-delete-preview" />
+										<?php echo lang('marketplace::delete-image-warning') ?>
+									</div>
+									<div class="submit">
+										<input type="submit" value="<?php echo lang('marketplace::delete') ?>" class="btn btn-danger" />
+									</div>
+									<input type="hidden" name="val[id]" value="" id="image-delete-id" />
+									<input type="hidden" name="val[listing_id]" value="<?php echo $listing['id'] ?>" />
+									<input type="hidden" name="val[type]" value="delete_image" />
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('marketplace::close') ?></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div>
+					<?php if($listing['featured'] == 1): ?>
+						<div class="marketplace-featured-badge"><?php echo lang('marketplace::featured') ?></div>
+					<?php endif ?>
+					<?php if($listing['image']): ?>
+						<?php $listing_images[] = array('image' => $listing['image']) ?>
+					<?php endif; ?>
+					<div class="marketplace-listing-images slide">
+						<?php if($listing_images): ?>
+							<?php foreach($listing_images as $listing_image): ?>
+								<div class="marketplace-listing-image-container">
+									<img src="<?php echo url_img($listing_image['image'], 920) ?>" class="marketplace-listing-image" />
+								</div>
+							<?php endforeach ?>
+						<?php else: ?>
+							<img src="<?php echo img('marketplace::images/no_image.jpg') ?>" class="marketplace-listing-image">
+						<?php endif; ?>
+					</div>
+				</div>
+				<?php if(count($listing_images) > 1): ?>
+				<div class="marketplace-listing-images nav">
+					<?php foreach($listing_images as $listing_image): ?>
+						<div class="marketplace-listing-image-container">
+							<img src="<?php echo url_img($listing_image['image'], 920) ?>" class="marketplace-listing-image" />
+							<?php if(isset($listing_image['id']) && $listing['user_id'] == get_userid()): ?>
+								<a href="<?php echo url_to_pager('marketplace-delete-image') ?>?id=<?php echo $listing_image['id'] ?>&listing_id=<?php echo  $listing['id'] ?>" class="ion-android-close marketplace-delete-image" data-id="<?php echo $listing_image['id'] ?>" data-src="<?php echo url_img($listing_image['image'], 75) ?>"></a>
+							<?php endif ?>
+						</div>
+					<?php endforeach ?>
+				</div>
+				<?php endif; ?>
+				<div class="box-content">
+					<div><i class="ion-eye"></i> <?php echo $listing['nov'] ?> <?php echo lang('marketplace::views') ?></div>
+					<div><?php echo output_text($listing['description'], array('html' => false, 'length' => 300)) ?></div>
+					<?php if(trim($listing['tags'], ',') != ''): ?>
+						<div id="listing-tags" class="listing-tags listing-detail">
+							<?php foreach(explode(',', trim($listing['tags'], ',')) as $tag): ?>
+								#<?php echo trim($tag) ?>
+							<?php endforeach ?>
+						</div>
+					<?php endif ?>
+					<small>
+						<span><?php echo lang('marketplace::published') ?>: </span>
+						<span class="feed-time">
+							<span class="timeago " title="<?php echo date('c', strtotime($listing['date'])) ?>">
+								<?php echo date('c', strtotime($listing['date'])) ?>
+							</span>
+						</span>
+					</small>
+				</div>
+			</div>
+			<div class="feed-footer">
+				<?php if(plugin_loaded('comment')): ?>
+					<div class="field-footer feed-comment-container">
+						<?php if(count_comments('listing', $listing['id']) > config('pagination-limit-comments', 4)): ?>
+							<a id="comment-view-more-button-listing-<?php echo $listing['id'] ?>" class="comment-view-more-button comment-view-more-button-listing-<?php echo $listing['id'] ?>" onclick="return show_more_comment('listing', '<?php echo $listing['id'] ?>', 'comment-view-more-indicator-<?php echo $listing['id'] ?>')" href=""><?php echo lang('view-previous-comments') ?></a>
+							<img class="comment-view-more-indicator" id="comment-view-more-indicator-<?php echo $listing['id'] ?>" src="<?php echo img('images/loading.gif') ?>" />
+						<?php endif ?>
+						<div data-offset="<?php echo config('pagination-limit-comments', 4) ?>" data-limit="<?php echo config('pagination-limit-comments', 4) ?>" class="comment-lists comment-lists-listing-<?php echo $listing['id'] ?>" id="">
+							<?php foreach(get_comments('listing', $listing['id'], config('pagination-limit-comments', 4), 0, $listing) as $comment): ?>
+								<?php echo view('comment::display', array('comment' => $comment)) ?>
+							<?php endforeach; ?>
+						</div>
+						<?php echo view('comment::editor', array('type' => 'listing', 'typeId' => $listing['id'])) ?>
+					</div>
+				<?php endif ?>
+			</div>
+		</div>
+		<div id="marketplace-listing-right-column" class="col-md-4">
+			<div class="box">
+				<div class="box-content">
+					<?php $host = marketplace_get_listing_host($listing); ?>
+					<img class="marketplace-listing-avatar" src="<?php echo $host['image'] ?>" />
+					<a class="marketplace-listing-username" href="<?php echo $host['link'] ?>"><?php echo $host['name'] ?></a>
+				</div>
+			</div>
+			<div class="box">
+				<div class="box-content">
+					<div class="marketplace-listing-price"><?php echo $listing['price'] ? config('currency', '$').$listing['price'] : lang('marketplace::free') ?></div>
+					<h5><?php echo $listing['title'] ?></h5>
+					<?php if($listing['contact']): ?>
+						<div><a href="#" class="btn btn-success btn-block marketplace-contact" title="<?php echo lang('marketplace::show-contact') ?>" data-contact="<?php echo $listing['contact'] ?>"><?php echo lang('marketplace::show-contact') ?></a></div>
+					<?php endif ?>
+				</div>
+			</div>
+			<div class="box">
+				<div class="box-content">
+					<div>
+						<i class="ion-ios-location"></i>
+						<?php echo $listing['location'] ?>
+					</div>
+					<div id="marketplace-listing-map"></div>
+				</div>
+			</div>
+			<div class="box">
+				<div class="box-content">
+					<div class="marketplace-listing-buttons">
+						<?php if($listing['user_id'] == get_userid()): ?>
+							<a class="btn btn-info btn-sm ion-edit" href="<?php echo url_to_pager('marketplace-edit-listing') ?>?id=<?php echo $listing['id'] ?>" data-toggle="modal" data-target="#marketplace-edit-modal" title="<?php echo lang('marketplace::edit') ?>"></a>
+							<div id="marketplace-edit-modal" class="modal fade" role="dialog">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<p class="modal-title"><?php echo lang('marketplace::edit-listing') ?></p>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+										<div class="modal-body">
+											<?php if(!is_loggedIn()): ?>
+												<span class="error"><?php echo lang('marketplace::marketplace-create-login-error') ?></span>
+											<?php else: ?>
+												<?php $categories = marketplace_get_categories(); ?>
+												<form action="<?php echo url_to_pager('marketplace-edit-listing') ?>?id=<?php echo $listing['id'] ?>" method="post" enctype="multipart/form-data" class="ajax-form">
+													<input type="hidden" name="val[type]" value="edit_listing"/>
+													<input type="hidden" name="val[id]" value="<?php echo $listing['id'] ?>"/>
+													<input type="hidden" name="val[image]" value="<?php echo $listing['image'] ?>"/>
+													<?php CSRFProtection::embed() ?>
+													<div class="field">
+														<div class="top">
+															<label class="control-label" for="val[category]"><?php echo lang('marketplace::category') ?>:</label>
+														</div>
+														<div class="bottom">
+															<div class="magic-select" data-name="val[category_id]" data-width="200px">
+																<input type="hidden" name="val[category_id]" value="<?php echo $listing['category_id'] ?>" class="magic-select-value"/>
+																<?php $categories = marketplace_get_categories(); ?>
+																<?php if($categories): ?>
+																	<div class="magic-select-toggle">
+																		<?php echo lang($listing['category_title']) ?>
+																	</div>
+																<?php endif ?>
+																<div class="magic-select-content">
+																	<?php foreach($categories as $category): ?>
+																		<div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+																			<?php echo lang($category['title']) ?>
+																		</div>
+																	<?php endforeach ?>
+																</div>
+															</div>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-category-desc') ?></p>
+														</div>
+													</div>
+													<div class="field">
+														<div class="top">
+															<label class="control-label" for="val[title]"><?php echo lang('marketplace::title') ?>: </label>
+														</div>
+														<div class="bottom">
+															<input name="val[title]" type="text" value="<?php echo $listing['title'] ?>" class="form-control" required/>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-title-desc') ?></p>
+														</div>
+													</div>
+													<div class="top">
+														<div class="top">
+															<label class="control-label" for="val[description]"><?php echo lang('marketplace::description') ?>: </label>
+														</div>
+														<div class="bottom">
+															<textarea name="val[description]" class="form-control" maxlength="500"><?php echo $listing['description'] ?></textarea>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-description-desc') ?></p>
+														</div>
+													</div>
+													<div class="field">
+														<div class="top">
+															<label class="control-label" for="val[tags]"><?php echo lang('marketplace::tags') ?>: </label>
+														</div>
+														<div class="bottom">
+															<input name="val[tags]" value="<?php echo $listing['tags'] ?>" type="text" class="form-control" maxlength="128"/>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-tags-desc') ?>.</p>
+														</div>
+													</div>
+													<div class="field">
+														<div class="top">
+															<label class="control-label" for="val[location]"><?php echo lang('marketplace::location') ?>: </label>
+														</div>
+														<div class="bottom">
+															<input type="text" name="val[location]" value="<?php echo $listing['location'] ?>" class="form-control marketplace-geocomplete" required/>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-location-desc') ?>.</p>
+														</div>
+													</div>
+													<div class="field">
+														<div class="top">
+															<label class="control-label" for="val[contact]"><?php echo lang('marketplace::contact') ?>: </label>
+														</div>
+														<div class="bottom">
+															<input type="text" name="val[contact]" value="<?php echo $listing['contact'] ?>" class="form-control" placeholder="<?php echo lang('marketplace::contact') ?>"/>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-contact-desc') ?>.</p>
+														</div>
+													</div>
+													<div class="field">
+														<div class="top">
+															<label class="control-label" for="val[link]"><?php echo lang('marketplace::link') ?>: </label>
+														</div>
+														<div class="bottom">
+															<input type="url" name="val[link]" value="<?php echo $listing['link'] ?>" class="form-control" placeholder="http://domain.com"/>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-link-desc') ?>.</p>
+														</div>
+													</div>
+													<div class="field">
+														<div class="top">
+															<label class="control-label" for="val[price]"><?php echo lang('marketplace::price') ?>: </label>
+														</div>
+														<div class="bottom">
+															<input name="val[price]" value="<?php echo $listing['price'] ?>" type="text" class="form-control" placeholder="<?php echo config('currency', '$') ?> 0.00"/>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-price-desc') ?>.</p>
+														</div>
+													</div>
+													<?php fire_hook("listing.create.more.fields", null, array()); ?>
+													<div class="field">
+														<div class="top">
+															<label class="control-label" for="image"><?php echo lang('marketplace::image') ?>: </label>
+														</div>
+														<div class="bottom">
+															<div class="magic-input-image-preview" data-name="image" data-image="<?php echo $listing['image'] ? url_img($listing['image'], 200) : '' ?>">
+																<span class="dimension"></span>
+															</div>
+															<p class="form-description"><?php echo lang('marketplace::edit-listing-image-desc') ?></p>
+														</div>
+													</div>
+													<div class="submit">
+														<input type="submit" value="<?php echo lang('marketplace::save') ?>" class="btn btn-info action-button"/>
+													</div>
+												</form>
+											<?php endif ?>
+										</div>
+									</div>
+								</div>
+							</div>
+							<a href="<?php echo url_to_pager('marketplace-delete-listing') ?>?id=<?php echo $listing['id'] ?>" class="btn btn-danger btn-sm ion-android-delete" ajax="true" title="<?php echo lang('marketplace::remove') ?>"></a>
+							<?php if(config('max-num-listing-photos', 5) > count($listing_images)): ?>
+								<a href="<?php echo url_to_pager('marketplace-add-images') ?>?id=<?php echo $listing['id'] ?>" class="btn btn-primary btn-sm ion-images" data-toggle="modal" data-target="#marketplace-add-images-modal" title="<?php echo lang('marketplace::add-image') ?>"></a>
+								<div id="marketplace-add-images-modal" class="modal fade" role="dialog">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<form action="<?php echo url_to_pager('marketplace-add-images') ?>" method="post" enctype="multipart/form-data" class="ajax-form">
+												<?php CSRFProtection::embed() ?>
+												<input type="hidden" name="val[type]" value="add_images" />
+												<input type="hidden" name="val[listing_id]" value="<?php echo $listing['id'] ?>" />
+												<div class="modal-header">
+													<h4 class="modal-title"><?php echo lang('marketplace::add-listing-images') ?></h4>
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+												</div>
+												<div class="modal-body">
+													<div class="field">
+														<div class="top">
+															<label class="control-label"><?php echo lang('marketplace::images') ?>: </label>
+														</div>
+														<div class="bottom">
+															<input type="file" name="images[]" multiple class="marketplace-select-images" />
+															<p class="help-block"><?php echo lang('marketplace::add-listing-images-desc') ?></p>
+															<div id="marketplace-form-images-container"></div>
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<div class="submit">
+														<input type="submit" value="<?php echo lang('marketplace::add-images') ?>" class="btn btn-info action-button"/>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							<?php endif ?>
+                            <?php fire_hook("market.button.more",$listing,array('ads')) ?>
+						<?php endif ?>
+						<?php if(filter_var($listing['link'], FILTER_VALIDATE_URL)): ?>
+							<a href="<?php echo $listing['link'] ?>" class="btn btn-success btn-sm ion-link" title="<?php echo lang('marketplace::link') ?>"></a>
+						<?php endif ?>
+						<?php if(is_loggedIn() and plugin_loaded('report')): ?>
+							<a data-type="marketplace-listing" data-link="<?php echo url_to_pager('marketplace-listing', array('slug' => $listing['slug'])) ?>" class="report-btn btn btn-secondary" href=""><i class="ion-flag"></i></a>
+						<?php endif ?>
+						<?php echo plugin_loaded('sharer') ? view('sharer::share_link') : '' ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

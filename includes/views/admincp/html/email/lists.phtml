@@ -1,0 +1,84 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang("mailing-list") ?>
+	</div>
+	<div class="wrapper-content">
+		<form method="post" action="" enctype="multipart/form-data" class="" style="margin: 20px auto;width: 70%">
+			<?php CSRFProtection::embed() ?>
+			<?php if($message): ?>
+				<div class="alert alert-info"><?php echo $message ?></div>
+			<?php endif ?>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('mail-to') ?></label>
+				<div class="col-sm-9">
+					<select onchange="open_mailing_selector(this)" class="c-select" name="val[to]">
+						<option value="all"><?php echo lang('all-members') ?></option>
+						<option value="selected"><?php echo lang('selected-members') ?></option>
+						<option value="non-active"><?php echo lang('non-active-members') ?></option>
+						<?php if(plugin_loaded('sitereseter')): ?>
+							<option value="backups">Backup Emails</option>
+						<?php endif ?>
+					</select>
+					<div class="mail-to-selectors" id="mail-selected-members">
+						<div class="">
+							<input onkeyup="suggest_mail_users(this)" type="text" placeholder="Type member name"/>
+						</div>
+						<div class="user-suggestion"></div>
+					</div>
+					<div class="mail-to-selectors" id="mail-non-active-members">
+						<label class="form-control-label"><?php echo lang('non-active-for-last') ?></label>
+						<div class="row">
+							<div class="col-sm-6">
+								<input type="text" name="val[non][number]" value="1" class="form-control"/>
+							</div>
+							<div class="col-sm-6">
+								<select class="c-select" name="val[non][type]">
+									<option value="month"><?php echo lang('month') ?></option>
+									<option value="day"><?php echo lang('day') ?></option>
+									<option value="year"><?php echo lang('year') ?></option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('mail-subject') ?></label>
+				<div class="col-sm-9">
+					<input type="text" name="val[subject]" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('mail-body') ?></label>
+				<div class="col-sm-9">
+					<textarea name="val[body]" class="ckeditor"></textarea>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-3">
+					<label class="form-control-label"><?php echo lang('enable-subscription') ?></label>
+					<p class="form-description" style="padding-left: .75rem;"><?php echo lang('enable-subscription-desc') ?></p>
+				</div>
+				<div class="col-sm-9" style="padding-top: .4375rem;">
+					<div class="input-field col s10">
+						<p>
+							<label for="subscription-yes" class="c-input c-checkbox">
+								<input <?php echo config('email-enable-subscription') ? 'checked' : '' ?> value="1" name="val[subscription]" type="radio" id="subscription-yes">
+								<span class="c-indicator"></span>
+								<?php echo lang('yes') ?>
+							</label>
+						</p>
+						<p>
+							<label for="subscription-no" class="c-input c-checkbox">
+								<input <?php echo config('email-enable-subscription') ? '' : 'checked' ?> value="0" name="val[subscription]" type="radio" id="subscription-no">
+								<span class="c-indicator"></span>
+								<?php echo lang('no') ?>
+							</label>
+						</p>
+					</div>
+				</div>
+			</div>
+			<button class="btn btn-info"><?php echo lang('send-mail') ?></button>
+		</form>
+	</div>
+</div>

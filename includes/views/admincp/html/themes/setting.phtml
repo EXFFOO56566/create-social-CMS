@@ -1,0 +1,45 @@
+<div class="wrapper" id="theme-setting">
+	<div class="wrapper-title">
+		<?php echo lang('theme-settings') ?>
+		<span><?php echo lang('theme-settings-description') ?></span>
+	</div>
+	<div class="wrapper-content">
+		<form enctype="multipart/form-data" action="" class="col s12" method="post">
+			<?php CSRFProtection::embed() ?>
+			<input type="hidden" value="1" name="val[theme_settings]"/>
+			<div class="row">
+				<div class="col-md-5">
+					<h6><?php echo lang('upload-site-logo') ?></h6>
+					<p class="form-description"><?php echo lang('site-logo-description') ?></p>
+				</div>
+				<div class="col-md-7">
+					<?php $logo = config('site-logo');
+					$logo = (!$logo) ? img("images/logo.png") : url_img($logo); ?>
+					<div class="theme-setting-image-container">
+						<img id="site-logo-preview" src="<?php echo $logo ?>" class="theme-setting-image-preview"/>
+						<span id="site-logo-dimension" class="theme-setting-image-dimension"></span>
+						<span id="site-logo-reset" class="theme-setting-image-reset reset-image-preview ion-close" data-preview="site-logo-preview" data-original-image="<?php echo $logo ?>" data-image-handle="site-logo-input" data-dimension="site-logo-dimension"></span>
+					</div>
+					<input id="site-logo-input" name="logo" type="file" class="theme-setting-image-input auto-preview-image" data-preview="site-logo-preview" data-dimension="site-logo-dimension" data-reset="site-logo-reset"/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-5">
+					<h6><?php echo lang('upload-site-favicon') ?></h6>
+				</div>
+				<div class="col-md-7">
+					<?php $favicon = config('site-favicon');
+					$favicon = (!$favicon) ? img("images/favicon.ico") : url_img($favicon); ?>
+					<div class="theme-setting-image-container">
+						<img id="site-favicon-preview" src="<?php echo $favicon ?>" class="theme-setting-image-preview"/>
+						<span id="site-favicon-dimension" class="theme-setting-image-dimension"></span>
+						<span id="site-favicon-reset" class="theme-setting-image-reset reset-image-preview ion-close" data-preview="site-favicon-preview" data-original-image="<?php echo $favicon ?>" data-image-handle="site-favicon-input" data-dimension="site-favicon-dimension"></span>
+					</div>
+					<input id="site-favicon-input" name="favicon" type="file" class="theme-setting-image-input auto-preview-image" data-preview="site-favicon-preview" data-dimension="site-favicon-dimension" data-reset="site-favicon-reset"/>
+				</div>
+			</div>
+			<?php theme_extend('theme.settings.form') ?>
+			<button class="waves-effect waves-light btn"><?php echo lang("save-settings") ?></button>
+		</form>
+	</div>
+</div>

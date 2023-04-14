@@ -1,0 +1,5 @@
+<li>
+	<a class="media" href="<?php echo url_to_pager('paypal-process') ?>?id=<?php echo $id ?>&price=<?php echo $price ?>&name=<?php echo $name ?>&description=<?php echo $description ?>&type_r=<?php echo $type ?>&return_url=<?php echo urlencode($return_url) ?>&cancel_url=<?php echo urlencode($cancel_url) ?>&coupon=<?php echo $coupon ?>&action=paypal<?php echo (config('enable-paypal-sandbox', true)) ? '&sandbox=1' : '&sandbox=0' ?><?php echo  (input('webview')) ? "&webview=true&api_userid=".input('api_userid') : '';?>">
+		<img src="<?php echo img('images/paypal-button.png') ?>"/>
+	</a>
+</li>

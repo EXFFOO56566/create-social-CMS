@@ -1,0 +1,101 @@
+<?php $filter = input('val', $_GET); load_functions('country'); $countries = get_countries(); ?>
+<div class="people people-filter box">
+	<form action="" method="post">
+		<?php CSRFProtection::embed() ?>
+		<?php if(config('enable-feature-filter')): ?>
+			<div class="row form-group">
+				<div class="col-sm-5"><?php echo lang('feature') ?></div>
+				<div class="col-sm-7">
+					<select name="val[feature]" class="form-control filter-input">
+						<option value="both" <?php if(isset($filter['feature']) && $filter['feature'] == 'both'): ?>selected<?php endif ?>><?php echo lang('both') ?></option>
+						<option value="featured" <?php if(isset($filter['feature']) && $filter['feature'] == 'featured'): ?>selected<?php endif ?>><?php echo lang('featured') ?></option>
+						<option value="not-featured" <?php if(isset($filter['feature']) && $filter['feature'] == 'not-featured'): ?>selected<?php endif ?>><?php echo lang('not-featured') ?></option>
+					</select>
+				</div>
+			</div>
+		<?php endif ?>
+		<?php if(config('enable-gender-filter') && config('enable-gender', true)): ?>
+			<div class="row form-group">
+				<div class="col-sm-5"><?php echo lang('gender') ?></div>
+				<div class="col-sm-7">
+					<select name="val[gender]" class="form-control filter-input">
+						<option value="both" <?php if(isset($filter['gender']) && $filter['gender'] == 'both'): ?>selected<?php endif ?>><?php echo lang('both') ?></option>
+						<option value="male" <?php if(isset($filter['gender']) && $filter['gender'] == 'male'): ?>selected<?php endif ?>><?php echo lang('male') ?></option>
+						<option value="female" <?php if(isset($filter['gender']) && $filter['gender'] == 'female'): ?>selected<?php endif ?>><?php echo lang('female') ?></option>
+						<?php fire_hook('people.gender', $filter, array($filter)); ?>
+					</select>
+				</div>
+			</div>
+		<?php endif ?>
+		<?php if(config('enable-online-filter')): ?>
+			<div class="row form-group">
+				<div class="col-sm-5"><?php echo lang('online-status') ?></div>
+				<div class="col-sm-7">
+					<select name="val[online_status]" class="form-control filter-input">
+						<option value="both" <?php if(isset($filter['online_status']) && $filter['online_status'] == 'both'): ?>selected<?php endif ?>><?php echo lang('both') ?></option>
+						<option value="online" <?php if(isset($filter['online_status']) && $filter['online_status'] == 'online'): ?>selected<?php endif ?>><?php echo lang('online') ?></option>
+						<option value="offline" <?php if(isset($filter['online_status']) && $filter['online_status'] == 'offline'): ?>selected<?php endif ?>><?php echo lang('offline') ?></option>
+					</select>
+				</div>
+			</div>
+		<?php endif ?>
+		<?php if(config('enable-age-filter')): ?>
+			<div class="row form-group">
+				<div class="col-sm-5"><?php echo lang('max-age') ?></div>
+				<div class="col-sm-7">
+					<select name="val[from_age]" class="form-control filter-input">
+						<option value="any" <?php if(isset($filter['from_age']) && $filter['from_age'] == 'any'): ?>selected<?php endif ?>><?php echo lang('any') ?></option>
+						<?php for($i = 13; $i <= 99; $i++): ?>
+							<option value="<?php echo $i ?>" <?php if(isset($filter['from_age']) && $filter['from_age'] == $i): ?>checked<?php endif ?>><?php echo $i ?></option>
+						<?php endfor ?>
+					</select>
+				</div>
+			</div>
+			<div class="row form-group">
+				<div class="col-sm-5"><?php echo lang('min-age') ?></div>
+				<div class="col-sm-7">
+					<select name="val[to_age]" class="form-control filter-input">
+						<option value="any" <?php if(isset($filter['to_age']) && $filter['to_age'] == 'any'): ?>selected<?php endif ?>><?php echo lang('any') ?></option>
+						<?php for($i = 13; $i <= 99; $i++): ?>
+							<option value="<?php echo $i ?>" <?php if(isset($filter['to_age']) && $filter['to_age'] == $i): ?>selected<?php endif ?>><?php echo $i ?></option>
+						<?php endfor ?>
+					</select>
+				</div>
+			</div>
+		<?php endif ?>
+		<?php if(config('enable-country-filter')): ?>
+			<div class="row form-group">
+				<div class="col-sm-5"><?php echo lang('country') ?></div>
+				<div class="col-sm-7">
+					<select name="val[country]" class="form-control filter-input">
+						<option value="any" <?php if(isset($filter['country']) && $filter['country'] == 'any'): ?>selected<?php endif ?>><?php echo lang('any') ?></option>
+						<?php foreach($countries as $country => $name): ?>
+							<option value="<?php echo $name ?>" <?php if(isset($filter['country']) && $filter['country'] == $name): ?>selected<?php endif ?>><?php echo ucwords($name) ?></option>
+						<?php endforeach ?>
+					</select>
+				</div>
+			</div>
+		<?php endif ?>
+        <?php if(config('enable-city-filter',1)): ?>
+            <div class="row form-group">
+                <div class="col-sm-5"><?php echo lang('city') ?></div>
+                <div class="col-sm-7">
+                    <input type="text" name="val[city]" value="<?php if(isset($filter['city'])) echo $filter['city'] ?>" class="form-control"/>
+                </div>
+            </div>
+        <?php endif ?>
+		<?php fire_hook('extend.people.directory', null, array($filter)); ?>
+		<div class="row form-group">
+			<div class="col-sm-5"><?php echo lang('keywords') ?></div>
+			<div class="col-sm-7">
+				<input type="text" name="val[keywords]" value="<?php if(isset($filter['keywords'])) echo $filter['keywords'] ?>" class="form-control"/>
+			</div>
+		</div>
+		<div class="row form-group button">
+			<div class="col-sm-12">
+				<input value="<?php echo lang('search') ?>" class="btn btn-secondary" name="val[submit]" type="submit">
+			</div>
+		</div>
+	</form>
+</div>
+

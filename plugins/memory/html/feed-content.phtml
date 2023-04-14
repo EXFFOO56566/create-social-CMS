@@ -1,0 +1,73 @@
+<?php if($memory['type'] == 'registration'): ?>
+	<?php $registration = perfectUnserialize($memory['data']) ?>
+	<div class="memory-feed memory-registration">
+		<?php $user = find_user($registration['id']) ?>
+		<?php $age = round((time() - strtotime($registration['join_date'])) / 31540000, 0) ?>
+		<?php $year_str = $age > 1 ? 'years' : 'year'; ?>
+		<div class="memory-feed-head">
+			<img class="memory-feed-head-image" class="feed-memory-head-img" src="<?php echo img('memory::images/post_head.png') ?>"/>
+			<div class="memory-feed-head-title"><?php echo get_user_name($user).' '.lang('memory::memory-registration-title', array('age' => $age, 'year_str' => $year_str, 'site_title' => config('site_title'))) ?></div>
+			<a ajax="true" href="<?php echo url_to_pager('on-this-day') ?>" class="memory-feed-head-link memory-more-link"><?php echo lang('memory::see-your-memories') ?>
+				<i class="ion-ios-arrow-right"></i></a>
+		</div>
+		<div class="memory-feed-body">
+			<img class="avatar me" src="<?php echo get_avatar(200) ?>"/>
+		</div>
+	</div>
+<?php elseif($memory['type'] == 'relationship'): ?>
+	<?php $relationship = perfectUnserialize($memory['data']) ?>
+	<?php $from_user = find_user($relationship['from_userid']); ?>
+	<?php $to_user = find_user($relationship['to_userid']) ?>
+	<div class="memory-feed memory-relationship">
+		<?php $age = round((time() - $relationship['time']) / 31540000, 0) ?>
+		<?php $year_str = $age > 1 ? 'years' : 'year'; ?>
+		<?php $type = $relationship['type'] == 2 ? 'Followership' : 'Friendship'; ?>
+		<div class="memory-feed-head">
+			<img class="memory-feed-head-image" class="feed-memory-head-img" src="<?php echo img('memory::images/post_head.png') ?>"/>
+			<div class="memory-feed-head-title">
+				<a ajax="true" href="<?php echo profile_url(null, $from_user) ?>"><?php echo get_user_name($from_user) ?></a> <?php echo lang('memory::and') ?>
+				<a ajax="true" href="<?php echo profile_url(null, $to_user) ?>"><?php echo get_user_name($to_user) ?></a> <?php echo lang('memory::memory-relationship-title', array('age' => $age, 'year_str' => $year_str, 'type' => $type, 'site_title' => config('site_title'))) ?>
+			</div>
+			<a ajax="true" href="<?php echo url_to_pager('on-this-day') ?>" class="memory-feed-head-link memory-more-link"><?php echo lang('memory::see-your-memories') ?>
+				<i class="ion-ios-arrow-right"></i></a>
+		</div>
+		<div class="memory-feed-body">
+			<img class="avatar from" src="<?php echo get_avatar(200, $from_user) ?>"/>
+			<img class="avatar to" src="<?php echo get_avatar(200, $to_user) ?>"/>
+		</div>
+	</div>
+<?php elseif($memory['type'] == 'post'): ?>
+	<?php $post = perfectUnserialize($memory['data']) ?>
+	<?php $post_feed = find_feed($post['feed_id']); ?>
+	<div class="memory-feed memory-post">
+		<?php $user = find_user($post['user_id']) ?>
+		<?php $age = round((time() - $post['time']) / 31540000, 0) ?>
+		<?php $year_str = $age > 1 ? 'years' : 'year'; ?>
+		<div class="memory-feed-head">
+			<img class="memory-feed-head-image" class="feed-memory-head-img" src="<?php echo img('memory::images/post_head.png') ?>"/>
+			<div class="memory-feed-head-title"><?php echo get_user_name($user).' '.lang('memory::memory-post-title', array('age' => $age, 'year_str' => $year_str)) ?></div>
+			<a ajax="true" href="<?php echo url_to_pager('on-this-day') ?>" class="memory-feed-head-link memory-more-link"><?php echo lang('memory::see-your-memories') ?>
+				<i class="ion-ios-arrow-right"></i></a>
+		</div>
+		<div class="memory-feed-body">
+			<?php echo view('feed::feed-content', array('feed' => $post_feed)) ?>
+		</div>
+	</div>
+<?php elseif($memory['type'] == 'birthday_reminder'): ?>
+	<?php $birthday_reminder = perfectUnserialize($memory['data']) ?>
+	<?php $user = find_user($birthday_reminder['id']); ?>
+	<div class="memory-feed memory-birthday_reminder">
+		<div class="memory-feed-head">
+			<img class="memory-feed-head-image" class="feed-memory-head-img" src="<?php echo img('memory::images/post_head.png') ?>"/>
+			<div class="memory-feed-head-title">
+				<a ajax="true" href="<?php echo profile_url(null, $user) ?>"><?php echo get_user_name($user) ?></a> <?php echo lang('memory::memory-birthday_reminder-title') ?>
+			</div>
+			<a ajax="true" href="<?php echo url_to_pager('on-this-day') ?>" class="memory-feed-head-link memory-more-link"><?php echo lang('memory::see-your-memories') ?>
+				<i class="ion-ios-arrow-right"></i></a>
+		</div>
+		<div class="memory-feed-body">
+			<img class="avatar from" src="<?php echo get_avatar(200, $user) ?>"/>
+		</div>
+	</div>
+<?php endif; ?>
+<?php theme_extend("feed.content", null, array($feed)) ?>

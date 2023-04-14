@@ -1,0 +1,96 @@
+<div id="dashboard-filter-menu" class="box clearfix">
+	<ul class="pull-left left">
+		<li class="<?php echo input('type') != 'mine' && input('type') != 'playlists' ? 'active' : '' ?>">
+			<a ajax="true" href="<?php echo url_to_pager('music-playlists') ?>">
+				<?php echo lang('music::playlists') ?>
+			</a>
+		</li>
+		<?php if(is_loggedIn()): ?>
+			<li class="<?php echo input('type') == 'mine' ? 'active' : '' ?>">
+				<a ajax="true" href="<?php echo url_to_pager('music-playlists').'?type=mine' ?>">
+					<?php echo lang('music::my-playlists') ?>
+				</a>
+			</li>
+		<?php endif ?>
+		<li class="<?php echo input('type') == 'musics' ? 'active' : '' ?>">
+			<a ajax="true" href="<?php echo url_to_pager('musics') ?>">
+				<?php echo lang('music::musics') ?>
+			</a>
+		</li>
+		<?php foreach(get_menus("music-playlists-menu") as $menu): ?>
+			<li>
+				<a ajax="true" href="<?php echo $menu->link ?>"><?php echo lang($menu->title) ?></a>
+			</li>
+		<?php endforeach ?>
+	</ul>
+	<div class="action pull-right">
+		<?php if(is_loggedIn() && user_has_permission('can-add-playlist')): ?>
+			<a class="btn btn-block btn-info" href="<?php echo url_to_pager('music-playlist-create') ?>" data-toggle="modal" data-target="#playlist-create-modal"><i class="ion-plus"></i> <?php echo lang('music::add-new-playlist') ?>
+			</a>
+			<div id="playlist-create-modal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<form action="<?php echo url_to_pager('music-playlist-create') ?>" class="ajax-form" method="post">
+							<?php CSRFProtection::embed() ?>
+							<div class="modal-form-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<p class="modal-title pull-left"><?php echo lang('music::add-playlist') ?></p>
+							</div>
+							<div class="modal-body">
+								<div class="field">
+									<div class="top">
+										<label for="val[title]" class="control-label"><?php echo lang('music::title') ?></label>
+									</div>
+									<div class="bottom">
+										<input value="<?php echo input('val.title') ?>" type="text" name="val[title]" class="form-control" placeholder="<?php echo lang('music::title') ?>"/>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label for="val[description]" class="control-label"><?php echo lang('music::description') ?></label>
+									</div>
+									<div class="bottom">
+										<input value="<?php echo input('val.description') ?>" type="text" name="val[description]" class="form-control" placeholder="<?php echo lang('music::description') ?>" placeholder="<?php echo lang('music::search-musics') ?>"/>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label for="val[music_search]" class="control-label"><?php echo lang('music::add-music') ?></label>
+									</div>
+									<div class="bottom">
+										<input autocomplete="off" value="<?php echo input('val.music_search') ?>" type="text" name="val[music_search]" class="form-control" onblur="$('#music-playlist-editor-search-result').fadeOut('fast');" onfocus="music.playlist.editor.searchMusic(this)" onkeyup="music.playlist.editor.searchMusic(this)" placeholder="<?php echo lang('music::search-musics') ?>"/>
+										<div style="height: 0px; overflow: visible; z-index: 9999; position: relative;">
+											<div id="music-playlist-editor-search-result">
+
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label for="val[musics]" class="control-label"></label>
+									</div>
+									<div class="bottom">
+										<div id="music-items">
+										</div>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label"><?php echo lang('privacy') ?></label>
+									</div>
+									<div class="bottom">
+										<?php fire_hook('privacy.select', 'relationship', config('default-playlist-privacy', 1)); ?>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<input type="submit" class="btn btn-default" value="<?php echo lang('music::add-playlist') ?>"/>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		<?php endif ?>
+	</div>
+</div>

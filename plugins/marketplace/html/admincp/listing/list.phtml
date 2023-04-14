@@ -1,0 +1,107 @@
+<div class="wrapper marketplace">
+	<div class="wrapper-title">
+		<?php echo lang('marketplace::listings-manager') ?>
+		<span><?php echo lang('marketplace::listings-manager-desc') ?></span>
+	</div>
+	<div class="wrapper-content">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="dropdown" style="margin: 5px 0px 0px;">
+					<button class="marketplace btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown" style="padding: 10px 20px; width: 100%;">
+						<?php echo lang($category) ?>
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+						<li role="presentation">
+							<a role="menuitem" tabindex="-1" href="" ajax="true"><?php echo lang('marketplace::all-categories') ?></a>
+						</li>
+						<?php foreach($categories as $category): ?>
+							<li role="presentation">
+								<a role="menuitem" tabindex="-1" href="<?php echo url_to_pager('admin-marketplace-listings-list').'?c='.$category['id'] ?>" ajax="true"><?php echo lang($category['title']) ?></a>
+							</li>
+						<?php endforeach ?>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<form action="" method="get">
+					<?php CSRFProtection::embed() ?>
+					<input type="text" class="form-control" name="s" placeholder="<?php echo lang('search') ?>" style="display: inline-block; padding: 14px 10px; width: calc(100% - 70px);"/>
+					<button class="btn btn-sm btn-secondary ion-ios-search" style="padding: 0px 10px; font-size: 30px; margin-left: 10px;"></button>
+				</form>
+			</div>
+		</div>
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="listings">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-marketplace-batch-action') ?>?action=delete" class="admin-confirm action-link list-table-select-action" data-group="listings"><?php echo lang('delete') ?></a>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+						<tr>
+							<th>
+								<div class="list-table-select" data-group="listings" data-id="0"></div>
+							</th>
+							<th><?php echo lang('image') ?></th>
+							<th><?php echo lang('title') ?></th>
+							<th><?php echo lang('price') ?></th>
+							<th><?php echo lang('category') ?></th>
+							<th><?php echo lang('user') ?></th>
+							<th><?php echo lang('approved') ?></th>
+							<th><?php echo lang('featured') ?></th>
+							<th><?php echo lang('views') ?></th>
+							<th><?php echo lang('date') ?></th>
+							<th><?php echo lang('actions') ?></th>
+						</tr>
+					</thead>
+					<tbody>
+					<?php foreach($listings->results() as $listing): ?>
+						<tr>
+							<td><div class="list-table-select" data-group="listings" data-id="<?php echo $listing['id'] ?>"></div></td>
+							<td><a href="<?php echo profile_url(null, $listing) ?>"><img src="<?php echo $listing['image'] ? url_img($listing['image'], 200) : img('marketplace::images/no_image.jpg', 75) ?>" style="width: 30px;height: 30px" class="thumb"/></a></td>
+							<td>
+								<?php if($listing['approved'] == 1 && $listing['active'] == 1): ?>
+									<a href="<?php echo url_to_pager('marketplace-listing', array('slug' => $listing['slug'])) ?>"> <?php echo $listing['title'] ?></a>
+								<?php else: ?>
+									<?php echo $listing['title'] ?>
+								<?php endif ?>
+							</td>
+							<td><?php echo config('currency', '$').$listing['price'] ?></td>
+							<td><?php echo lang($listing['category_title']) ?></td>
+							<td><?php echo get_user_name(find_user($listing['user_id'])) ?></td>
+							<td><?php echo $listing['approved'] ? lang('yes') : lang('no') ?></td>
+							<td><?php echo $listing['featured'] ? lang('yes') : lang('no') ?></td>
+							<td><?php echo $listing['nov'] ?></td>
+							<td><?php echo date('l jS \of F Y h:i:s A', strtotime($listing['date'])) ?></td>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="<?php echo url_to_pager('admin-marketplace-listing-edit') ?>?id=<?php echo $listing['id'] ?>" class="ion-edit"></a>
+										<a href="<?php echo url_to_pager('admin-marketplace-listing-delete') ?>?id=<?php echo $listing['id'] ?>" class="admin-confirm ion-android-delete"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="row pagination">
+			<div class="col-sm-12">
+				<?php if($listings->total): ?>
+					<?php if($listings->total > config('pagination-limit-listings', 20)): ?>
+						<?php echo $listings->links() ?>
+					<?php endif ?>
+				<?php else: ?>
+					<div class="alert alert-info"><?php echo lang('marketplace::no-listing-found') ?></div>
+				<?php endif ?>
+			</div>
+		</div>
+	</div>
+</div>

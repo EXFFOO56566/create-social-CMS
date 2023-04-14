@@ -1,0 +1,260 @@
+<?php if(isMobile()): ?>
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<?php else: ?>
+	<!DOCTYPE html>
+<?php endif ?>
+	<html>
+	<head>
+		<?php echo render_assets('css') ?>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<!-- Alternative to above: Disables zooming -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title><?php echo get_title() ?></title>
+		<link rel="shortcut icon" type="image/x-icon" href="<?php echo (config('site-favicon')) ? url_img(config('site-favicon')) : img('images/favicon.ico') ?>"/>
+		<meta content="<?php echo $keywords ?>" name="keywords"/>
+		<meta content="<?php echo $description ?>" name="description"/>
+		<style type="text/css">
+			.jqstooltip {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				visibility: hidden;
+				background: rgba(0, 0, 0, 0.6);
+				filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=rgba(0, 0, 0, 0.6), endColorstr=rgba(0, 0, 0, 0.6));
+				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=rgba(0, 0, 0, 0.6), endColorstr=rgba(0, 0, 0, 0.6))";
+				color: white;
+				font: 10px arial, san serif;
+				text-align: left;
+				white-space: nowrap;
+				padding: 5px;
+				border: 1px solid white;
+				z-index: 10000;
+			}
+
+			.jqsfield {
+				color: white;
+				font: 10px arial, san serif;
+				text-align: left;
+			}
+		</style>
+	</head>
+<body class="<?php echo is_loggedIn() ? 'logged-in' : 'logged-out' ?>">
+<?php if(is_loggedIn() and is_admin()): ?>
+	<nav id="header" class="navbar navbar-light navbar-fixed-top">
+		<div class="nav navbar-nav pull-left">
+			<div class="nav-item">
+				<a href="" class="menu-toggle"><i class="ion-android-menu"></i></a>
+			</div>
+			<div id="header-block-search" class="header-block header-block-search">
+				<form role="search">
+					<div class="input-container">
+						<i class="ion-ios-search"></i>
+						<input type="search" placeholder="Search" data-result="#header-block-search-result">
+					</div>
+				</form>
+				<div id="header-block-search-result" class="slimscroll" data-height="200px">
+
+				</div>
+			</div>
+		</div>
+		<div class="nav navbar-nav pull-right" id="header-right">
+			<div class="header-block header-block-nav">
+				<ul class="nav-profile">
+					<?php $total = count_verification_requests(); ?>
+					<?php $limit = 5; ?>
+					<?php $requests = get_verification_requests(null, $limit)->results(); ?>
+					<li class="notifications<?php echo $total ? ' new' : '' ?>">
+						<a href="" data-toggle="dropdown">
+							<i class="ion-ios-checkmark"></i>
+							<sup>
+								<span class="counter"><?php echo $total ?></span>
+							</sup>
+						</a>
+						<div class="dropdown-menu notifications-dropdown-menu">
+							<ul class="notifications-container">
+								<?php foreach($requests as $request): ?>
+									<li>
+										<?php if($request['type'] == 'user'): $user = find_user($request['type_id']) ?>
+											<a href="<?php echo profile_url(null, $user) ?>" target="_blank" class="notification-item">
+												<div class="img-col">
+													<div class="img" style="background-image: url('<?php echo get_avatar(75, $user) ?>')"></div>
+												</div>
+												<div class="body-col">
+													<p>
+														<?php echo lang('user-has-pending-verification-request', array('user' => '<span class="accent">'.get_user_name($user).'</span>')) ?>
+													</p>
+												</div>
+											</a>
+										<?php else: $page = find_page($request['type_id']) ?>
+											<div class="img-col">
+												<div class="img" style="background-image: url('<?php echo page_url(null, $page) ?>')"></div>
+											</div>
+											<div class="body-col">
+												<p>
+													<?php echo lang('page-has-pending-verification-request', array('page' => '<span class="accent">'.$page['page_title'].'</span>')) ?>
+												</p>
+											</div>
+										<?php endif ?>
+									</li>
+								<?php endforeach ?>
+								<?php if(!$total): ?>
+									<li>
+										<p class="text-center">
+											<span class="accent"><?php echo lang('report::no-request') ?></span>
+										</p>
+									</li>
+								<?php endif; ?>
+							</ul>
+							<footer>
+								<ul>
+									<li>
+										<a href="<?php echo url_to_pager('admin-requests') ?>"><?php echo lang('see-requests') ?></a>
+									</li>
+								</ul>
+							</footer>
+						</div>
+					</li>
+					<?php $total = (function_exists('count_reports')) ? count_reports() : 0; ?>
+					<?php $limit = 5; ?>
+					<?php $reports = get_reports($limit)->results(); ?>
+					<li class="notifications<?php echo $total ? ' new' : '' ?>">
+						<a href="#" data-toggle="dropdown">
+							<i class="ion-android-alert"></i>
+							<sup>
+								<span class="counter"><?php echo $total ?></span>
+							</sup>
+						</a>
+						<div class="dropdown-menu notifications-dropdown-menu">
+							<ul class="notifications-container">
+								<?php foreach($reports as $report): $user = find_user($report['user_id']) ?>
+									<li>
+										<a href="<?php echo $report['link'] ?>" target="_blank" class="notification-item">
+											<div class="img-col">
+												<div class="img" style="background-image: url('<?php echo get_avatar(75, $user) ?>')"></div>
+											</div>
+											<div class="body-col">
+												<p>
+													<span class="accent"><?php echo get_user_name($user) ?></span>: <?php echo str_limit($report['message'], 64) ?>
+												</p>
+											</div>
+										</a>
+									</li>
+								<?php endforeach; ?>
+								<?php if(!$total): ?>
+									<li>
+										<p class="text-center">
+											<span class="accent"><?php echo lang('report::no-report') ?></span>
+										</p>
+									</li>
+								<?php endif; ?>
+							</ul>
+							<footer>
+								<ul>
+									<li>
+										<a href="<?php echo url_to_pager('admincp-reports') ?>"><?php echo lang('report::see-reports') ?></a>
+									</li>
+								</ul>
+							</footer>
+						</div>
+					</li>
+					<li class="profile dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+							<div class="img" style="background-image: url('<?php echo get_avatar(75) ?>')"></div>
+							<span class="name"><?php echo get_user_name() ?></span>
+						</a>
+						<div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 30px, 0px); top: 0px; left: 0px; will-change: transform;">
+							<a class="dropdown-item" href="<?php echo profile_url() ?>" target="_blank">
+								<i class="ion-android-person icon"></i><?php echo lang('profile') ?>
+							</a>
+							<a class="dropdown-item" href="<?php echo url('notifications') ?>" target="_blank">
+								<i class="ion-ios-bell icon"></i><?php echo lang('notifications') ?>
+							</a>
+							<a class="dropdown-item" href="<?php echo url('account') ?>" target="_blank">
+								<i class="ion-android-settings icon"></i> <?php echo lang('settings') ?>
+							</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="<?php echo url('logout') ?>" target="_blank">
+								<i class="ion-log-out icon"></i> <?php echo lang('logout') ?>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="site-wide-notification" class="success">
+			<span class="message"></span>
+			<a href="#" onclick="return closeNotify()" class="close">
+				<i class="ion-close"></i>
+			</a>
+		</div>
+	</nav>
+	<div id="side-navigation">
+		<div class="row sidebar-header">
+			<a href="<?php echo url() ?>" style="text-decoration: none">
+				<?php $logo = config('site-logo');
+				$logo_url = $logo ? url_img($logo) : img('images/logo.png'); ?>
+				<img src="<?php echo $logo_url ?>" class="logo"/>
+				<!-- <div>
+                    <span style="color:#FFFFFF" class="title"><?php echo config('site_title') ?></span>
+                </div> -->
+			</a>
+		</div>
+		<ul class="menu" id="side-navigation-menu" role="tablist" aria-multiselectable="false">
+			<?php foreach(get_menus("admin-menu") as $menu): ?>
+				<?php if($menu->hasMenu()): ?>
+					<?php if($menu->id == 'settings'): ?>
+						<li class="<?php echo ($menu->isActive()) ? 'active' : null ?>">
+							<a class="waves-effect collapsible-header no-padding waves-teal <?php echo ($menu->isActive()) ? 'active' : null ?>" href="<?php echo url('admincp/settings')?>">
+								<i class="<?php echo ($menu->icon) ? $menu->icon : ' mdi-image-lens' ?> "></i> <?php echo $menu->title ?>
+							</a>
+						</li>
+					<?php else: ?>
+						<li class="<?php echo $menu->isActive() ? 'active' : null ?>">
+							<a aria-expanded="<?php echo $menu->isActive() ? 'true' : 'false' ?>" <?php echo $menu->hasMenu() ? 'data-toggle="collapse" data-parent="#side-navigation"' : '' ?> class="<?php echo $menu->isActive() ? 'active' : 'collapsed' ?> " href="<?php echo $menu->hasMenu() ? '#sub-menu-'.$menu->id : $menu->link ?>">
+                                    <span class="left">
+                                        <i class="<?php echo ($menu->icon) ? $menu->icon : 'mdi-navigation-apps' ?>"></i>
+	                                    <?php echo $menu->title ?>
+	                                    <?php echo ($menu->hasMenu()) ? '<span class="pull-right"><i class="arrow ion-ios-arrow-forward"></i></span>' : null ?>
+                                    </span>
+							</a>
+							<ul class="dropdown collapse <?php echo ($menu->isActive()) ? 'in show' : null ?>" id="sub-menu-<?php echo $menu->id ?>">
+								<?php foreach($menu->getMenus() as $subMenu): ?>
+									<?php if($subMenu->hasMenu()): ?>
+										<li class=" <?php echo ($subMenu->isActive()) ? 'active' : null ?>">
+											<a aria-expanded="<?php echo $subMenu->isActive() ? 'true' : 'false' ?>" style="position: relative" data-toggle="collapse" data-parent="#sub-menu-<?php echo $menu->id ?>" class="<?php echo ($subMenu->isActive()) ? 'active' : 'collapsed' ?>" href="<?php echo ($subMenu->hasMenu()) ? '#sub-menu-'.$subMenu->id : $subMenu->link ?>">
+												<?php echo $subMenu->title ?><?php echo ($subMenu->hasMenu()) ? '<span  class="sub-menu-arrow-container"><i class="arrow ion-ios-arrow-forward"></i></span>' : null ?>
+											</a>
+											<ul class="dropdown collapse <?php echo ($subMenu->isActive()) ? 'in show' : null ?>" id="sub-menu-<?php echo $subMenu->id ?>">
+												<?php foreach($subMenu->getMenus() as $sMenu): ?>
+													<li class="">
+														<a href="<?php echo $sMenu->link ?>"><i class="<?php echo ($sMenu->icon) ? $sMenu->icon : ' mdi-image-lens' ?> "></i> <?php echo $sMenu->title ?>
+														</a>
+													</li>
+												<?php endforeach ?>
+											</ul>
+										</li>
+									<?php else: ?>
+										<li>
+											<a href="<?php echo $subMenu->link ?>"><?php echo $subMenu->title ?></a>
+										</li>
+									<?php endif ?>
+								<?php endforeach ?>
+							</ul>
+						</li>
+					<?php endif; ?>
+				<?php else: ?>
+					<li class="<?php echo ($menu->isActive()) ? 'active' : null ?>">
+						<a class="waves-effect collapsible-header no-padding waves-teal <?php echo ($menu->isActive()) ? 'active' : null ?>" href="<?php echo $menu->link ?>">
+							<i class="<?php echo ($menu->icon) ? $menu->icon : ' mdi-image-lens' ?> "></i> <?php echo $menu->title ?>
+						</a>
+					</li>
+				<?php endif ?>
+			<?php endforeach ?>
+			<li class="">
+				<a class="waves-effect collapsible-header no-padding waves-teal" href="<?php echo url_to_pager("logout") ?>"><i class="ion-ios-undo"></i> Logout</a>
+			</li>
+		</ul>
+	</div>
+<?php endif ?>

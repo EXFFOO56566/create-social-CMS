@@ -1,0 +1,11 @@
+#currency-conversion .row {
+    padding: 8px 0px;
+}
+
+#currency-conversion-currency-result {
+    text-align: center;
+    padding: 8px 8px 8px 8px;
+    font-size: 24px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, .1);
+}

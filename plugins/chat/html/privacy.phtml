@@ -1,0 +1,9 @@
+<div class="field">
+	<div class="left">
+		<label class="control-label"><?php echo lang('chat::who-can-see-send-message') ?></label>
+	</div>
+	<div class="right">
+		<?php fire_hook('privacy.select', 'relationship', array(get_privacy('who_can_send_message', config('default-send-message-privacy', 1)), 'val[who_can_send_message]')); ?>
+		<p class="help-block"><?php echo lang('chat::who-can-see-send-message-desc') ?></p>
+	</div>
+</div>

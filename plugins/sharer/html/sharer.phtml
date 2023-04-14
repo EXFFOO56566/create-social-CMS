@@ -1,0 +1,83 @@
+<?php $user = find_user(get_userid()) ?>
+<?php $gender = (isset($user['gender']) and $user['gender']) ? $user['gender'] : null ?>
+<?php $gender_image = ($gender) ? img("images/avatar/{$gender}.png") : img("images/avatar.png") ?>
+<?php $user_image = $user['avatar'] ? url_img($user['avatar'], 75) : $gender_image ?>
+<?php $user_name = trim($user['first_name'].$user['last_name']) == '' ? $user['username'] : $user['first_name'].' '.$user['last_name'] ?>
+<?php $default = user_privacy("feed-editor-privacy", 1) ?>
+<?php $privacy = (isset($privacy)) ? $privacy : $default ?>
+<?php if(isMobile()): ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><?php else: ?><!DOCTYPE html><?php endif ?>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta http-equiv="x-ua-compatible" content="ie=edge"/>
+	<title><?php echo get_title() ?></title>
+	<?php echo render_assets('css') ?>
+	<link rel="shortcut icon" type="image/x-icon" href="<?php echo (config('site-favicon')) ? url_img(config('site-favicon')) : img('images/favicon.ico') ?>"/>
+	<link rel="stylesheet" href="<?php echo url('themes/default/css/style.css') ?>">
+	<link rel="stylesheet" href="<?php echo url('themes/default/css/bootstrap.min.css') ?>">
+	<?php if(app()->langDetails['dir'] == 'rtl' and !isMobile()): ?>
+		<link rel="stylesheet" href="<?php echo url('themes/default/css/bootstrap-rtl.css') ?>">
+	<?php endif ?>
+	<link rel="stylesheet" href="<?php echo url('themes/default/css/ionicons.min.css') ?>">
+</head>
+<body>
+<div class="sharer share">
+	<form action="" method="post">
+		<?php CSRFProtection::embed() ?>
+		<?php echo view('feed::link', array('details' => $details)) ?>
+		<div class="dashboard">
+			<div class="dropup" style="display: inline-block">
+				<?php if(!isset($offPrivacy) or (isset($offPrivacy) and !$offPrivacy)): ?>
+					<a id="feed-editor-privacy-toggle" href="#" class="dropdown-toggle btn btn-secondary btn-sm" data-toggle="dropdown">
+						<?php $editorPrivacy = user_privacy("feed-editor-privacy", config('default-feed-privacy', 1)); ?>
+						<?php if($editorPrivacy == 1): ?>
+							<i class="ion-earth" data-toggle="tooltip" title="<?php echo lang('public') ?>"></i>
+						<?php elseif($editorPrivacy == 2): ?>
+							<i class="ion-ios-people" data-toggle="tooltip" title="<?php echo (config('relationship-method', 3) == 1) ? lang('feed::followers-only') : lang('feed::friends-only') ?>"></i>
+						<?php else: ?>
+							<i class="ion-android-lock" data-toggle="tooltip" title="<?php echo lang('feed::only-me') ?>"></i>
+						<?php endif ?>
+					</a>
+					<ul id='feed-privacy-dropdown' class='dropdown-menu dropdown-menu-left'>
+						<li>
+							<a data-id="1" class="dropdown-item" href="javascript:void(0)">
+								<i class="ion-android-globe"></i>
+								<span><?php echo lang('public') ?></span>
+							</a>
+						</li>
+						<li>
+							<a data-id="2" class="dropdown-item" href="javascript:void(0)">
+								<i class="ion-ios-people"></i>
+								<span><?php echo (config('relationship-method', 3) == 1) ? lang('feed::followers-only') : lang('feed::friends-only') ?></span>
+							</a>
+						</li>
+						<li>
+							<a data-id="3" class="dropdown-item" href="javascript:void(0)">
+								<i class="ion-android-lock"></i>
+								<span><?php echo lang('feed::only-me') ?></span>
+							</a>
+						</li>
+					</ul>
+				<?php endif ?>
+			</div>
+			<input type="hidden" name="val[privacy]" value="<?php echo $privacy ?>" id="feed-editor-privacy"/>
+			<input type="hidden" name="val[type]" value="feed"/>
+			<input type="hidden" name="val[type_id]"/>
+			<input type="hidden" name="val[type_data]"/>
+			<input type="hidden" name="val[entity_id]" value="<?php echo get_userid() ?>"/>
+			<input type="hidden" name="val[entity_type]" value="user"/>
+			<input type="hidden" name="val[to_user_id]"/>
+			<button class="btn btn-info btn-sm btn-upper">
+				<i class="ion-android-send"></i> <?php echo lang('post') ?>
+			</button>
+		</div>
+	</form>
+</div>
+<script src="<?php echo url('themes/default/js/jquery.js') ?>"></script>
+<script src="<?php echo url('themes/default/js/bootstrap.min.js') ?>"></script>
+<script src="<?php echo url('themes/default/js/video.js') ?>"></script>
+<script src="<?php echo url('themes/default/js/script.js') ?>"></script>
+<script src="<?php echo url('plugins/feed/js/feed.js') ?>"></script>
+</body>
+</html>

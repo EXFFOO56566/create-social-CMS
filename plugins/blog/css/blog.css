@@ -1,0 +1,70 @@
+.blog-large-image img {
+    width: 100%;
+
+}
+
+.blog-large-image {
+    margin-bottom: 10px
+}
+
+.blog .post img {
+    max-width: 100%;
+    height: auto;
+}
+
+.blog-list:hover {
+    background-color: #FAFAFA;
+}
+
+.blog-no-image {
+    padding: 0 10px 0 10px !important;
+    background-color: #00CCFF;
+}
+
+.blogger {
+    margin: 0 0 20px 0;
+    border-top-width: 0;
+
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.blogger .card-heading {
+    padding: 0 20px;
+    margin: 0;
+}
+
+.blogger.hovercard {
+    position: relative;
+    padding-top: 0;
+    overflow: hidden;
+    text-align: center;
+    background-color: rgba(214, 224, 226, 0.2);
+}
+
+.blogger.hovercard .cardheader {
+    background: url("http://lorempixel.com/850/280/nature/4/");
+    background-size: cover;
+    height: 135px;
+}
+
+.blogger.hovercard .avatar {
+    position: relative;
+    top: -50px;
+    margin-bottom: -50px;
+}
+
+.blogger.hovercard .avatar img {
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.5);
+}

@@ -1,0 +1,10 @@
+<?php $pages = get_pages('mine')->results(); ?>
+<?php if($pages): ?>
+	<div class="magic-select-label"><?php echo lang('page::pages-you-manage') ?></div>
+	<?php foreach($pages as $page): ?>
+		<div class="magic-select-option" data-value="page-<?php echo $page['page_id'] ?>">
+			<img src="<?php echo get_page_logo(75, $page) ?>" class="thumb"/>
+			<?php echo $page['page_title']; ?>
+		</div>
+	<?php endforeach ?>
+<?php endif; ?>

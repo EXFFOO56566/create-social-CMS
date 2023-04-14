@@ -1,0 +1,61 @@
+<?php $user = isset($app->profileUser) ? $app->profileUser : get_user(); $friends = count(get_friends($user['id'])); $followers = count(get_followers($user['id'])); $followings = count(get_following($user['id'])); $posts = count(get_feeds('timeline', $user['id'], 10000000)); ?>
+<div class="user-card-widget">
+	<div class="cover" style="background-image: url(<?php echo get_user_cover($user, false) ?>);">
+		<a ajax="true" href="<?php echo profile_url(null, $user) ?>" class="user">
+			<img src="<?php echo get_avatar(75, $user) ?>" class="avatar">
+			<div class="name">
+				<?php echo get_user_name($user) ?>
+				<?php verify_badge($user) ?>
+			</div>
+		</a>
+	</div>
+	<div class="stats">
+		<a ajax="true" href="<?php echo profile_url(null, $user) ?>" class="post stat">
+			<div class="title"><?php echo lang('posts') ?></div>
+			<div class="detail">
+				<i class="la la-edit"></i>
+				<?php echo socialCountDisplay($posts) ?>
+			</div>
+		</a>
+		<?php if(in_array(config('relationship-method', 3), array(2, 3))): ?>
+			<a ajax="true" href="<?php echo profile_url('friends', $user) ?>" class="friends stat">
+				<div class="title"><?php echo lang('friends') ?></div>
+				<div class="detail">
+					<i class="la la-user-times"></i>
+					<?php echo socialCountDisplay($friends); ?>
+				</div>
+			</a>
+		<?php endif; ?>
+		<?php if(in_array(config('relationship-method', 3), array(1, 3))): ?>
+		<a ajax="true" href="<?php echo profile_url('followers', $user) ?>" class="followers stat">
+			<div class="title"><?php echo lang('followers') ?></div>
+			<div class="detail">
+				<i class="la la-user-times"></i>
+				<?php echo socialCountDisplay($followers); ?>
+			</div>
+		</a>
+		<a ajax="true" href="<?php echo profile_url('following', $user) ?>" class="following stat">
+			<div class="title"><?php echo lang('following') ?></div>
+			<div class="detail">
+				<i class="la la-user-times"></i>
+				<?php echo socialCountDisplay($followings); ?>
+			</div>
+		</a>
+		<?php endif; ?>
+	</div>
+	<?php if($user['id'] != get_userid()): ?>
+		<div class="actions">
+			<?php if(plugin_loaded('relationship')): ?>
+				<?php echo view('relationship::button', array('userid' => $user['id'], 'follow' => true)) ?>
+			<?php endif ?>
+			<?php echo theme_extend('user.profile.buttons', null, array('user' => $user)) ?>
+			<?php if(is_loggedIn() and $user['id'] != get_userid() and can_send_message($user['id'])): ?>
+				<?php if(isMobile()): ?>
+					<a ajax="true" href="<?php echo url('messages?userid='.$user['id']) ?>" class="btn btn-secondary btn-sm message-me-small"><?php echo lang('chat::send-message') ?></a>
+				<?php else: ?>
+					<a href="" onclick="return Chat.open(null, '<?php echo $user['id'] ?>', '<?php echo htmlentities(get_user_name($user)) ?>', '<?php echo get_avatar(75, $user) ?>')" class="btn btn-secondary btn-sm message-me-large"><?php echo lang('chat::send-message') ?></a>
+				<?php endif; ?>
+			<?php endif ?>
+		</div>
+	<?php endif; ?>
+</div>

@@ -1,0 +1,32 @@
+<div id="topo" class="<?php if (isMobile()): ?> <?php echo 'bg-mobile'; endif ?> auto splash foxers">
+    <?php if (!isMobile()): ?>
+        <div id="slides">
+            <div class="slide slide-1" style="z-index: 1;"></div>
+            <div class="slide slide-2"></div>
+            <div class="slide slide-3"></div>
+        </div>
+    <?php endif ?>
+    <div id="topo-content">
+        <div class="container">
+		<div class="row">
+            <div class=" col-sm-8 slide-layout-info" style="background-image: url(<?php echo img('images/topography/one.jpg')?>)"></div>
+            <div class="col-sm-4 form-layout-right signup-content">
+                <div class="" id="register-form">
+                    <div class="action-title">
+                        <span class="col-sm-4"><?php _lang('Signup')?></span>
+                    </div>
+                    <?php echo view('signup/portable-signup'); ?>
+                </div>
+                <div class="login-content" style="display:none" id="login-form">
+                    <div class="content">
+                        <div class="action-title">
+                            <span><?php _lang('Login')?></span>
+                        </div>
+                        <?php echo view('login/portable-login'); ?>
+                    </div>
+                </div>
+            </div>
+		</div>
+            </div>
+        </div>
+</div>

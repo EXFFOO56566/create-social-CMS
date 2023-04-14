@@ -1,0 +1,664 @@
+<script src="<?php echo(url('plugins/livestreaming/js/FileSelector.js')); ?>"></script>
+<script src="https://cdn.firebase.com/v0/firebase.js"> </script> <!-- Signaling -->
+<script src="<?php echo(url('plugins/livestreaming/js/RTCPeerConnection.js')); ?>"></script>
+<script src="<?php echo(url('plugins/livestreaming/js/RecordRTC.js')); ?>"></script>
+<script src="<?php echo(url('plugins/livestreaming/js/broadcast.js')); ?>"></script>
+<script src="<?php echo(url('plugins/livestreaming/js/DetectRTC.js')); ?>"></script>
+<div class="box">
+    <div class="box-content" style="padding: 20px 10%">
+        <?php if($message):?>
+            <div class="alert alert-danger"><?php echo $message?></div>
+        <?php endif?>
+        <?php
+            $current = (config('livestream-upload', false) and config('livestream-encoder', 'none') != 'none') ? 'upload' : 'external';
+        ?>
+        <p id="support-info"></p>
+        <form action="" method="post">
+            <?php CSRFProtection::embed() ?>
+           
+			<input type="hidden" name="val[entity_type]" id="entity_type" value="<?php echo input('type', 'user')?>"/>
+            <input type="hidden" name="val[entity_id]" id="entity_id" value="<?php echo input('id', get_userid())?>"/>
+            <div class="form-group row">
+                <label class="control-label col-sm-4"><?php _lang('livestreaming::media-type')?></label>
+                <div class="col-sm-8">
+                    <select onchange="return change_livestream_source(this)" name="val[media-type]" id="media-type" class="c-select">
+                        <option><?php _lang('livestreaming::audio-video')?></option>
+                        <option><?php _lang('livestreaming::audio-only')?></option>
+                        <option><?php _lang('livestreaming::pre-recorded')?></option>
+                    </select>
+                    <input type="hidden" id="broadcast-name" value="<?php echo($username); ?>">
+             </div>
+          </div>
+
+
+
+            <div class="form-group row">
+                <div class="source upload" >
+                	<label class="control-label col-sm-4"><?php _lang('livestreaming::video-preview'); ?></label>
+					<div class="col-sm-8">
+						<input type="file" id="file" name="livestream_preview">
+					</div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-sm-4"><?php _lang('category')?></label>
+                <div class="col-sm-8">
+                    <select name="val[category_id]" class=" c-select" id="category_id" >
+                        <?php foreach(get_livestream_categories() as $category):?>
+                            <?php $subCategories = get_livestream_parent_categories($category['id'])?>
+                            <?php if($subCategories):?>
+                                <optgroup label="<?php _lang($category['title'])?>">
+                                    <?php foreach($subCategories as $cat):?>
+                                        <option value="<?php echo $cat['id']?>"><?php _lang($cat['title'])?></option>
+                                    <?php endforeach?>
+                                </optgroup>
+                            <?php else:?>
+                                <option value="<?php echo $category['id']?>"><?php _lang($category['title'])?></option>
+                            <?php endif?>
+                        <?php endforeach?>
+                    </select>
+                </div>
+            </div>
+
+          <div class="form-group row">
+                    <label class="control-label col-sm-4"><?php _lang('livestream::title')?></label>
+                    <div class="col-sm-8">
+                        <input value="<?php echo input('val.title')?>" id="stream-title" type="text" name="val[title]" class="form-control"/>
+                    </div>
+          </div>
+          <div class="form-group row">
+                    <label class="control-label col-sm-4"><?php _lang('livestreaming::description')?></label>
+                    <div class="col-sm-8">
+                        <textarea name="val[description]" class="form-control auto-grow-input" id="description"><?php echo input('val.description')?></textarea>
+                    </div>
+                </div>
+            <div class="form-group row">
+              <label class="control-label col-sm-4"><?php _lang('privacy')?></label>
+                <div class="col-sm-8">
+                    <?php $default = config('default-livestream-privacy', 1);?>
+                    <select class="c-select" name="val[privacy]" id="privacy">
+                        <option <?php echo ($default == 1) ? 'selected' : null?> value="1" ><?php _lang('everyone')?></option>
+                        <option <?php echo ($default == 2) ? 'selected' : null?> value="2"><?php echo (config('relationship-method', 2) == 2 or config('relationship-method', 2) == 3) ? lang('friends-only') : lang('followers-only')?></option>
+                        <option <?php echo ($default == 3) ? 'selected' : null?> value="3"><?php _lang('only-me')?> </option>
+                    </select>
+                </div>
+          </div>
+        </form>
+            	<button class="btn btn-info" id="setup-new-broadcast" onClick="setupNewBroadcastButtonClickHandler" > <?php _lang('livestreaming::setup-livestream')?> </button>
+				<div id="livestream-overlay" style="visibility:hidden" class="htmlElement"><span id="close-x">x</span><span id="viewers" class="v-viewer">Viewers: 0</span>
+                <!-- local/remote videos container -->
+
+                <div id="videos-container"></div>
+                <div class="control-container">
+                    <button id="start-streaming" class="button button--itzel button--text-thick"><i class="button__icon ion-radio-waves"></i><span><?php _lang('livestreaming::start-livestream')?></span></button>
+                    <button id="stop-streaming" style="visibility:hidden" class="button button--itzel button--text-thick"><i class="button__icon ion-radio-waves-outline"></i><span><?php _lang('livestreaming::stop-livestream')?></span></button>
+                </div>
+                </div>
+		</div>
+</div>
+
+            <script>
+				var postStartData = function(){
+					var data = ['entity_type', 'entity_id', 'media-type', 'category_id', 'stream-title', 'description', 'privacy'];
+					var formData = new FormData();
+                    formData.append('csrf_token', csrf.value);
+					for(var i = 0; i < data.length; i++){
+                    	var value_data = document.getElementById(data[i]);
+						formData.append(value_data.name, value_data.value);
+					}
+                    var file = document.getElementById('file');
+                    formData.append('val[livestream_preview]', file.files[0]);
+					formData.append('val[broadcast_token]', broadcastUI.getChannel());
+					window.myForm = formData;
+					sendXhr('<?php echo(url('livestream/start')); ?>', formData, function(data) {
+                        data = JSON.parse(data);
+                    	if(data.status == 'success') streamId = data.id;
+						//document.getElementById("support-info").innerHTML = '<div class="alert alert-success">Your livestreaming has been uploaded to the server.<br><br><span style="color:green;">It will be available on your profile any moment from now.</span></div>';
+						running = true;
+						liveStill();
+					});
+				};
+				
+				var postEndData = function(audioBlob, videoBlob, fileName) {
+					var formData = new FormData();
+                    formData.append('csrf_token', csrf.value);
+					formData.append('id', streamId);
+					formData.append('filename', fileName);
+					formData.append('audio-blob', audioBlob);
+					formData.append('video-blob', videoBlob);
+					sendXhr('<?php echo(url('livestream/end')); ?>', formData, function(data) {
+                        data = JSON.parse(data);
+                        if (data.status != 'success') {
+                            alert("You do not have ffmpeg on your host, the livestream was not saved with sound");
+                            window.location.reload();
+                        } else {
+                            document.getElementById("support-info").innerHTML = '<div class="alert alert-success">Your livestreaming has been uploaded to the server.<br><br><span style="color:green;">It will be available on your profile any moment from now.</span></div>';
+                            window.location.reload();
+                        }
+
+					});
+				}
+
+				function oldBrowserDetected() {
+					document.getElementById('setup-new-broadcast').disabled = true;
+					document.getElementById('support-info').innerHTML = '<div class="alert alert-danger">Your browser does NOT supports pre-recorded media streaming.<br><br><span style="color:red;">This Application requires Chrome 53+ or Firefox.</span></div>';
+				}
+
+				if(!DetectRTC.isVideoSupportsStreamCapturing) {
+					oldBrowserDetected();
+				}
+
+				var streamId = 0;
+                var csrf = document.getElementsByName('csrf_token')[0];
+                var headerEle = document.getElementById('header');
+			    var isFirefox = !!navigator.mozGetUserMedia;
+				var stopLivestreaming = document.getElementById('stop-streaming');
+				var startLivestreaming = document.getElementById('start-streaming');
+				var recordVideo, recordAudio;
+<?php
+$server = get_livestream_server(config('livestreaming-server'));
+$server = !isset($server['type']) ? array('type' => 'none-yet') : $server;
+if($server['type'] == "PHP XHR SSE Server"){
+?>
+				function PHPXhr(url, callback, data) {
+					if (!window.XMLHttpRequest || !window.JSON) return;
+				
+					var request = new XMLHttpRequest();
+					request.onreadystatechange = function () {
+						if (callback && request.readyState == 4 && request.status == 200) {
+							// server MUST return JSON text
+							callback(JSON.parse(request.responseText));
+						}
+					};
+					request.open('POST', url);
+				
+					var formData = new FormData();
+				
+					// you're passing "message" parameter
+					formData.append('message', data);
+				
+					request.send(formData);
+				}
+				
+				// this object is used to store "onmessage" callbacks from "openSignalingChannel handler
+				var onMessageCallbacks = {};
+				
+				// this object is used to make sure identical messages are not used multiple times
+				var messagesReceived = {};
+				
+				function repeatedlyCheck() {
+					PHPXhr('/Home/GetData', function (data) {
+						// if server says nothing; wait.
+						if (data == false) return setTimeout(repeatedlyCheck, 400);
+				
+						// if already receied same message; skip.
+						if (messagesReceived[data.ID]) return setTimeout(repeatedlyCheck, 400);
+						messagesReceived[data.ID] = data.Message;
+				
+						// "Message" property is JSON-ified in "openSignalingChannel handler
+						data = JSON.parse(data.Message);
+				
+						// don't pass self messages over "onmessage" handlers
+						if (data.sender != connection.userid && onMessageCallbacks[data.channel]) {
+							onMessageCallbacks[data.channel](data.message);
+						}
+				
+						// repeatedly check the database
+						setTimeout(repeatedlyCheck, 1);
+					});
+				}
+				
+				repeatedlyCheck();
+<?php } ?>
+				var config = {
+<?php
+switch($server['type']){
+	case "www.firebase.com":
+?>
+                    openSocket: function(config) {
+                        var channel = config.channel || location.href.replace( /\/|:|#|%|\.|\[|\]/g , '');
+                        var socket = new Firebase('<?php echo $server['address'] ?>/' + channel);
+                        socket.channel = channel;
+                        socket.on("child_added", function(data) {
+                            config.onmessage && config.onmessage(data.val());
+                        });
+                        socket.send = function(data) {
+                            this.push(data);
+                        };
+                        config.onopen && setTimeout(config.onopen, 1);
+                        socket.onDisconnect().remove();
+                        return socket;
+                    },
+<?php
+	break;
+	case "Node.js Socket.IO Server":
+?>
+					openSocket: function(config) {
+						
+						var SIGNALING_SERVER = '<?php echo $server['address'].":".$server['port'] ?>/';
+						var channel = config.channel || location.href.replace( /\/|:|#|%|\.|\[|\]/g , '');
+						var sender = Math.round(Math.random() * 999999999) + 999999999;
+						io.connect(SIGNALING_SERVER).emit('new-channel', {
+							channel: channel,
+							sender: sender
+						});
+						var socket = io.connect(SIGNALING_SERVER + channel);
+						socket.channel = channel;
+						socket.on('connect', function() {
+							if (config.callback) config.callback(socket);
+						});
+						socket.send = function(message) {
+							socket.emit('message', {
+								sender: sender,
+								data: message
+							});
+						};
+						socket.on('message', config.onmessage);
+                    },
+<?php
+	break;
+	case "PHP XHR SSE Server":
+?>
+                    openSocket: function(config) {
+						var channel = config.channel || this.channel;
+						onMessageCallbacks[channel] = config.onmessage;
+					
+						// let RTCMultiConnection know that server connection is opened!
+						if (config.onopen) setTimeout(config.onopen, 1);
+					
+						// returning an object to RTCMultiConnection
+						// so it can send data using "send" method
+						return {
+							send: function (data) {
+								data = {
+									channel: channel,
+									message: data,
+									sender: connection.userid
+								};
+					
+								// posting data to server
+								// data is also JSON-ified.
+								PHPXhr('<?php echo $server['address'] ?>', null, JSON.stringify(data));
+							},
+							channel: channel
+						};
+                    },
+<?php
+	break;
+	case "Websocket Server":
+?>
+					openSocket: function(config) {
+						 var SIGNALING_SERVER = '<?php echo $server['address'].":".$server['port'] ?>';
+						 var channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g, '');
+						 var websocket = new WebSocket(SIGNALING_SERVER);
+						 websocket.channel = config.channel;
+						 websocket.onopen = function () {
+							 websocket.push(JSON.stringify({
+								 open: true,
+								 channel: config.channel
+							 }));
+				
+							 // second option: returning socket object using "config.callback" method
+							 if (config.callback)
+								 config.callback(websocket);
+						 };
+						 websocket.onmessage = function (event) {
+							 config.onmessage(JSON.parse(event.data));
+						 };
+						 websocket.push = websocket.send;
+						 websocket.send = function (data) {
+							 websocket.push(JSON.stringify({
+								 data: data,
+								 channel: config.channel
+							 }));
+						 };
+		 			},
+<?php
+	break;
+	default:
+?>
+                    openSocket: function(config) {
+                        var channel = config.channel || location.href.replace( /\/|:|#|%|\.|\[|\]/g , '');
+                        var socket = new Firebase('https://livestreaming-1557a.firebaseio.com/' + channel);
+                        socket.channel = channel;
+                        socket.on("child_added", function(data) {
+                            config.onmessage && config.onmessage(data.val());
+                        });
+                        socket.send = function(data) {
+                            this.push(data);
+                        };
+                        config.onopen && setTimeout(config.onopen, 1);
+                        socket.onDisconnect().remove();
+                        return socket;
+                    },
+<?php } ?>
+                    onRemoteStream: function(htmlElement) {
+                        //htmlElement.setAttribute('controls', true);
+                        videosContainer.insertBefore(htmlElement, videosContainer.firstChild);
+                        htmlElement.play();
+                        rotateInCircle(htmlElement);
+                    },
+                    onRoomFound: function(room) {
+						return;
+						broadcaster = room.broadcaster;
+                        var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+                        if (alreadyExist) return;
+
+                        if (typeof roomsList === 'undefined') roomsList = document.body;
+
+                        var tr = document.createElement('tr');
+                        tr.innerHTML = '<td><strong>' + room.roomName + '</strong> is broadcasting his media!</td>' +
+                            '<td><button class="btn btn-default">Join</button></td>';
+                        roomsList.insertBefore(tr, roomsList.firstChild);
+
+                        var joinRoomButton = tr.querySelector('.join');
+                        joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
+                        joinRoomButton.setAttribute('data-roomToken', room.broadcaster);
+                        joinRoomButton.onclick = function() {
+                            this.disabled = true;
+							document.getElementById('livestream-overlay').style.visibility = "visible";
+							startLivestreaming.style.visibility = 'hidden';
+                            var broadcaster = this.getAttribute('data-broadcaster');
+                            var roomToken = this.getAttribute('data-roomToken');
+                            broadcastUI.joinRoom({
+                                roomToken: roomToken,
+                                joinUser: broadcaster
+                            });
+                            hideUnnecessaryStuff();
+                        };
+                    },
+                    onNewParticipant: function(numberOfViewers) {
+                        document.getElementById('viewers').html = 'Viewers: ' + numberOfViewers;
+                    }
+                };
+
+				function loadCSS(){
+					var headID = document.getElementsByTagName("head")[0];
+					var cssNode = document.createElement('link');
+					cssNode.type = 'text/css';
+					cssNode.rel = 'stylesheet';
+					cssNode.href = '<?php echo url('plugins/livestreaming/css/livestreaming.css'); ?>';
+					cssNode.media = 'screen';
+					headID.appendChild(cssNode);
+				}
+                
+				function unloadCSS() {
+					var targetElement = "link"; 
+					var targetAttr = "href"; 
+					
+					var allCtrl = document.getElementsByTagName(targetElement);
+					for (var i=allCtrl.length; i>=0; i--)  { 
+					//search backwards within nodelist for matching elements to remove
+						if (allCtrl[i] && allCtrl[i].getAttribute(targetAttr)!=null && allCtrl[i].getAttribute(targetAttr).indexOf("livestreaming.css")!=-1)
+							allCtrl[i].parentNode.removeChild(allCtrl[i]);
+					}
+				}
+                function setupNewBroadcastButtonClickHandler() {
+					//document.getElementById('myframe').style.display = 'block'; return;
+					//event.preventDefault();
+					loadCSS();
+					//wait for 5 sec for css to load
+					setTimeout({}, 5000);
+                    document.getElementById('setup-new-broadcast').disabled = true;
+					document.getElementById('livestream-overlay').style.visibility = "visible";
+					startLivestreaming.style.visibility = "visible";
+					var broadcastType = document.getElementById('media-type').value;
+
+					if(broadcastType == 'Pre-Recorded'){
+						var selector = new FileSelector();
+						selector.selectSingleFile(function(file) {
+							if(file.name.search(/.webm|.mp3/g) === -1) {
+								document.getElementById('setup-new-broadcast').disabled = false;
+		
+								alert('Please select either WebM or Mp3 file.');
+								return;
+							}
+
+						//var htmlElement = document.createElement('video');
+						//htmlElement.setAttribute('autoplay', true);
+						//htmlElement.setAttribute('loop', true);
+	                    //htmlElement.src = URL.createObjectURL(file);
+						//videosContainer.insertBefore(htmlElement, videosContainer.firstChild);
+						var video = document.createElement('video');
+						video.loop = true;
+						video.src = URL.createObjectURL(file);
+						video.play();
+						videosContainer.insertBefore(video, videosContainer.firstChild);
+							
+						setTimeout(function() {
+							video.play();
+						try {
+							if('captureStream' in video) {
+								config.attachStream = video.captureStream(15);
+								callback && callback();
+	
+								video.setAttribute('muted', true);
+								rotateInCircle(video);
+							}
+							else if('mozCaptureStream' in video) {
+								config.attachStream = video.mozCaptureStream(15);
+								callback && callback();
+	
+								video.setAttribute('muted', true);
+								rotateInCircle(video);
+							}
+							else if('webkitCaptureStream' in video) {
+								config.attachStream = video.webkitCaptureStream(15);
+								callback && callback();
+	
+								video.setAttribute('muted', true);
+								rotateInCircle(video);
+							}
+						}
+						catch(e) {
+							//config.attachStream = null;
+						}
+
+						if(!config.attachStream) {
+							oldBrowserDetected();
+							return;
+						}
+						}, 2000);
+					});			
+	                    hideUnnecessaryStuff();
+						return;
+					}
+                    captureUserMedia();
+                    hideUnnecessaryStuff();
+                }
+				
+				startLivestreaming.onclick = function() 
+				{
+					var shared = 'video';
+					if (window.option == 'Audio Only') {
+						shared = 'audio';
+					}
+					
+					if (window.option == 'Screen') {
+						shared = 'screen';
+					}
+					
+					if(config.attachStream == null){
+						alert("Error in page... Please try again");
+					}
+					
+					onstream(config.attachStream);
+					broadcastUI.createRoom({
+						roomName: (document.getElementById('broadcast-name') || { }).value || 'Anonymous',
+						isAudio: shared === 'audio'
+					});
+					this.style.visibility = 'hidden';
+					stopLivestreaming.style.visibility = 'visible';
+					started = true;
+					postStartData();
+				}
+                
+				function captureUserMedia(callback) {
+                    var constraints = null;
+                    window.option = broadcastingOption ? broadcastingOption.value : '';
+                    if (option === 'Only Audio') {
+                        constraints = {
+                            audio: true,
+                            video: false
+                        };
+
+                        if(DetectRTC.hasMicrophone !== true) {
+                            alert('We are unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
+                        }
+                    }
+                    if (option === 'Screen') {
+                        var video_constraints = {
+                            mandatory: {
+                                chromeMediaSource: 'screen'
+                            },
+                            optional: []
+                        };
+                        constraints = {
+                            audio: false,
+                            video: video_constraints
+                        };
+
+                        if(DetectRTC.isScreenCapturingSupported !== true) {
+                           alert('We are unable to find screen capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-screen-capturing"');
+                        }
+                    }
+
+                    if (option != 'Only Audio' && option != 'Screen' && DetectRTC.hasWebcam !== true) {
+                        alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
+                    }
+
+                    var htmlElement = document.createElement(option === 'Only Audio' ? 'audio' : 'video');
+                    htmlElement.setAttribute('autoplay', true);
+                    //htmlElement.setAttribute('controls', true);
+                    videosContainer.insertBefore(htmlElement, videosContainer.firstChild);
+
+                    var mediaConfig = {
+                        video: htmlElement,
+                        onsuccess: function(stream) {
+                            config.attachStream = stream;
+                            callback && callback();
+
+                            htmlElement.setAttribute('muted', true);
+                            rotateInCircle(htmlElement);
+                        },
+                        onerror: function() {
+                            if (option === 'Only Audio') alert('unable to get access to your microphone');
+                            else if (option === 'Screen') {
+                                if (location.protocol === 'http:') alert('Please test this WebRTC experiment on HTTPS.');
+                                else alert('Screen capturing is either denied or not supported. Have you enabled flag: "Enable screen capture support in getUserMedia"?');
+                            } else alert('Unable to get access to your webcam');
+                        }
+                    };
+                    if (constraints) mediaConfig.constraints = constraints;
+                    getUserMedia(mediaConfig);
+                }
+
+                var broadcastUI = broadcast(config);
+
+                /* UI specific */
+                var videosContainer = document.getElementById('videos-container') || document.body;
+                var setupNewBroadcast = document.getElementById('setup-new-broadcast');
+				var started = false;
+				var running = false;
+
+                var broadcastingOption = document.getElementById('media-type');
+
+                if (setupNewBroadcast) setupNewBroadcast.onclick = setupNewBroadcastButtonClickHandler;
+ 
+				function hideUnnecessaryStuff() {
+					headerEle.style.display = 'none';
+					var visibleElements = document.getElementsByClassName('visible'),
+                        length = visibleElements.length;
+                    for (var i = 0; i < length; i++) {
+                        visibleElements[i].style.display = 'none';
+                    }
+                }
+
+                function rotateInCircle(video) {
+                    video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(0deg)';
+                    setTimeout(function() {
+                        video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(360deg)';
+                    }, 1000);
+                }
+
+				function onstream(stream) {		
+					recordAudio = RecordRTC(stream, {
+						// bufferSize: 16384,
+						onAudioProcessStarted: function() {
+							if (!isFirefox) {
+								recordVideo.startRecording();
+							}
+						}
+					});
+		
+					recordVideo = RecordRTC(stream, {
+						type: 'video'
+					});
+		
+					recordAudio.startRecording();				
+				}
+				
+				document.getElementById('close-x').onclick = function(){
+					unloadCSS();
+					headerEle.style.display = 'block';
+					stopLivestreaming.style.visibility = 'hidden';
+					document.getElementById('livestream-overlay').style.visibility = "hidden";
+                    if(started) postEndData(null, null, 'nofile');
+				};
+				
+				stopLivestreaming.onclick = function() {
+					//preview.poster = 'ajax-loader.gif';
+					unloadCSS();
+					headerEle.style.display = 'block';
+					fileName = Math.round(Math.random() * 99999999) + 99999999;
+					fileName = fileName.toString() + '.webm';
+					config.attachStream.getVideoTracks()[0].stop();
+					if (!isFirefox) {
+						recordAudio.stopRecording(function() {
+							document.getElementById('support-info').innerHTML = 'Got audio-blob. Getting video-blob...';
+							recordVideo.stopRecording(function() {
+								document.getElementById('support-info').innerHTML = 'Uploading to server...';
+								postEndData(recordAudio.getBlob(), recordVideo.getBlob(), fileName);
+							});
+						});
+					}
+					//startLivestreaming.style.visibility = 'visible';
+					stopLivestreaming.style.visibility = 'hidden';
+					document.getElementById('livestream-overlay').style.visibility = "hidden";	
+				};
+				
+				function joinStream(broadcaster) {
+					loadCSS();
+                    hideUnnecessaryStuff();
+					document.getElementById('livestream-overlay').style.visibility = "visible";
+					startLivestreaming.style.visibility = 'hidden';
+					var broadcaster = broadcaster;
+					var roomToken = broadcaster;
+					broadcastUI.joinRoom({
+						roomToken: roomToken,
+						joinUser: broadcaster
+					});
+					return;
+				}
+
+				function liveStill(){
+					if(!running) return;
+					checkingXhr = new XMLHttpRequest();
+					checkingXhr.open("GET", "<?php echo url("livestream/livestill"); ?>" + "?id=" + streamId, true);
+					checkingXhr.setRequestHeader('Content-type', 'text/html');
+					checkingXhr.send();
+					setTimeout(liveStill, 15000);
+				}
+
+				function sendXhr(url, data, callback) {
+					var request = new XMLHttpRequest();
+					request.onreadystatechange = function() {
+						if (request.readyState == 4 && request.status == 200) {
+							callback(request.responseText);
+						}
+					};
+					request.open('POST', url);
+					request.send(data);
+				}
+            </script>

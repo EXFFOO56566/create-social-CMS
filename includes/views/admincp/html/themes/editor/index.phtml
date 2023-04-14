@@ -1,0 +1,45 @@
+<div class="wrapper">
+	<div id="site-editor-link-items" class="row bg-primary">
+		<div class="<?php echo ($type == 'themes') ? 'active' : null ?>">
+			<a onclick="return site_editor_switch(this,'themes-site-editor-pane')"><?php echo lang('themes') ?></a>
+		</div>
+		<div class="<?php echo ($type == 'customize') ? 'active' : null ?>">
+			<a onclick="return site_editor_switch(this,'customize-site-editor-pane')"><?php echo lang('customize') ?></a>
+		</div>
+		<div class="<?php echo ($type == 'menu') ? 'active' : null ?>">
+			<a onclick="return site_editor_switch(this,'menu-site-editor-pane')"><?php echo lang('menu') ?></a>
+		</div>
+	</div>
+	<div id="site-editor-content-pane">
+		<div class="each-site-editor-pane <?php echo ($type == 'themes') ? 'site-editor-visible' : null ?>" id="themes-site-editor-pane">
+			<?php foreach(get_all_themes() as $theme => $details): ?>
+				<div class="each-theme">
+					<div class="theme">
+						<div class="actions">
+							<div class="btn-group">
+								<?php if(get_active_theme('frontend') == $theme): ?>
+									<button disabled class="btn btn-sm btn-success"><?php echo lang('active') ?></button>
+								<?php else: ?>
+
+									<a class="btn btn-sm btn-success" href="<?php echo url('admincp/themes/frontend') ?>?action=activate&theme=<?php echo $theme ?>"><?php echo lang('activate') ?></a>
+								<?php endif ?>
+								<button class="btn btn-sm btn-info" onclick="return siteEditor.previewTheme('<?php echo $theme ?>')"><?php echo lang('preview') ?></button>
+							</div>
+						</div>
+						<div class="image-container">
+							<div></div>
+							<img src="<?php echo $details['preview'] ?>"/>
+						</div>
+						<span class="title"><?php echo $details['info']['name'] ?></span>
+					</div>
+				</div>
+			<?php endforeach ?>
+		</div>
+		<div class="each-site-editor-pane clearfix <?php echo ($type == 'customize') ? 'site-editor-visible' : null ?>" id="customize-site-editor-pane">
+			<?php echo view('themes/editor/settings') ?>
+		</div>
+		<div class="each-site-editor-pane <?php echo ($type == 'menu') ? 'site-editor-visible' : null ?>" id="menu-site-editor-pane">
+			<?php echo view("themes/editor/menu") ?>
+		</div>
+	</div>
+</div>

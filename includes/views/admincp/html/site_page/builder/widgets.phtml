@@ -1,0 +1,17 @@
+<?php foreach($widgets as $widget): ?>
+	<?php $widgetDetails = Widget::get($widget['block_view']) ?>
+	<?php if($widgetDetails and isset($widgetDetails['title'])): ?>
+		<div class="widget">
+			<input type='hidden' name='<?php echo $position ?>[<?php echo $widget['id'] ?>][widget]' value='<?php echo $widget['block_view'] ?>'/>
+			<input id="settings-<?php echo $widget['id'] ?>" type='hidden' name='<?php echo $position ?>[<?php echo $widget['id'] ?>][settings]' value='<?php echo $widget['settings'] ?>'/>
+			<div class="title"><?php echo $widgetDetails['title'] ?></div>
+			<div class="description"><?php echo $widgetDetails['description'] ?></div>
+			<div class="actions">
+				<?php if(isset($widgetDetails['settings']) and $widgetDetails['settings']): ?>
+					<a onclick="return siteEditor.loadWidgetSettings(this, '<?php echo $widget['id'] ?>','<?php echo $widget['block_view'] ?>')" href="#"><i class="ion-android-settings"></i></a>
+				<?php endif ?>
+				<a href='' onclick="return siteEditor.deleteWidget(this, '<?php echo $widget['id'] ?>')" class='close'><i class='ion-android-close'></i></a>
+			</div>
+		</div>
+	<?php endif ?>
+<?php endforeach ?>

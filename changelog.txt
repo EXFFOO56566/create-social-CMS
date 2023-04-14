@@ -1,0 +1,242 @@
+------------------------------------------------------------------------------------------------------------------------
+======================================================CREA8SOCIAL=======================================================
+------------------------------------------------------------------------------------------------------------------------
+=================================================VERSION 7.2.1 CHANGELOG================================================
+------------------------------------------------------------------------------------------------------------------------
+-----------------------This document contains changes from the previous version worth mentioning------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+------------------------------------------------------NEW FEATURES------------------------------------------------------
+
+
+
+
+------------------------------------------------------IMPROVEMENTS------------------------------------------------------
+
+ADDED Shortcut system to side menu
+ADDED Gender enable/disable option
+
+
+
+---------------------------------------------------------BUG FIXES------------------------------------------------------
+
+FIXED 'No Record' Language phrases
+FIXED Add video permission in feed editor
+FIXED AdminCP Settings Menu
+FIXED Ads permission bug in menu
+FIXED Album photos privacy issue
+FIXED Asset Override issue
+FIXED Broken link in Top Blogger widget
+FIXED Enable signup option for landing page
+FIXED Evento theme signup
+FIXED Facebook Link preview
+FIXED Feed video height
+FIXED Forum category dropdown height
+FIXED Foxers theme signup
+FIXED GIF upload issue
+FIXED Missing profile completion settings
+FIXED Overflowing feed editor button
+FIXED Overflowing items in user card widget
+FIXED Overflowing reaction images
+FIXED Page builder not saving issue
+FIXED Page builder slug issue
+FIXED Setting title error
+FIXED Term of service link
+FIXED User send message button on iPad
+
+
+
+-----------------------------------------------NEW/UPDATED FILES AND FOLDERS--------------------------------------------
+
+- includes/core.php
+- includes/functions.php
+- includes/functions/admin.php
+- includes/functions/users.php
+- includes/libraries/embed/1x/Url.php
+- includes/loader.php
+- includes/pages/signup.php
+- includes/settings/profile.php
+- includes/settings/user.php
+- includes/views/admincp/html/layouts/header.phtml
+- includes/views/admincp/html/settings/content.phtml
+- includes/views/admincp/js/editor.js
+- languages/english.php
+- plugins/ads/loader.php
+- plugins/blog/widgets/top-bloggers/view.phtml
+- plugins/business/languages/english.php
+- plugins/feed/css/feed.css
+- plugins/feed/html/editor.phtml
+- plugins/feed/html/feed-content.phtml
+- plugins/forum/html/create_thread.phtml
+- plugins/forum/html/forum-mobile.phtml
+- plugins/forum/html/forum.phtml
+- plugins/forum/languages/english.php
+- plugins/getstarted/html/info.phtml
+- plugins/getstarted/settings.php
+- plugins/like/css/like.css
+- plugins/memory/languages/english.php
+- plugins/music/html/index.phtml
+- plugins/music/languages/english.php
+- plugins/photo/functions/photo.php
+- plugins/poll/html/polls.phtml
+- plugins/poll/languages/english.php
+- plugins/property/html/properties.phtml
+- plugins/property/languages/english.php
+- plugins/video/css/video.css
+- themes/default/html/account/general.phtml
+- themes/default/html/account/profile-card.phtml
+- themes/default/html/profile/about.phtml
+- themes/default/html/profile/about/overview.phtml
+- themes/default/html/profile/layout.phtml
+- themes/default/html/signup/content.phtml
+- themes/default/html/signup/portable-signup.phtml
+- themes/default/html/user/people.phtml
+- themes/evento/widget-override/splash/view.phtml
+- themes/foxers/css/foxers.css
+- themes/foxers/html/profile/layout.phtml
+- themes/foxers/html/signup/content.phtml
+- themes/foxers/html/signup/portable-signup.phtml
+- themes/foxers/js/foxers.js
+- widgets/peoplefilter/view.phtml
+- widgets/splash/view.phtml
+- widgets/user-card/view.phtml
+
+
+-------------------------------------------------REMOVED FILES AND FOLDERS----------------------------------------------
+
+
+
+
+
+----------------------------------------------------------CHANGES-------------------------------------------------------
+
+ADDED Gender enable/disable option
+- includes/functions.php
+- includes/functions/users.php
+- includes/pages/signup.php
+- includes/settings/user.php
+- languages/english.php
+- plugins/getstarted/html/info.phtml
+- plugins/getstarted/settings.php
+- themes/default/html/account/general.phtml
+- themes/default/html/profile/about.phtml
+- themes/default/html/profile/about/overview.phtml
+- themes/default/html/signup/content.phtml
+- themes/default/html/signup/portable-signup.phtml
+- themes/default/html/user/people.phtml
+- widgets/peoplefilter/view.phtml
+
+FIXED Feed video height
+- plugins/feed/css/feed.css
+- plugins/feed/html/feed-content.phtml
+- plugins/video/css/video.css
+
+FIXED Forum category dropdown height
+- plugins/forum/html/create_thread.phtml
+
+FIXED Evento theme signup
+- themes/evento/widget-override/splash/view.phtml
+
+FIXED Foxers theme signup
+- themes/foxers/css/foxers.css
+- themes/foxers/html/signup/portable-signup.phtml
+- themes/foxers/html/signup/content.phtml
+- themes/foxers/js/foxers.js
+
+FIXED Ads permission bug in menu
+- includes/core.php
+- plugins/ads/loader.php
+
+FIXED Missing profile completion settings
+- includes/settings/profile.php
+
+FIXED Setting title error
+- includes/views/admincp/html/settings/content.phtml
+
+FIXED Asset Override issue
+- includes/core.php
+
+FIXED GIF upload issue
+- includes/functions.php
+
+FIXED AdminCP Settings Menu
+- includes/functions/admin.php
+- includes/views/admincp/html/layouts/header.phtml
+
+FIXED Term of service link
+- languages/english.php
+
+FIXED Broken link in Top Blogger widget
+- plugins/blog/widgets/top-bloggers/view.phtml
+
+FIXED Overflowing feed editor button
+- plugins/feed/css/feed.css
+
+FIXED Album photos privacy issue
+- plugins/photo/functions/photo.php
+
+FIXED Overflowing items in user card widget
+- plugins/feed/css/feed.css
+
+FIXED Enable signup option for landing page
+- widgets/splash/view.phtml
+
+FIXED Facebook Link preview
+- includes/libraries/embed/1x/Url.php
+
+FIXED 'No Record' Language phrases
+- plugins/business/languages/english.php
+- plugins/forum/html/forum-mobile.phtml
+- plugins/forum/html/forum.phtml
+- plugins/forum/languages/english.php
+- plugins/memory/languages/english.php
+- plugins/music/html/index.phtml
+- plugins/music/languages/english.php
+- plugins/poll/html/polls.phtml
+- plugins/poll/languages/english.php
+- plugins/property/html/properties.phtml
+- plugins/property/languages/english.php
+
+FIXED Add video permission in feed editor
+- plugins/feed/html/editor.phtml
+
+FIXED Overflowing reaction images
+- plugins/like/css/like.css
+
+FIXED User send message button on iPad
+- themes/default/html/account/profile-card.phtml
+- themes/default/html/profile/layout.phtml
+- themes/foxers/html/profile/layout.phtml
+- widgets/user-card/view.phtml
+
+FIXED Page builder slug issue
+- includes/functions.php
+- includes/functions/users.php
+- includes/loader.php
+
+FIXED Page builder not saving issue
+- includes/views/admincp/js/editor.js
+
+
+
+
+--------------------------------------------------------INSTRUCTIONS----------------------------------------------------
+
+
+After adding and updating necessary files,
+
+- Login to your AdminCP.
+
+- Click Maintenance -> Update System
+
+- Test your site.
+
+You may report any bug via our Feedback System at https://crea8social.com/feedback
+
+
+
+
+
+Thank you for using Crea8social.

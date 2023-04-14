@@ -1,0 +1,71 @@
+
+<?php echo view('layouts/menu')?>
+<div  class="dashboard-content" style="padding: 0">
+    <?php theme_extend('main.extend')?>
+    <?php echo $content?>
+</div>
+<?php $menus = get_menus("main-menu"); ?>
+<?php $current_page = segment(0); ?>
+<?php $current = array(); ?>
+<div class="foxer-header-menu" style="display: none">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item icon-menu-li">
+            <div class="dropdown icon-menu-dropdown">
+                <span data-toggle="dropdown" aria-expanded="false"><i class="ion-android-menu"></i></span>
+                <ul class="dropdown-menu site_menu mCustomScrollbar _mCS_1 mCS-autoHide dont-unbind-children" style="overflow: visible;">
+                    <div id="mCSB_1" class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside" style="max-height: 312px;" tabindex="0">
+                        <div id="mCSB_1_container" class="mCSB_container" style="position:relative; top:0; left:0;" dir="ltr">
+                            <?php foreach ($menus as $menu):?>
+                                <?php //if ($current_page != strtolower(lang($menu->title)) ):?>
+                                    <li rel="">
+                                        <a href="<?php echo ($menu->tab) ? 'javascript:void(0)' : $menu->link?>" ajax ="true" class="ajax_link">
+                                            <i style="    margin: 0px 5px 0px 10px;" class="ico <?php echo $menu->icon?>"></i>
+                                            <span> <?php echo ucwords(lang($menu->title))?> </span>
+                                        </a>
+                                    </li>
+                         
+
+                                <?php //endif;?>
+                            <?php endforeach;?>
+                        </div>
+                    </div>
+                    <div id="mCSB_1_scrollbar_vertical" class="mCSB_scrollTools mCSB_1_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical" style="display: block;">
+                        <div class="mCSB_draggerContainer">
+                            <div id="mCSB_1_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 50px; display: block; height: 178px; max-height: 286px; top: 0px;">
+                                <div class="mCSB_dragger_bar" style="line-height: 50px;">
+
+                                </div>
+                            </div>
+                            <div class="mCSB_draggerRail">
+
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            <?php if ($current):?>
+			<!--
+                <span class="js-btn-collapse-main-nav link built icon-menu-span">
+                    <a href="<?php echo ($current->tab) ? 'javascript:void(0)' : $current->link?>" ajax ="true">
+                        <i style="    margin: 0px 5px 0px -4px;" class="ico <?php echo $current->icon?>"></i>
+                        <span>
+                            <?php echo ucwords(lang($current->title))?>
+                        </span>
+                    </a>
+                </span>
+				-->
+				
+            <?php else:?>
+			<!--
+                <span class="js-btn-collapse-main-nav link built">
+                    <a href="<?php echo url(); ?>" ajax = "true" class=" ajax_link">
+                        <i style="    margin: 0px 5px 0px -4px;" class="fa fa-dashboard"></i>
+                        <span><?php echo ucwords(lang('home'))?></span>
+                    </a>
+                </span>
+				-->
+				<?php _lang('explore')?>
+            <?php endif; ?>
+        </li>
+    </ul>
+</div>

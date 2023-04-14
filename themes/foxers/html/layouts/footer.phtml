@@ -1,0 +1,209 @@
+		</div>
+		<?php if(app()->onFooter): ?>
+		<div id="footer">
+			<div class="container">
+				<?php echo view('layouts/column/load', array('position' => 'bottom', 'page' => 'footer', 'content' => '')) ?>
+			</div>
+			<!--<div class="top">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-3">
+							<div id="section-1" class="section contact">
+								<h4 class="title">
+									<?php $logo = config('site-logo'); $logo = (!$logo) ? img("images/logo.png") : url_img($logo); ?>
+									<img src="<?php echo $logo ?>" />
+									<span><?php echo config('site_title') ?></span>
+								</h4>
+								<div class="content">
+									<ul>
+										<li><i class="ion-location icon"></i><span><?php echo config('site-company-location', '795, Folsom Ave, Suite 600, San Fransisco, CA94107') ?></span></li>
+										<li><i class="ion-android-call icon"></i><span><?php echo config('site-company-phone-number', '(123) 456 7890') ?></span></li>
+										<li><i class="ion-email icon"></i><span><?php echo config('site-company-email', 'first.last@example.com') ?></span></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div id="section-2" class="section twitter-feed">
+								<h4 class="title"><?php echo lang('twitter-feed') ?></h4>
+								<div class="content">
+									<ul>
+										<li>
+											<i class="icon ion-social-twitter"></i>
+											<span>RT @nolson: Now this http://t.co/TSfMWlqMAW is one hell of a stunning site!!! awsome work guys @AIRNAUTS</span>
+										</li>
+										<li>
+											<i class="icon ion-social-twitter"></i>
+											<span>Checkout the WordPres version of Tucson - http://t.co/sBIU3GbapT</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div id="section-3" class="section photostream">
+								<h4 class="title"><?php echo lang('photostream') ?></h4>
+								<div class="content">
+									<?php $photos = get_photos(null, 'all', 9); $i = 1; ?>
+									<div class="row">
+										<?php foreach($photos as $photo): ?>
+										<?php if($i % 3 == 0): ?>
+									</div>
+									<div class="row">
+										<?php endif ?>
+										<div class="col-sm-4"><img src="<?php echo url_img($photo['path'], 200) ?>" /></div>
+										<div class="col-sm-4"><img src="<?php echo url_img($photo['path'], 200) ?>" /></div>
+										<div class="col-sm-4"><img src="<?php echo url_img($photo['path'], 200) ?>" /></div>
+										<?php $i++; endforeach; ?>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3">
+							<div id="section-4" class="section newsletter">
+								<h4 class="title"><?php echo lang('newsletter') ?></h4>
+								<div class="content">
+									<p><?php echo lang('newsletter-subscribe-info') ?></p>
+									<form action="" method="POST">
+										<input type="text" value="" placeholder="<?php echo lang('enter-email-address') ?>" />
+										<input type="submit" value="<?php echo lang('subscribe') ?>" />
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>-->
+			<div class="container bottom <?php echo ($app->hideFooterContent) ? 'hide-footer' : null ?>">
+				<div class="row">
+					<div class="col-md-6 left">
+						<div class="copyright">
+							<?php echo lang('copyright') ?> © <?php echo date('Y') ?> <?php echo config('site_title') ?>. <?php echo lang('all-right-reserved') ?>
+						</div>
+					</div>
+					<div class="col-md-6 right">
+						<ul class="footer-links">
+							<?php $menus = get_menus("footer-menu"); $size = count($menus) ?>
+							<?php foreach ($menus as $menu): ?>
+								<li><a href="<?php echo $menu->link ?>"> <?php echo ucfirst(lang($menu->title)) ?> </a></li>
+							<?php endforeach ?>
+							<?php $languages = get_all_languages(); ?>
+							<?php $active_language = $app->lang;  foreach ($languages as $lang) if($lang['language_id'] == $app->lang) $active_language = $lang['language_title'] ?>
+							<li class="dropdown">
+								<a aria-expanded="false" href="#" class="dropdown-toggle" data-toggle="dropdown" > <?php echo $active_language ?> </a>
+								<ul class="dropdown-menu dropdown-menu-right">
+									<?php foreach ($languages as $lang): ?>
+										<li class="dropdown-item">
+											<a href="<?php echo url_to_pager("change-language", array('lang' => $lang['language_id'])) ?>"> <?php echo $lang['language_title'] ?> </a>
+										</li>
+									<?php endforeach ?>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php echo theme_extend("footer") ?>
+		<?php endif; ?>
+		<div class="modal fade" id="loginModal">
+			<div class="modal-dialog modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+                        <h4 class="modal-title"><?php echo lang('login') ?></h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form action="<?php echo url_to_pager('login') ?>" method="post">
+							<?php CSRFProtection::embed() ?>
+							<fieldset class="form-group">
+								<input type="text" class="form-control form-control-lg" name="val[username]" placeholder="<?php echo lang('username-email-address') ?>">
+							</fieldset>
+							<fieldset class="form-group">
+								<input type="password" class="form-control form-control-lg" name="val[password]" placeholder="<?php echo lang('your-password') ?>">
+							</fieldset>
+							<div class="clearfix">
+								<div class="checkbox pull-left">
+									<label class="c-input c-checkbox"> <input name="val[remember]" checked type="checkbox">
+										<span class="c-indicator"></span>
+										<?php echo lang('remember-me') ?>
+									</label>
+								</div>
+								<a ajax="true" href="<?php echo url_to_pager('forgot-password') ?>" class="pull-right forgot"><?php echo lang('forgot-password') ?></a>
+							</div>
+							<button class="btn btn-info btn-block btn-upper" style="margin: 10px 0px"><?php echo lang('sign-in') ?></button>
+						</form>
+						<?php if (config('enable-facebook', false) || config('enable-twitter', false) || config('enable-googleplus', false) || config('enable-vk', false)): ?>
+							<div id="social-links-container">
+								<div class="sign-with-container">
+									<div class="text"><?php echo lang('login-with') ?></div>
+									<div class="line"></div>
+								</div>
+								<div class="content">
+									<ul id="home-social-links">
+										<?php if (config('enable-facebook', false)): ?>
+											<li>
+												<a class="facebook" href="<?php echo url_to_pager('facebook-auth') ?>"><i class="icon ion-social-facebook"></i></a>
+											</li>
+										<?php endif ?>
+										<?php if (config('enable-twitter', false)): ?>
+											<li>
+												<a class="twitter" href="<?php echo url_to_pager('twitter-auth') ?>"><i class="icon ion-social-twitter"></i></a>
+											</li>
+										<?php endif ?>
+										<?php if (config('enable-googleplus', false)): ?>
+											<li>
+												<a class="googleplus" href="<?php echo url_to_pager('googleplus-auth') ?>"><i class="ion-social-googleplus-outline"></i></a>
+											</li>
+										<?php endif ?>
+										<?php if (config('enable-vk', false)): ?>
+											<li>
+												<a class="vk" href="<?php echo url_to_pager('vk-auth') ?>"><i class="ion-android-arrow-forward"></i></a>
+											</li>
+										<?php endif ?>
+										<?php echo fire_hook('extend.third.party.auth', null, array()); ?>
+									</ul>
+								</div>
+							</div>
+						<?php endif ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="confirmModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-body" data-message="<?php echo lang('are-you-sure') ?>">
+						<?php echo lang('are-you-sure') ?>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo lang('no') ?></button>
+						<button type="button" id="confirm-button" class="btn btn-primary"><?php echo lang('yes') ?></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="alertModal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-primary btn-sm"><?php echo lang('ok') ?></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php echo render_assets('js') ?>
+		<script src="<?php echo asset_link("js/tinymce/tinymce.min.js") ?>"></script>
+		<script src="<?php echo asset_link("js/tinymce/jquery.tinymce.min.js") ?>"></script>
+		<?php $key = trim(config('google-api-key', '') != '') ? '&key='.config('google-api-key', '') : '' ?>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&callback=initMaps<?php echo $key ?>"></script>
+		<audio id="update-sound" preload="auto">
+			<source src="<?php echo asset_link('sounds/notification.ogg') ?>" type="audio/ogg">
+			<source src="<?php echo asset_link('sounds/notification.mp3') ?>" type="audio/mpeg">
+			<source src="<?php echo asset_link('sounds/notification.wav') ?>" type="audio/wav">
+		</audio>
+	</body>
+</html>

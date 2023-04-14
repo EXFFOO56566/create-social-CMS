@@ -1,0 +1,117 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('manage-members') ?>
+		<span><?php echo lang('manage-members-desc') ?></span>
+	</div>
+	<div class="wrapper-content">
+		<form method="post" action="" class="wrapper-form">
+			<?php CSRFProtection::embed() ?>
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<label class="form-control-label"><?php echo lang('first_name') ?></label>
+					<div>
+						<input type="text" class="form-control" name="val[first_name]" value="<?php echo $user['first_name'] ?>"/>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<label class="form-control-label"><?php echo lang('last_name') ?></label>
+					<div>
+						<input type="text" class="form-control" name="val[last_name]" value="<?php echo $user['last_name'] ?>"/>
+					</div>
+				</div>
+			</div>
+			<?php fire_hook('user.type.signup', $user); ?>
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<label class="form-control-label"><?php echo lang('username') ?></label>
+					<div>
+						<input type="text" class="form-control" name="val[username]" value="<?php echo $user['username'] ?>" required/>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<label class="form-control-label"><?php echo lang('email-address') ?></label>
+					<div>
+						<input type="email" class="form-control" name="val[email_address]" value="<?php echo $user['email_address'] ?>" required/>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<label class="form-control-label"><?php echo lang('password') ?></label>
+					<div>
+						<input type="password" class="form-control" name="val[password]" value=""/>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-6">
+							<label class="form-control-label"><?php echo lang('verified') ?></label>
+							<div>
+								<select name="val[verified]" class="form-control">
+									<option <?php echo ($user['verified'] == 0) ? 'selected' : null ?> value="0"><?php echo lang('no') ?></option>
+									<option <?php echo ($user['verified'] == 1) ? 'selected' : null ?> value="1"><?php echo lang('yes') ?></option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label class="form-control-label"><?php echo lang('activated') ?></label>
+							<div>
+								<select name="val[activated]" class="form-control">
+									<option <?php echo ($user['activated'] == 0) ? 'selected' : null ?> value="0"><?php echo lang('no') ?></option>
+									<option <?php echo ($user['activated'] == 1) ? 'selected' : null ?> value="1"><?php echo lang('yes') ?></option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-6">
+							<label class="form-control-label"><?php echo lang('banned') ?></label>
+							<div>
+								<select name="val[bannned]" class="form-control">
+									<option <?php echo ($user['bannned'] == 0) ? 'selected' : null ?> value="0"><?php echo lang('no') ?></option>
+									<option <?php echo ($user['bannned'] == 1) ? 'selected' : null ?> value="1"><?php echo lang('yes') ?></option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label class="form-control-label"><?php echo lang('featured') ?></label>
+							<div>
+								<select name="val[featured]" class="form-control">
+									<option <?php echo ($user['featured'] == 0) ? 'selected' : null ?> value="0"><?php echo lang('no') ?></option>
+									<option <?php echo ($user['featured'] == 1) ? 'selected' : null ?> value="1"><?php echo lang('yes') ?></option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-6">
+							<label class="form-control-label"><?php echo lang('role') ?></label>
+							<div>
+								<select name="val[role]" class="form-control">
+									<?php $userRole = ($user['role']) ? $user['role'] : 2; ?>
+									<?php foreach(list_user_roles() as $role): ?>
+										<option <?php echo ($role['role_id'] == $userRole) ? 'selected' : null ?> value="<?php echo $role['role_id'] ?>"><?php echo $role['role_title'] ?></option>
+									<?php endforeach ?>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <?php fire_hook('more.admin.user.edit.fields', null, array($user)); ?>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <div class="submit-button-container">
+                        <button class="btn btn-info form-control"><?php echo lang('save') ?></button>
+                    </div>
+                </div>
+            </div>
+		</form>
+	</div>
+</div>

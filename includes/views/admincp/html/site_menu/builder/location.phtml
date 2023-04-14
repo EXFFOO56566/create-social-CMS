@@ -1,0 +1,20 @@
+<?php $location = (isset($location)) ? $location : 'main-menu'; ?>
+<div class="title clearfix">
+	<?php echo lang('menu-locations') ?>
+	<select onchange="return siteEditor.changeMenu(this)" id="menu-locations" class="c-select pull-right">
+		<?php foreach(get_menu_locations() as $id => $title): ?>
+			<option <?php echo ($id == $location) ? 'selected' : null ?> value="<?php echo $id ?>"><?php echo lang($title) ?></option>
+		<?php endforeach ?>
+	</select>
+</div>
+<div class="box-content">
+	<div id="menu-location-items">
+		<?php foreach(Menu::getSaveMenus($location) as $menu): ?>
+			<div class="menu-item" id="<?php echo $menu['id'] ?>-menu">
+				<span class="menu-title"><?php echo lang($menu['title']) ?></span>
+				<a onclick="return siteEditor.editMenu('<?php echo $menu['id'] ?>')" href='' style='color:#009CEB'>Edit</a>
+				<a onclick="return siteEditor.deleteMenu('<?php echo $menu['id'] ?>')" href="" class="close" style="font-size: 15px"><i class="ion-close"></i></a>
+			</div>
+		<?php endforeach ?>
+	</div>
+</div>

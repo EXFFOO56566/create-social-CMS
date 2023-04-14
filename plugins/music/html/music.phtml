@@ -1,0 +1,30 @@
+<div class="music-item clearfix" style="margin-bottom: 15px;">
+	<div style=" margin-top: -25px; width: 20%; border-radius: 5px; float: left !important; padding-right: 5px; ">
+		<a ajax="true" href="<?php echo get_music_url($music) ?>">
+			<img class="" style="width: 100% !important; height: 100px; overflow: hidden; object-fit: cover;"
+			     src="<?php echo ($music['cover_art']) ? url_img($music['cover_art'], 920) : img('music::images/preview.png') ?>"></a>
+		<a ajax="true" href="<?php echo get_music_url($music) ?>"
+		   style="width: 100%; height:auto; background-image:url(<?php echo ($music['cover_art']) ? url_img($music['cover_art'], 920) : img('music::images/preview.png') ?>);"></a>
+	</div>
+	<div style="width: 80%; float: left; margin-left: 0 !important; ">
+		<?php $playlist = $playlist ? $playlist : array($music['slug'] => $music);
+		$options = array('nowPlaying' => $music['slug'], 'autoplay' => true); ?>
+		<a ajax="true" href="<?php echo get_music_url($music) ?>">
+			<p class="item-desc"
+			   style="margin: 0px;"><?php echo empty($music['artist']) ? lang('music::unknown-artist').' - '.$music['title'] : $music['artist'].' - '.$music['title'] ?>
+			</p>
+		</a>
+		<div style="float: left;">
+			<?php $music['entity'] = fire_hook('entity.info', $music); ?>
+			<img style="border-radius: 50%; float: left;" src="<?php echo $music['entity']['avatar'] ?>" width="35" height="35"/>
+			<?php echo lang('music::by').' : '; ?>
+			<a ajax="true" href="<?php echo url($music['entity']['id']) ?>"><?php echo $music['entity']['name'] ?></a>
+			<span class="feed-time"><span class="timeago" title="<?php echo date('c', $music['time']) ?>"><?php echo date('c', $music['time']) ?></span></span>
+		</div>
+		<div style="float: right;">
+			<i style="float: right; margin: 5px;" id="list-play-button-<?php echo $music['id'] ?>" class="list-play-button  ion-play 1button" style=" margin-left: 0px; z-index: 999999" onclick='if(typeof music.player.nowPlaying !== "undefined" && music.player.playing && music.player.nowPlaying == "<?php echo $music['slug'] ?>"){music.updateButton(this)}else{music.player.init(<?php echo str_replace("'", '&apos;', json_encode($playlist)) ?>, <?php echo json_encode($options) ?>); this.className += " playing "; this.className = this.className.replace(/(?:^|\s)ion-play(?!\S)/g , " ion-pause ");} this.className += " playing ";'></i>
+			<span style="float: right; margin: 5px; display: block;"><strong><?php echo $music['play_count'] ?></strong><br/><?php echo $music['play_count'] > 1 ? lang('music::plays') : lang('music::play') ?></span>
+			<span style="float: right; margin: 5px;" class=" music-social-share-link"><?php if($music['privacy'] == 1 && plugin_loaded('sharer')) echo view('sharer::share_link', array('link' => url_to_pager('music-page', array('id' => $music['slug'])))) ?></span>
+		</div>
+	</div>
+</div>

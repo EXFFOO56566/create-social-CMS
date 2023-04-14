@@ -1,0 +1,82 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('ads::edit-service') ?>
+		<a class="btn btn-outline-secondary" href="<?php echo url_to_pager('admin-ads-service-list') ?>" style="float: right; margin-left: 8px;"><?php echo lang('ads::service-list') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<form method="post" action="" class="wrapper-form">
+			<?php CSRFProtection::embed() ?>
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('ads::title') ?></label>
+				<div class="col-sm-9">
+					<input type="text" name="val[title]" value="<?php echo $service['title'] ?>" class="form-control" placeholder="<?php echo lang('ads::title') ?>" required />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('ads::code') ?></label>
+				<div class="col-sm-9">
+					<textarea name="val[code]" class="form-control" placeholder="<?php echo lang('ads::code') ?>" required><?php echo $service['code'] ?></textarea>
+				</div>
+			</div>
+
+			<?php $positions = explode(',', $service['positions']) ?>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('ads::positioning') ?></label>
+				<div class="col-sm-9">
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-top-before" type="checkbox" name="val[positions][]" value="top.before" class="custom-control-input" <?php echo in_array('top.before', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-top-before"><?php echo lang('ads::top-before') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-top-after" type="checkbox" name="val[positions][]" value="top.after" class="custom-control-input" <?php echo in_array('top.after', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-top-after"><?php echo lang('ads::top-after') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-right-before" type="checkbox" name="val[positions][]" value="right.before" class="custom-control-input" <?php echo in_array('right.before', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-right-before"><?php echo lang('ads::right-before') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-right-after" type="checkbox" name="val[positions][]" value="right.after" class="custom-control-input" <?php echo in_array('right.after', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-right-after"><?php echo lang('ads::right-after') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-bottom-before" type="checkbox" name="val[positions][]" value="bottom.before" class="custom-control-input" <?php echo in_array('bottom.before', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-bottom-before"><?php echo lang('ads::bottom-before') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-bottom-after" type="checkbox" name="val[positions][]" value="bottom.after" class="custom-control-input" <?php echo in_array('bottom.after', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-bottom-after"><?php echo lang('ads::bottom-after') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-left-before" type="checkbox" name="val[positions][]" value="left.before" class="custom-control-input" <?php echo in_array('left.before', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-left-before"><?php echo lang('ads::left-before') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-left-after" type="checkbox" name="val[positions][]" value="left.after" class="custom-control-input" <?php echo in_array('left.after', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-left-after"><?php echo lang('ads::left-after') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-middle-before" type="checkbox" name="val[positions][]" value="middle.before" class="custom-control-input" <?php echo in_array('middle.before', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-middle-before"><?php echo lang('ads::middle-before') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-middle-after" type="checkbox" name="val[positions][]" value="middle.after" class="custom-control-input" <?php echo in_array('middle.after', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-middle-after"><?php echo lang('ads::middle-after') ?></label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input id="positioning-feed-inline" type="checkbox" name="val[positions][]" value="feed.inline" class="custom-control-input" <?php echo in_array('feed.inline', $positions) ? 'checked' : '' ?>>
+						<label class="custom-control-label" for="positioning-feed-inline"><?php echo lang('ads::feed-inline') ?></label>
+					</div>
+				</div>
+			</div>
+<!--			--><?php //var_dump($positions) ?>
+			<input type="hidden" name="val[id]" value="<?php echo $service['id'] ?>">
+			<button class="btn btn-info"><?php echo lang('ads::update') ?></button>
+		</form>
+	</div>
+</div>

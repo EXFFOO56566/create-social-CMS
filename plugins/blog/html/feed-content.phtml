@@ -1,0 +1,56 @@
+<div id="blogs-list-container" class="box-content clearfix list-listing-container">
+        <?php $blog = arrange_blog($blog); ?>
+        <?php $user = find_user($blog['user_id']) ?>
+        <?php $refId = $blog['id'];
+        $refName = 'blog'; ?>
+        <div class="each-item clearfix blog-list">
+            <?php if($blog['image']): ?>
+                <div class="left">
+                    <?php if($blog['featured']): ?>
+                        <span class="featured-tag"><?php echo lang('featured') ?></span>
+                    <?php endif ?>
+                    <a ajax="true" href="<?php echo url('blog/'.$blog['slug']) ?>" style="background-image:url(<?php echo ($blog['image']) ? url_img($blog['image'], 700) : get_avatar(200, $user) ?>)"></a>
+                </div>
+                <div class="right">
+                    <span class="item-title"><a ajax="true" href="<?php echo url('blog/'.$blog['slug']) ?>"><?php echo $blog['title'] ?></a></span>
+                    <div class="item-info">
+							<span class="help-block" style="display: block">
+								<?php echo lang('blog::publisher') ?>: <a href="<?php echo url($blog['publisher']['id']) ?>"><?php echo $blog['publisher']['name'] ?></a>
+                                <?php echo lang('blog::on') ?> <?php echo date('M j , y  h:i A', $blog['time']) ?>
+							</span>
+                    </div>
+                    <p class="item-desc"><?php echo strip_tags(str_limit($blog['content'], 100)) ?></p>
+                    <p>
+                        <strong><?php echo $blog['views']; ?></strong> <?php echo lang('blog::views'); ?>
+                        <strong><?php $likes = count_likes($refName, $refId);
+                            echo $likes; ?></strong> <?php if($likes > 1) {
+                            echo lang('blog::likes');
+                        } else {
+                            echo lang('blog::like');
+                        } ?>
+                    </p>
+                </div>
+            <?php else: ?>
+                <div class="right" style="width: 97% !important;">
+                    <span class="item-title">
+					<a ajax="true" href="<?php echo url('blog/'.$blog['slug']) ?>"><strong><?php echo $blog['title'] ?></strong></a> </span>
+                    <div class="item-info">
+							<span class="help-block" style="display: block">
+								<?php echo lang('blog::publisher') ?>: <a href="<?php echo url($blog['publisher']['id']) ?>"><?php echo $blog['publisher']['name'] ?></a>
+                                <?php echo lang('blog::on') ?> <?php echo date('M j , y  h:i A', $blog['time']) ?>
+							</span>
+                    </div>
+                    <p class="item-desc"><?php echo strip_tags(str_limit($blog['content'], 250)) ?></p>
+                    <p>
+                        <strong><?php echo $blog['views']; ?></strong> <?php echo lang('blog::views'); ?>
+                        <strong><?php $likes = count_likes($refName, $refId);
+                            echo $likes; ?></strong> <?php if($likes > 1) {
+                            echo lang('blog::likes');
+                        } else {
+                            echo lang('blog::like');
+                        } ?>
+                    </p>
+                </div>
+            <?php endif; ?>
+        </div>
+</div>

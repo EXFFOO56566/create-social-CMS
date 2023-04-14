@@ -1,0 +1,56 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('pages') ?>
+		<a class="btn btn-sm btn-outline-primary" href="<?php echo url('admincp/site/page/add') ?>" style="float: right; margin-left: 8px;"><?php echo lang('add-new-page') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="types">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-pages-batch-action') ?>?action=delete" class="action-link list-table-select-action" data-group="pages"><?php echo lang('delete') ?></a>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="pages" data-id="0"></div>
+						</th>
+						<th><?php echo lang('title') ?></th>
+						<th><?php echo lang('layout') ?></th>
+						<th class="actions"><?php echo lang('action') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php $layouts = Pager::getLayouts(); foreach($pages->results() as $page): $page['column_type'] = $page['column_type'] ? $page['column_type'] : 1 ?>
+						<tr>
+							<th>
+								<div class="list-table-select" data-group="pages" data-id="<?php echo $page['id'] ?>"></div>
+							</th>
+							<td><a href="<?php echo url($page['slug']) ?>" target="_blank"><?php echo lang($page['title']) ?></a></td>
+							<td><?php echo $layouts[$page['column_type']]['title'] ?></td>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown"><i class="ion-android-settings"></i></a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a class="ion-edit" href="<?php echo url('admincp/site/page/builder?id='.$page['id']) ?>"></a>
+										<a class="admin-confirm ion-android-delete" href="<?php echo url('admincp/site/page/delete?id='.$page['id']) ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php if($pages->total): ?>
+			<?php if($pages->total > 20): ?>
+				<?php echo $pages->links() ?>
+			<?php endif ?>
+		<?php else: ?>
+			<div class="alert alert-info"><?php echo lang('no-page-found') ?></div>
+		<?php endif ?>
+	</div>
+</div>

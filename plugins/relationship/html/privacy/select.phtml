@@ -1,0 +1,22 @@
+<?php $privacy = fire_hook('privacy', [' ']); ?>
+<div class="magic-select global-privacy" data-name="<?php echo $name ?>" data-width="200px">
+	<input type="hidden" name="<?php echo $name ?>" value="<?php echo $default ?>" class="magic-select-value"/>
+	<div class="magic-select-toggle">
+		<i class="<?php echo $privacy[$default]['icon']; ?>"></i>
+		<?php echo $privacy[$default]['title']; ?>
+	</div>
+	<div class="magic-select-content">
+		<div class="magic-select-option" data-value="1">
+			<i class="<?php echo $privacy['1']['icon']; ?>"></i>
+			<?php echo $privacy['1']['title']; ?>
+		</div>
+		<?php foreach($privacy as $id => $detail): ?>
+			<?php if(isset($detail['type']) && $detail['type'] == $type): ?>
+				<div class="magic-select-option" data-value="<?php echo $id ?>">
+					<i class="<?php echo $detail['icon']; ?>"></i>
+					<?php echo $detail['title']; ?>
+				</div>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	</div>
+</div>

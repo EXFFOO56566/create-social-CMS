@@ -1,0 +1,79 @@
+<div class="modal fade" id="image-modal" tabindex="-1" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only"><?php echo lang('photo::close') ?></span>
+				</button>
+				<h4 class="modal-title" id="my-modal-label"><?php echo lang('photo::image-preview') ?></h4>
+			</div>
+			<div class="modal-body">
+				<img src="" id="image-preview">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('photo::close') ?></button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="image-delete-modal" tabindex="-1" role="dialog" aria-labelledby="my-modal-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<h4 class="modal-title" id="my-modal-label"><?php echo lang('photo::image-delete-prompt') ?></h4>
+				<button id="image-delete-button" type="button" class="btn btn-danger" data-dismiss="modal" onclick="photoImageDelete()"><?php echo lang('photo::yes') ?></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('photo::no') ?></button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+    function photoViewImage(img) {
+        $('#image-preview').attr('src', $(img).attr('src').replace(/_75_|_200_/g, "_920_"));
+        $('#image-modal').modal('show');
+    }
+
+    function photoDeleteModal(id) {
+        $('#image-delete-button').data('id', id);
+        $('#image-delete-modal').modal('show');
+    }
+
+    function photoImageDelete(id) {
+        var id = $('#image-delete-button').data('id');
+        $('#photo-' + id).remove();
+        $.ajax({url: baseUrl + 'photo/delete/' + id});
+        $('#image-delete-modal').modal('hide');
+    }
+</script>
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('photo::manage-photos') ?>
+		<span><?php echo lang('photo::manage-photos-desc') ?></span>
+	</div>
+	<?php fire_hook('clear.vote.count'); ?>
+    <?php fire_hook('admincp.photo.header') ?>
+	<div id="admin-photo-list" class="wrapper-content">
+		<?php foreach($photos->results() as $photo): ?>
+			<?php $user = find_user($photo['user_id']) ?>
+			<div id="photo-<?php echo $photo['id'] ?>" class="photo">
+				<img src="<?php echo url_img($photo['path'], 600) ?>" onclick="photoViewImage(this)"/>
+				<?php if($photo['featured']): ?>
+					<span class="feature-badge"><?php echo lang('photo::featured') ?></span>
+				<?php endif ?>
+				<?php if(fire_hook('fashion.photo.list', false)): ?>
+					<?php fire_hook('photo.order.count', $photo['count'], array($photo['count'])); ?>
+				<?php endif; ?>
+				<a class="edit-button ion-edit" href="<?php echo url_to_pager('admin-photo-edit').'?id='.$photo['id'] ?>"></a>
+				<span class="delete-button ion-ios-trash" onclick="photoDeleteModal(<?php echo $photo['id'] ?>)"></span>
+				<a href="<?php echo profile_url(null, $user) ?>" class="user"><?php echo get_user_name($user) ?></a>
+			</div>
+		<?php endforeach; ?>
+		<?php if($photos->total): ?>
+			<?php if($photos->total > config('photo-list-limit', 20)): ?>
+				<?php echo $photos->links(true) ?>
+			<?php endif ?>
+		<?php else: ?>
+			<div class="alert alert-info"><?php echo lang('photo::no-photo') ?></div>
+		<?php endif ?>
+	</div>
+</div>

@@ -1,0 +1,48 @@
+<?php if(input('category') == 'discover'): ?>
+	<div class="box">
+		<div id="u_fetchstream_11_1">
+			<div class="_27i-">
+				<div class="_4-u2 _1htl _4-u8">
+					<div class="_3c6v  _9bp _50z3">
+						<div class="_50zm" style="height: 72px;">
+							<div style="width: 176px; height: 72px;">
+								<div class="_50zn clearfix " style="width: 4920px; height: 72px; margin-left: 0px;">
+									<div role="article" aria-hidden="false" aria-posinset="0" aria-setsize="28" class="_3el8 clearfix">
+										<div class="_3el6 _3el7">
+                                    <span display="inline">
+                                        <a href="<?php echo url_to_pager('group-manage') ?>">
+                                            <div class="_3c6x">
+                                                <div class="uiScaledImageContainer _3c6w" style="width:168px;height:72px;">
+                                                    <img class="scaledImageFitWidth img" src="<?php echo img("group::images/recommend.jpg") ?>" style="top:0px;" alt="" width="168" height="112"></div><div class="_44y-">
+                                                    <span class="_3c6_"><?php echo lang('group::recommended') ?></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </span>
+										</div>
+									</div>
+									<?php foreach(get_group_categories() as $category): ?>
+										<div role="article" aria-hidden="false" aria-posinset="0" aria-setsize="28" class="_3el8 clearfix">
+											<div class="_3el6 _3el7">
+                                    <span display="inline">
+                                        <a href="<?php echo url_to_pager('group-category-profile', array('slug' => $category['slug'])) ?>">
+                                            <div class="_3c6x">
+                                                <div class="uiScaledImageContainer _3c6w" style="width:168px;height:72px;">
+                                                    <img class="scaledImageFitWidth img" src="<?php echo url_img($category['image'], 200) ?>" style="top:0px;" alt="" width="168" height="112">
+                                                </div>
+                                                <div class="_44y-"><span class="_3c6_"><?php echo lang($category['title']) ?></span></div>
+                                            </div>
+                                        </a>
+                                    </span>
+											</div>
+										</div>
+									<?php endforeach; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>

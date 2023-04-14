@@ -1,0 +1,22 @@
+<?php if(count($users)): ?>
+	<li class="heading"><?php echo lang('users') ?></li>
+	<?php foreach($users as $user): ?>
+		<li>
+			<div class="img-col">
+				<a href="<?php echo profile_url(null, $user) ?>" target="_blank" class="notification-item">
+					<div class="img" style="background-image: url('<?php echo get_avatar(75, $user) ?>')"></div>
+				</a>
+			</div>
+			<div class="body-col">
+				<div>
+					<a href="<?php echo profile_url(null, $user) ?>" target="_blank" class="notification-item">
+						<span class="accent"><?php echo get_user_name($user) ?></span>
+					</a>
+				</div>
+				<div>
+					<a href="<?php echo url_to_pager('admin-user-action').'?type=edit&id='.$user['id'] ?>"><?php echo lang('edit') ?></a>
+				</div>
+			</div>
+		</li>
+	<?php endforeach; ?>
+<?php endif; ?>

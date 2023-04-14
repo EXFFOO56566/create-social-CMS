@@ -1,0 +1,52 @@
+<?php $user = find_user($id); ?>
+<div class="box" id="relationship" style="background-color: #f6f7f9">
+    <div class="box-content">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="">
+                    <img class="request-relation-image" src="<?php echo get_avatar(75, $user) ?>"/>
+                    <a ajax="true" href="<?php echo profile_url(null, $user) ?>">
+                        <strong> <?php echo $user['first_name']." ".$user['last_name']; ?></strong></a>
+                </div>
+            </div>
+            <?php $gender = ($user['gender'])?$user['gender']:'all' ?>
+            <?php $relationships = get_relationships($gender,'relation');?>
+            <div class="row">
+                <div class="" style="margin-top: 10px;">
+                    <select class="relationSelector" id="relationSelector" name="relation[]" title="Relationship Type">
+                        <option value="0">Choose Relationship:</option>
+                        <?php foreach ($relationships as $relationship):?>
+                        <option <?php if ($relationship['id'] == $type_id) echo "selected" ?> value="<?php echo $relationship['id']?>"><?php echo lang($relationship['relationship'])?></option>
+                        <?php endforeach;?>
+                    </select>
+                    <div class="row">
+                        <?php if (!$relation): ?>
+                            <input type="hidden" id="relationship-family-id" value="<?php echo $id ?>">
+                        <?php else: ?>
+                            <input type="hidden" id="relationship-family-id" value="<?php echo $relation['id'] ?>">
+                            <input type="hidden" id="relation-user-id" value="<?php echo $id ?>">
+                        <?php endif;?>
+                        <div class="" style="margin-left: 36px;margin-top: 10px;">
+                            <?php if ($type_id == 0): ?>
+                                <button type="button" class="btn btn-primary btn-sm" id="relationship-send-request"><?php echo lang('relation::send'); ?></button>
+                                <button type="button" class="btn btn-sm" id="relationship-cancel"><?php echo lang('relation::cancel') ?></button>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-primary btn-sm" data-id="<?php echo $user['id'] ?>" onclick="return save_relations(this)"><?php echo lang('relation::send'); ?></button>
+                                <button type="button" class="btn btn-sm" onclick="return cancel_save_relations(this)" data-id="<?php echo $user['id'] ?>"><?php echo lang('relation::cancel') ?></button>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                </div>
+                <div class="foreground">
+                    <div class="indicator">
+                        <img src="<?php echo img('images/loading.gif') ?>"/>
+                    </div>
+                    <div class="message">
+                        <div class="alert alert-success"><?php echo lang('relation::request-sent') ?></div>
+                        <div class="alert alert-danger"><?php echo lang('relation::request-not-sent') ?></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

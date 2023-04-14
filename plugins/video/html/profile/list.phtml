@@ -1,0 +1,17 @@
+<div class="box">
+	<div class="title"><?php echo lang("video::videos") ?></div>
+	<div id="videos-list-container" class="box-content clearfix list-listing-container">
+		<?php foreach($videos->results() as $video): ?>
+			<?php echo view('video::video', array('video' => $video)) ?>
+		<?php endforeach ?>
+	</div>
+	<?php if($videos->total): ?>
+		<div class="box-content">
+			<?php echo $videos->append(array('category' => input('category'), 'term' => input('term'), 'type' => 'user-profile'))->links(); ?>
+		</div>
+	<?php else: ?>
+		<div class="box-content">
+			<div class="alert alert-info"><?php echo lang('video::no-videos-found-here') ?></div>
+		</div>
+	<?php endif ?>
+</div>

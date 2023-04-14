@@ -1,0 +1,90 @@
+<?php $ref_id = $photo['id'] ; $ref_name = 'photo'; $feed = $ref_name == 'feed' ? find_feed($ref_id) : $photo; ?>
+<div class="media media-md">
+	<div class="media-left">
+		<div class="media-object">
+			<a href="<?php echo $photo['publisher']['url'] ?>"><img src="<?php echo $photo['publisher']['avatar'] ?>"/></a>
+		</div>
+	</div>
+	<div class="media-body">
+		<h6 class="media-heading">
+			<a href="<?php echo $photo['publisher']['url'] ?>"><?php echo $photo['publisher']['name'] ?></a>
+		</h6>
+		<?php if(is_photo_owner($photo, true)): ?>
+			<span class="photo-action-dropdown dropdown">
+	            <button class="dropdown-toggle btn btn-sm" data-toggle="dropdown"><i class="ion-android-more-horizontal"></i></button>
+	            <ul class="dropdown-menu dropdown-menu-right">
+	                <?php if(is_photo_owner($photo)): ?>
+		                <li><a onclick="return make_photo_dp('<?php echo $photo['id'] ?>','<?php echo url_to_pager('photo-dp', array('id' => $photo['id'])) ?>')" href="" class="dropdown-item"><i class="ion-ios-person"></i> <?php echo lang('photo::set-as-profile-picture') ?></a> </li>
+	                <?php endif ?>
+		            <li><a onclick="return delete_photo('<?php echo $photo['id'] ?>','<?php echo url_to_pager('photo-delete', array('id' => $photo['id'])) ?>')" href="" class="dropdown-item"><i class="ion-android-delete"></i> <?php echo lang('photo::delete-photo') ?></a> </li>
+	            </ul>
+	        </span>
+		<?php endif ?>
+	</div>
+</div>
+<?php if(is_loggedIn() && plugin_loaded('like') and config('feed-like-type', 'regular') != 'regular'): ?>
+	<div class="reactors reactors-<?php echo $ref_name ?>-<?php echo $ref_id ?>">
+		<?php echo view('like::reacts', array('type' => $ref_name, 'type_id' => $ref_id)) ?>
+	</div>
+<?php endif ?>
+<div class="photo-viewer-footer feed-footer">
+	<div class="">
+		<ul class=" feed-footer-menu clearfix">
+			<?php if(is_loggedIn() && plugin_loaded('like')): ?>
+				<?php load_functions('like::like'); ?>
+				<?php echo view('like::like-footer', array('type' => $ref_name, 'typeId' => $ref_id)); ?>
+			<?php endif ?>
+			<?php fire_hook('more-feed-footer', null, array($ref_name, $ref_id)); ?>
+			<li class="pull-right">
+				<ul class="feed-statistics">
+					<?php if(plugin_loaded('like')): ?>
+						<li>
+							<a onclick="return show_likes('<?php echo $ref_name ?>', '<?php echo $ref_id ?>')" href="">
+								<i class="fa fa-thumbs-o-up "></i>
+								<span class="like-count-<?php echo $ref_name ?>-<?php echo $ref_id ?>"><?php echo count_likes($ref_name, $ref_id) ?></span></a>
+						</li>
+						<?php if(config('enable-dislike', false)): ?>
+							<li>
+								<a onclick="return show_dislikes('<?php echo $ref_name ?>', '<?php echo $ref_id ?>')" href="">
+									<i class="fa fa-thumbs-o-down "></i>
+									<span class="dislike-count-<?php echo $ref_name ?>-<?php echo $ref_id ?>"><?php echo count_dislikes($ref_name, $ref_id) ?></span></a>
+							</li>
+						<?php endif ?>
+
+					<?php endif ?>
+
+					<?php if(plugin_loaded('comment')): ?>
+						<?php load_functions('comment::comment') ?>
+						<?php $countComments = count_comments($ref_name, $ref_id); ?>
+						<li>
+							<i class="fa fa-comments-o"></i>
+							<span class="comment-count-<?php echo $ref_name ?>-<?php echo $ref_id ?>"><?php echo ($countComments) ? $countComments : null ?></span>
+						</li>
+					<?php endif ?>
+					<?php fire_hook('more-feed-footer-count', null, array($ref_name, $ref_id)); ?>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<?php if(plugin_loaded('comment')): ?>
+		<div class="feed-comment-container">
+
+			<?php if($countComments > config('feed-comment-limit', 3)): ?>
+				<a id="comment-view-more-button-<?php echo $ref_name ?>-<?php echo $ref_id ?>" class="comment-view-more-button comment-view-more-button-<?php echo $ref_name ?>-<?php echo $ref_id ?>" onclick="return show_more_comment('<?php echo $ref_name ?>', '<?php echo $ref_id ?>', 'comment-view-more-indicator-<?php echo $ref_id ?>')" href=""><?php echo lang('view-previous-comments') ?></a>
+				<img class="comment-view-more-indicator" id="comment-view-more-indicator-<?php echo $ref_id ?>" src="<?php echo img('images/loading.gif') ?>"/>
+			<?php endif ?>
+			<div data-offset="<?php echo config('feed-comment-limit', 3) ?>" data-limit="<?php echo config('feed-comment-limit', 3) ?>" class="comment-lists comment-lists-<?php echo $ref_name ?>-<?php echo $ref_id ?>" id="">
+				<?php foreach(get_comments($ref_name, $ref_id, config('feed-comment-limit', 3), 0, $feed) as $comment): ?>
+					<?php echo view('comment::display', array('comment' => $comment)) ?>
+				<?php endforeach; ?>
+			</div>
+			<?php echo view('comment::editor', array(
+				'typeId' => $ref_id,
+				'type' => $ref_name,
+				'entityId' => $photo['editor']['id'],
+				'entityType' => $photo['editor']['type'],
+				'avatar' => $photo['editor']['avatar'],
+				'textLimit' => (config('enable-feed-text-limit', false)) ? config('maximum-feed-text-limit', 150) : false)) ?>
+		</div>
+	<?php endif ?>
+</div>

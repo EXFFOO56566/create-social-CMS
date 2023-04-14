@@ -1,0 +1,65 @@
+<div class="box">
+	<div class="box-content" style="margin: 5% 15%">
+		<h6><?php echo lang('ads::transaction-details') ?></h6>
+		<?php
+		$plan = get_plan($ads['plan_id']);
+		$coupon = "";
+		if(config('promotion-coupon', 0)) {
+			$coupon = input('coupon');
+			$data = array('price' => $plan['price'], 'status' => 0);
+			if($coupon) {
+				$data = fire_hook('promotion.coupon.calculate', $data, array($coupon));
+				if($data['status'] == "1") {
+					$plan['price'] = $data['price'];
+				}
+			}
+		}
+		?>
+		<table class="table table-bordered">
+			<thead>
+			<tr>
+				<th></th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td><?php echo lang('ads::campaign-name') ?></td>
+				<td><?php echo $ads['name'] ?></td>
+			</tr>
+			<tr>
+				<td><?php echo lang('ads::bid-type') ?></td>
+				<td><?php echo ($ads['plan_type'] == 1) ? lang('ads::cost-per-click') : lang('ads::cost-per-impression') ?></td>
+			</tr>
+			<tr>
+				<td><?php echo lang('ads::bid-plan') ?></td>
+				<td><?php echo lang($plan['name']) ?></td>
+			</tr>
+			<tr>
+				<td><?php echo lang('ads::plan-description') ?></td>
+				<td><?php echo lang($plan['description']) ?></td>
+			</tr>
+			<tr>
+				<td><?php echo lang('ads::amount') ?></td>
+				<td><?php echo $plan['price'] ?> (<?php echo config('default-currency') ?>)</td>
+			</tr>
+			</tbody>
+		</table>
+		<?php
+		if(config('promotion-coupon', 0)) {
+			if(!$coupon || $data['status'] == 0) {
+				fire_hook('promotion.coupon.field', $coupon);
+				?>
+				<?php if($coupon) {
+					if($data['status'] == "0"): ?>
+						<span class="alert-danger"> <?php echo lang('membership::coupon-error') ?></span> <?php endif;
+				}
+			}
+		} ?>
+		<h6><?php echo lang('ads::select-payment-method') ?></h6>
+		<img src="<?php echo img('images/payment-options.png') ?>"/>
+		<ul class="nav ads-payment-method">
+			<?php fire_hook('payment.buttons.extend', null, array('ads-plan', $ads['plan_id'], lang($plan['name']), lang($plan['description']), $plan['price'], url_to_pager('ads-payment-success').'?id='.$ads['ads_id'].'&csrf_token='.CSRFProtection::getToken(), url_to_pager('ads-payment-cancel').'?id='.$ads['ads_id'], $coupon)) ?>
+		</ul>
+	</div>
+</div>

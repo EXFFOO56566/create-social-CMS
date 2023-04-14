@@ -1,0 +1,144 @@
+<div class="box">
+	<div class="title"><?php echo lang('marketplace::create-listing') ?></div>
+	<?php if(!is_loggedIn()): ?>
+		<span class="error"><?php echo lang('marketplace::marketplace-create-login-error') ?></span>
+	<?php else: ?>
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<form action="" method="post" enctype="multipart/form-data" class="ajax-form">
+			<?php CSRFProtection::embed() ?>
+			<input type="hidden" name="val[type]" value="create_listing"/>
+			<?php if(!is_loggedIn()): ?>
+				<span class="error"><?php echo lang('marketplace::marketplace-create-login-error') ?></span>
+			<?php endif; ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[category]"><?php echo lang('marketplace::category') ?>: </label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[category_id]" data-width="200px">
+						<div class="magic-select-toggle">
+							<?php echo lang('select-category') ?>
+						</div>
+						<div class="magic-select-content">
+							<?php $categories = marketplace_get_categories(); ?>
+							<?php foreach($categories as $category): ?>
+								<div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+									<?php echo lang($category['title']) ?>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-category-desc') ?></p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[title]"><?php echo lang('marketplace::title') ?>: </label>
+				</div>
+				<div class="right">
+					<input name="val[title]" type="text" class="form-control" required/>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-title-desc') ?></p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[description]"><?php echo lang('marketplace::description') ?>: </label>
+				</div>
+				<div class="right">
+					<textarea name="val[description]" class="form-control" maxlength="500"></textarea>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-description-desc') ?></p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[tags]"><?php echo lang('marketplace::tags') ?>: </label>
+				</div>
+				<div class="right">
+					<input name="val[tags]" type="text" class="form-control" maxlength="128"/>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-tags-desc') ?>.</p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[location]"><?php echo lang('marketplace::location') ?>: </label>
+				</div>
+				<div class="right">
+					<input id="feed-editor-geocomplete" type="text" name="val[location]" class="form-control marketplace-geocomplete" required/>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-location-desc') ?>.</p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[contact]"><?php echo lang('marketplace::contact') ?>: </label>
+				</div>
+				<div class="right">
+					<input type="text" name="val[contact]" class="form-control" placeholder="<?php echo lang('marketplace::phone-email') ?>"/>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-contact-desc') ?>.</p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[link]"><?php echo lang('marketplace::link') ?>: </label>
+				</div>
+				<div class="right">
+					<input type="url" name="val[link]" class="form-control" placeholder="http://domain.com"/>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-link-desc') ?>.</p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[price]"><?php echo lang('marketplace::price') ?>: </label>
+				</div>
+				<div class="right">
+					<input name="val[price]" type="text" class="form-control" placeholder="<?php echo config('currency', '$') ?> 0.00"/>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-price-desc') ?>.</p>
+				</div>
+			</div>
+			<?php fire_hook("listing.create.more.fields", null, array()); ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" for="val[post]"><?php echo lang('marketplace::image') ?>: </label>
+				</div>
+				<div class="right">
+					<div class="magic-input-image-preview" data-name="image">
+						<span class="dimension"></span>
+					</div>
+					<p class="help-block"><?php echo lang('marketplace::create-listing-image-desc') ?></p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('host') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[entity]" data-width="250px">
+						<div class="magic-select-toggle">
+							<img src="<?php echo get_avatar(75) ?>" class="thumb" />
+							<?php echo get_user_name(); ?>
+						</div>
+						<div class="magic-select-content slimscroll" data-height="200px">
+							<div class="magic-select-option" data-value="user-<?php echo get_userid() ?>">
+								<img src="<?php echo get_avatar(75) ?>" class="thumb" />
+								<?php echo get_user_name(); ?>
+							</div>
+							<?php fire_hook('entity.select.list') ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('privacy') ?></label>
+				</div>
+				<div class="right">
+					<?php fire_hook('privacy.select'); ?>
+				</div>
+			</div>
+			<div class="submit">
+				<input type="submit" value="<?php echo lang('marketplace::create') ?>" class="btn btn-info action-button"/>
+			</div>
+		</form>
+	<?php endif ?>
+</div>

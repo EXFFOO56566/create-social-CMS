@@ -1,0 +1,53 @@
+<div class="wrapper">
+	<div class="wrapper-title"><?php echo lang('custom-fields') ?>
+		<a class="btn btn-primary" href="<?php echo url("admincp/custom-fields/") ?>?action=add&type=<?php echo $type ?>"><?php echo lang('add-new-custom-field') ?></a>
+	</div>
+	<div class="wrapper-content">
+        <div class="row">
+            <?php include 'menu.phtml'?>
+            <div class="col-lg-9">
+                <div class="custom-field-list">
+                    <?php foreach(get_custom_field_categories($type) as $category): ?>
+                        <h5><?php echo lang($category['title']) ?></h5>
+                    <div class="table-responsive">
+                        <table data-category="<?php echo $category['id'] ?>" class="table table-striped list-table custom-field-list">
+                            <thead>
+                            <tr style="width: 100%">
+                                <th style="width: 10%"><?php echo lang('type') ?></th>
+                                <th style="width: 30%"><?php echo lang('title') ?></th>
+                                <th style="width: 30%"><?php echo lang('description') ?></th>
+                                <th style="width: 10%"><?php echo lang('show-in-form') ?></th>
+                                <th style="width: 10%"><?php echo lang('required') ?></th>
+                                <th style="width: 20%"><?php echo lang('action') ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach(get_custom_fields($type, $category['id']) as $field): ?>
+                                <tr style="width: 100% !important" class="item" id="<?php echo $field['id'] ?>">
+                                    <td style="width: 10%"><?php echo $field['field_type'] ?></td>
+                                    <td style="width: 30%"><?php echo lang($field['title']) ?></td>
+                                    <td style="width: 30%"><?php echo lang($field['description']) ?></td>
+                                    <td style="width: 10%"><?php echo ($field['show_in_form'] == 1) ? lang('yes') : lang('no') ?></td>
+                                    <td style="width: 10%"><?php echo ($field['required'] == 1) ? lang('yes') : lang('no') ?></td>
+                                    <td style="width: 20%">
+                                        <div class="dropdown actions">
+                                            <a href="#" data-toggle="dropdown">
+                                                <i class="ion-android-settings"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a href="<?php echo url("admincp/custom-fields?action=edit&id=".$field['id']) ?>&type=<?php echo $type ?>" class="ion-edit"></a>
+                                                <a href="<?php echo url("admincp/custom-fields?action=delete&id=".$field['id']) ?>&type=<?php echo $type ?>" class="admin-confirm ion-android-delete"></a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php endforeach ?>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>

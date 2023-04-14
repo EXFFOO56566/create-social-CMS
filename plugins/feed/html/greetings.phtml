@@ -1,0 +1,29 @@
+<?php
+    $user = get_user();
+    $name = $user['first_name'];
+    (int)$hour = date("G");
+	
+
+    $color = "";
+    if ( $hour == 0 && $hour <= 10 ) {
+        $greet = "morning";
+        $color = "47, 129, 70";
+    } else if ( $hour >= 10 && $hour <= 12 ) {
+        $color = "205, 121, 21";
+        $greet = "day";
+    }else if ( $hour >= 12 && $hour <= 15 ) {
+        $greet = "afternoon";
+        $color = "172, 179, 41";
+    } else if ( $hour >= 16 && $hour <= 23 ) {
+        $color = "18, 54, 65";
+        $greet = "evening";
+    } else {
+        $greet = "welcome";
+		$color = "50, 101, 152";
+    }
+    $day_icon = img('images/greetings/'."$greet".'.png');
+?>
+<div class="alert day-greetings alert-dismissible greet-alert box" role="alert" style="border-left: 4px solid rgb(<?php echo $color ?>);">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="position: inherit;padding-top: 8px; padding-right: 4px;" onclick="return setCookie('day_greetings', 1, 1);"><span class="day-greetings-close" aria-hidden="true">×</span></button>
+    <div id=""><div class="small-texts"><img class="day-greetings-img" src="<?php echo $day_icon ?>"> <?php echo lang('good-'.$greet)?>, <b><?php echo $name ?></b></div></div>
+</div>

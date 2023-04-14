@@ -1,0 +1,20 @@
+<div class="field">
+    <div class="top">
+        <label class="control-label"><?php echo lang('event::event-host') ?></label><br/>
+    </div>
+    <div class="bottom">
+        <div class="magic-select event-host" data-name="val[entity]" data-width="200px">
+            <div class="magic-select-toggle">
+                <img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+                <?php echo get_user_name(); ?>
+            </div>
+            <div class="magic-select-content slimscroll" data-height="200px">
+                <div class="magic-select-option" data-value="user-<?php echo get_userid() ?>">
+                    <img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+                    <?php echo get_user_name(); ?>
+                </div>
+                <?php fire_hook('entity.select.list') ?>
+            </div>
+        </div>
+    </div>
+</div>

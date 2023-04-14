@@ -1,0 +1,17 @@
+<div class="box">
+	<div class="box-content">
+		<div class="alert alert-danger">
+			<?php echo lang('membership-payment-cancel') ?>
+			<a href="<?php echo url_to_pager('membership-choose-plan') ?>" ajax="true"><?php echo lang('choose-plan') ?></a>
+		</div>
+	</div>
+
+    <?php
+    $url = url('membership/choose-plan');
+    ?>
+    <script>
+            setTimeout(function(){
+                window.location.href='<?php echo $url?>'
+            },500);
+        </script>
+</div>

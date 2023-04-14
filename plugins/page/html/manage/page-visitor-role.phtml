@@ -1,0 +1,10 @@
+<div class="divider"></div>
+ <div class="row form-group">
+     <div class="col-sm-12" style="font-weight: bold">
+         <p> <?php echo lang('page::visitor-role-msg')?> </p>
+         <select class="form-control c-select" name="val[visitor_editor]">
+             <option <?php echo ($page['visitor_editor'] == 0) ? 'selected' : null ?> value="0"><?php echo lang('no') ?></option>
+             <option <?php echo ($page['visitor_editor'] == 1) ? 'selected' : null ?> value="1"><?php echo lang('yes') ?></option>
+         </select>
+     </div>
+ </div>

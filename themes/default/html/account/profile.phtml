@@ -1,0 +1,17 @@
+<div class="box z-depth-1">
+	<div class="title"><?php echo lang('edit') ?><?php echo lang($category['title']) ?></div>
+	<div class="box-content" style="padding:30px 10%">
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<form action="" method="post" class="ajax-form">
+			<?php CSRFProtection::embed() ?>
+			<?php foreach(get_custom_fields('user', $category['id']) as $field): ?>
+				<?php echo get_user_data($field['slug']) ?>
+				<?php $value = get_user_data($field['title'], get_user(true)) ?>
+				<?php echo view("custom-field/display", array('field' => $field, 'value' => $value)) ?>
+			<?php endforeach ?>
+			<button class="btn btn-danger"><?php echo lang('save-details') ?></button>
+		</form>
+	</div>
+</div>

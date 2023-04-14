@@ -1,0 +1,67 @@
+<div class="modal fade" id="invitationsystem-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only"><?php echo lang('invitationsystem::close') ?></span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel"><?php echo lang('invitationsystem::enter-invitation-code') ?></h4>
+			</div>
+			<div class="modal-body">
+				<input id="invitationsystem-invitation-code" type="text" name="invitation_code" class="form-control"/>
+			</div>
+			<div class="modal-footer">
+				<button id="invitationsystem-invitation-submit-button" type="button" class="btn btn-primary invitationsystem-invitation-submit-button"><?php echo lang('invitationsystem::submit') ?></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('invitationsystem::close') ?></button>
+			</div>
+		</div>
+		<div class="foreground">
+			<div class="indicator">
+				<img src="<?php echo img('images/loading.gif') ?>"/>
+			</div>
+			<div class="message">
+				<div class="alert alert-success"><?php echo lang('invitationsystem::redirecting') ?></div>
+				<div class="alert alert-danger"><?php echo lang('invitationsystem::invalid-invitation-code') ?></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="invitationsystem-invitation-code-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel"><?php echo lang('invitationsystem::your-invitation-code') ?></h4>
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only"><?php echo lang('invitationsystem::close') ?></span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div>
+					<h6><?php echo lang('invitationsystem::invitation-code') ?></h6>
+					<div class="alert alert-info invitationsystem-invitation-code"></div>
+				</div>
+				<div>
+					<h6><?php echo lang('invitationsystem::signup-link') ?></h6>
+					<div class="alert alert-warning invitationsystem-invitation-signup-link"></div>
+				</div>
+				<div>
+					<h6><?php echo lang('invitationsystem::expiry-time') ?></h6>
+					<div class="alert alert-danger invitationsystem-invitation-code-expiry-time"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="invitationsystem-regenerate-invitation-code-button" type="button" class="btn btn-primary invitationsystem-regenerate-invitation-code-button"><?php echo lang('invitationsystem::regenerate') ?></button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('invitationsystem::close') ?></button>
+			</div>
+		</div>
+		<div class="foreground">
+			<div class="indicator">
+				<img src="<?php echo img('images/loading.gif') ?>"/>
+			</div>
+			<div class="message">
+				<div class="alert alert-success"><?php echo lang('invitationsystem::invitation-code-regenerated') ?></div>
+				<div class="alert alert-danger"><?php echo lang('invitationsystem::error-regenerating-invitation-code') ?></div>
+			</div>
+		</div>
+	</div>
+</div>

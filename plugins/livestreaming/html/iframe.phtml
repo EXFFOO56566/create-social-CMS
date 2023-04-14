@@ -1,0 +1,27 @@
+<style>
+    #livestream_frame{
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        border:none;
+        display:none;
+        overflow:hidden;
+        z-index:11000;
+    }
+</style>
+
+<script>
+    function loadLivestreamFrame(id, ended) {
+		if(ended){ 
+			notifyError("This stream has ended");
+			return;
+		}
+        document.getElementById('livestream_frame').style.display = 'block';
+        //document.getElementById('livestream_frame').setAttribute('src', "http://localhost/crea8socialpro/firebase.php");
+        document.getElementById('livestream_frame').setAttribute('src', "<?php echo url('livestream/live?id='); ?>" + id);
+        return false;
+    }
+</script>
+<iframe id="livestream_frame" style="background:url(<?php echo img('livestreaming::images/iframe-loading.gif') ?>) center no-repeat;"></iframe>';

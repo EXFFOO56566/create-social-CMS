@@ -1,0 +1,31 @@
+<div class="box">
+	<div class="title"><?php echo lang('game::playing-game', array('title' => get_game_details('game_title'))) ?>
+		<div class="action">
+			<a ajax="true" class="btn btn-sm btn-info" href="<?php echo game_url(null, $app->profileGame) ?>"><?php echo lang('game::go-back') ?></a>
+		</div>
+	</div>
+
+</div>
+<div class="box">
+	<div class="box-content" id="game-play-content">
+		<div id="game-player">
+			<?php if($app->profileGame['game_file']): ?>
+				<object id="game" type="application/x-shockwave-flash" data="<?php echo url($app->profileGame['game_file']) ?>">
+					<param name='movie' value="<?php echo url($app->profileGame['game_file']) ?>"/>
+					<param name='bgcolor' value="#000000"/>
+					<param name='FlashVars' value="var1=Hello&var2=Goodbye"/>
+					<param name='allowscriptaccess' value="sameDomain"/>
+				</object>
+				<script type="text/javascript">
+                    var width = document.getElementById("game-player").offsetWidth;
+                    var height = width;
+                    //var height = width / 2.666666666666666667;
+                    document.getElementById("game").style.width = width + 'px';
+                    document.getElementById("game").style.height = height + 'px';
+				</script>
+			<?php else: ?>
+				<?php echo $app->profileGame['game_code'] ?>
+			<?php endif ?>
+		</div>
+	</div>
+</div>

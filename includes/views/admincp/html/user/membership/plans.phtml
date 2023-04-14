@@ -1,0 +1,55 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('membership-plans') ?>
+		<a href="<?php echo url('admincp/membership/plans/add') ?>"
+		   class="btn btn-success btn-sm"><?php echo lang('add-plan') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<div class="list-table-container">
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th>ID</th>
+						<th><?php echo lang('title') ?></th>
+						<th><?php echo lang('description') ?></th>
+						<th><?php echo lang('recommended') ?></th>
+						<?php fire_hook('membership.plan.table'); ?>
+						<th><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($plans as $plan): ?>
+						<tr>
+							<th>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $plan['id'] ?>"></div>
+							</th>
+							<td><?php echo $plan['id'] ?></td>
+							<td><?php echo lang($plan['title']) ?></td>
+							<td><?php echo lang($plan['description']) ?></td>
+							<td><?php echo ($plan['recommend']) ? lang('yes') : lang('no') ?></td>
+							<?php fire_hook('membership.plan.table', $plan); ?>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-edit" href='<?php echo url('admincp/membership/plan/manage?action=edit&id='.$plan['id']) ?>'></a>
+										<a ajax="true" class="admin-confirm ion-android-delete" href="<?php echo url('admincp/membership/plan/manage?action=delete&id='.$plan['id']) ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

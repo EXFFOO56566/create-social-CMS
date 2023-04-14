@@ -1,0 +1,53 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('emoticons::edit-emoticon') ?>
+
+	</div>
+
+	<div class="wrapper-content">
+		<form class="wrapper-form" action="" method="post" enctype="multipart/form-data">
+			<?php CSRFProtection::embed() ?>
+			<div class="form-group row">
+				<label class="col-sm-5"><?php echo lang('title') ?></label>
+				<div class="col-sm-7">
+					<input value="<?php echo $emoticon['name'] ?>" type="text" name="val[title]" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-5"><?php echo lang('category') ?></label>
+				<div class="col-sm-7">
+					<select class="c-select" name="val[category]">
+						<option <?php echo ($emoticon['category'] == 1) ? 'selected' : null ?> value="1"><?php echo lang("emoticons::emoticon") ?></option>
+						<option <?php echo ($emoticon['category'] == 2) ? 'selected' : null ?> value="2"><?php echo lang("emoticons::sticker") ?></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-5"><?php echo lang('symbol') ?></label>
+				<div class="col-sm-7">
+					<input value="<?php echo $emoticon['symbol'] ?>" type="text" name="val[symbol]" placeholder="<?php echo lang('for-example') ?>: ):" class="form-control"/>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-5"><?php echo lang('change-icon') ?></label>
+				<div class="col-sm-7">
+					<input type="file" name="icon" class="form-control"/>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-5"><?php echo lang('dimensions') ?></label>
+				<div class="col-sm-7">
+					<?php echo lang('width') ?>
+					<input value="<?php echo $emoticon['width'] ?>" type="text" name="val[width]" class="form-control"/>
+
+					<?php echo lang('height') ?>
+					<input value="<?php echo $emoticon['height'] ?>" type="text" name="val[height]" class="form-control"/>
+				</div>
+			</div>
+
+			<button class="btn btn-info"><?php echo lang('emoticons::save-emoticon') ?></button>
+		</form>
+	</div>
+</div>

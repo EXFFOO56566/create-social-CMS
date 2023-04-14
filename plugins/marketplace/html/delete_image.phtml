@@ -1,0 +1,25 @@
+<div class="box">
+	<div class="title"><?php echo lang('marketplace::delete-image') ?></div>
+	<div class="box-content">
+		<?php if(!is_loggedIn()): ?>
+			<span class="error"><?php echo lang('marketplace::marketplace-create-login-error') ?></span>
+		<?php else: ?>
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<form action="" method="post" class="adm">
+				<?php CSRFProtection::embed() ?>
+				<div class="alert alert-warning">
+					<img src="<?php echo url_img($image, 75) ?>">
+					<?php echo lang('marketplace::delete-image-warning') ?>
+				</div>
+				<div class="submit">
+					<input type="submit" value="<?php echo lang('marketplace::delete') ?>" class="btn btn-danger action-button"/>
+				</div>
+				<input type="hidden" name="val[listing_id]" value="<?php echo input('listing_id') ?>"/>
+				<input type="hidden" name="val[id]" value="<?php echo input('id') ?>"/>
+				<input type="hidden" name="val[type]" value="delete_image"/>
+			</form>
+		<?php endif ?>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+<div class="box">
+    <div class="title"><i class="ion-android-share-alt"></i><?php echo "  ".lang('socialmore::social-connections') ?></div>
+    <div class="box-content">
+        <div style="margin-left: 25px;font-size: 25px;">
+            <?php if ($social = get_social_more('facebook','','users',$app->profileUser['id'])): ?>
+                <a target="_blank" style="font-size: 25px;" href="<?php echo $social ?>" title="Facebook Link"> <i style="color: #4B77BE !important" class="ion-social-facebook"></i></a>
+            <?php endif ?>
+
+            <?php if ($social = get_social_more('twitter','','users',$app->profileUser['id'])): ?>
+                <a target="_blank" style="font-size: 25px;" href="<?php echo $social ?>" title="Twitter Link"> <i style="color:#19B5FE !important" class="ion-social-twitter"></i></a>
+            <?php endif ?>
+
+            <?php if ($social = get_social_more('google','','users',$app->profileUser['id'])): ?>
+                <a target="_blank" style="font-size: 25px;" href="<?php echo $social ?>" title="Google+ Link"> <i style="color: #ff1107 !important" class="ion-social-googleplus"></i></a>
+            <?php endif ?>
+
+            <?php if ($social = get_social_more('linkedin','','users',$app->profileUser['id'])): ?>
+                <a target="_blank" style="font-size: 25px;" href="<?php echo $social ?>" title="LinkedIn Link"> <i style="color: #4B77BE !important" class="ion-social-linkedin"></i></a>
+            <?php endif ?>
+
+            <?php if ($social = get_social_more('youtube','','users',$app->profileUser['id'])): ?>
+                <a target="_blank" style="font-size: 25px;" href="<?php echo $social ?>" title="YouTube Link"> <i style="color: #ff1107 !important" class="ion-social-youtube"></i></a>
+            <?php endif ?>
+
+            <?php if ($social = get_social_more('vkontakte','','users',$app->profileUser['id'])): ?>
+                <a target="_blank" style="font-size: 25px;" href="<?php echo $social ?>" title="VKontakte Link"> <i style="color: #19B5FE !important" class="ion-social-vimeo"></i></a>
+            <?php endif ?>
+        </div>
+    </div>
+</div>

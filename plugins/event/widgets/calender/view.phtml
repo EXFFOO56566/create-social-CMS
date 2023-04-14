@@ -1,0 +1,14 @@
+<?php $type = segment(2); ?>
+<div id="dashboard-filter-menu" style="margin-top: 10px;" class="box  clearfix">
+	<ul class="pull-left left">
+		<li class="<?php if($type == 'upcoming') echo "active" ?>">
+			<a ajax="true" href="<?php echo url_to_pager('events-calender', array('slug' => 'upcoming')) ?>"><?php echo lang('event::upcoming') ?></a>
+		</li>
+		<li class="<?php if($type == 'invite') echo "active" ?>">
+			<a ajax="true" href="<?php echo url_to_pager('events-calender', array('slug' => 'invite')) ?>"><?php echo lang('event::invites') ?></a>
+		</li>
+		<li class="<?php if($type == 'yours') echo "active" ?>">
+			<a ajax="true" href="<?php echo url_to_pager('events-calender', array('slug' => 'me')) ?>"><?php echo lang('event::hosting') ?></a>
+		</li>
+	</ul>
+</div>

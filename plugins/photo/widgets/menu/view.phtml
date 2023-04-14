@@ -1,0 +1,34 @@
+<div class="box ">
+	<?php if(user_has_permission('can-add-photo') && is_loggedIn()): ?>
+		<div class="box-content">
+			<a href="<?php echo url_to_pager('photo-create-album') ?>" ajax="true" class="btn btn-block btn-secondary"><i class="ion-ios-plus-empty"></i> <?php echo lang('photo::create-new-album') ?>
+			</a>
+		</div>
+	<?php endif ?>
+	<ul class="menu">
+		<?php foreach(get_menus("photo-menu") as $menu): ?>
+			<li>
+				<a ajax="true" href=""><?php echo lang($menu->title) ?></a>
+			</li>
+		<?php endforeach ?>
+		<li>
+			<a ajax="true" href="<?php echo url_to_pager('photo-albums') ?>"><?php echo lang('photo::all-albums') ?></a>
+		</li>
+		<?php if(is_loggedIn()): ?>
+			<li>
+				<a ajax="true" href="<?php echo url_to_pager('photo-myalbums') ?>"><?php echo lang('photo::my-albums') ?></a>
+			</li>
+		<?php endif ?>
+		<li>
+			<a ajax="true" href="<?php echo url_to_pager('photo') ?>"><?php echo lang('photo::all-photos') ?></a>
+		</li>
+		<?php if(is_loggedIn()): ?>
+			<li>
+				<a ajax="true" href="<?php echo url_to_pager('photo-myphotos') ?>"><?php echo lang('photo::my-photos') ?></a>
+			</li>
+		<?php endif ?>
+        <?php echo fire_hook("more.photo.menu");?>
+	</ul>
+
+
+</div>

@@ -1,0 +1,76 @@
+<div class="wrapper">
+	<div class="wrapper-title"><?php echo lang('event::manage-events') ?></div>
+	<div class="wrapper-content">
+
+		<div class="row">
+			<div class="col-sm-7">
+				<form action="<?php echo url_to_pager('admin-event-lists') ?>?type=search" method="get">
+					<?php CSRFProtection::embed() ?>
+					<input type="text" name="term" value="<?php echo input('term') ?>" class="form-control"/>
+					<button class="btn btn-info btn-sm"><?php echo lang('event::find-events') ?></button>
+				</form>
+			</div>
+
+		</div>
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-event-batch-action') ?>?action=delete_event"
+					   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+					<?php fire_hook('admin.user.list.actions'); ?>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th style="width: 40%"><?php echo lang('event::event-title') ?></th>
+						<th style="width: 40%"><?php echo lang('event::start-time') ?></th>
+						<th style="width: 20%"><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($events->results() as $event): ?>
+						<tr>
+							<td>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $event['event_id'] ?>"></div>
+							</td>
+							<td>
+								<a href="<?php echo event_url(null, $event) ?>"><?php echo $event['event_title'] ?></a>
+							</td>
+							<td>
+								<?php echo date('d, F, Y at g : i A', ($event['start_time'])) ?>
+							</td>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a class="ion-eye" href='<?php echo event_url(null, $event) ?>'></a> |
+										<a class="admin-confirm ion-android-delete" href="<?php echo url('event/delete/'.$event['event_id']) ?>?admin=true"></a>
+									</div>
+								</div>
+							</td>
+
+
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php if($events->total): ?>
+			<?php if($events->total > config('pagination-limit-events', 20)): ?>
+				<?php echo $events->links() ?>
+			<?php endif ?>
+		<?php else: ?>
+			<div class="alert alert-info"><?php echo lang('events::no-event-display') ?></div>
+		<?php endif ?>
+	</div>
+</div>

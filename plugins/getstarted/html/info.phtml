@@ -1,0 +1,117 @@
+<div class="panel-container" style="padding: 0px;">
+	<div class="title" style="margin: 0px 0px; padding: 16px 0px;">
+	<i class="ion-android-add"></i> <?php echo lang('additional-info') ?>
+	</div>
+	<div>
+		<form enctype="multipart/form-data" action="" method="post" class="ajax-form clearfix">
+			<?php CSRFProtection::embed() ?>
+			<div class="getstarted-content">
+				<div class="media media-lg">
+					<div class="media-left">
+						<div id="getstarted-image-input" class="avatar-preview-box" style="background-image: url(<?php echo get_avatar(75) ?>)">
+							<input id="user-avatar-input" type="hidden" name="avatar"/>
+						</div>
+					</div>
+					<div class="media-body">
+						<p class="help-block"><?php echo lang('add-picture-note') ?></p>
+						<div class="form-group">
+							<button id="hide-upload-button" type="button" class="btn btn-secondary-outline btn-sm" onclick="return file_chooser('#getstarted-image-input .awesome-cropper .dropbox')"><?php echo lang('choose-photo') ?></button>
+						</div>
+					</div>
+				</div>
+				<?php $user = get_user(); if(!$user['email_address'] || $user['email_address'] == $user['social_email']): ?>
+					<div class="field">
+						<div class="top">
+							<label class="control-label"><?php echo lang('email-address') ?>:</label>
+						</div>
+						<div class="bottom">
+							<input class="form-control" type="text" name="val[email_address]" value="" required />
+							<span class="help-block"><?php echo lang('getstarted::please-enter-email') ?></span>
+						</div>
+					</div>
+				<?php endif; ?>
+				<?php if(config('enable-gender', true)): ?>
+					<div class="field">
+						<div class="top">
+							<label class="control-label"><?php echo lang('gender') ?></label>
+						</div>
+						<div class="bottom">
+							<label class="c-input c-radio">
+								<input <?php echo (get_user_data('gender') == "male") ? "checked" : null ?> id="radio1" value="male" name="val[gender]" type="radio">
+								<span class="c-indicator"></span>
+								<?php echo lang('male') ?>
+							</label>
+							<label class="c-input c-radio">
+								<input <?php echo (get_user_data('gender') == "female") ? "checked" : null ?> id="radio2" value="female" name="val[gender]" type="radio">
+								<span class="c-indicator"></span>
+								<?php echo lang('female') ?>
+							</label>
+							<?php fire_hook('account.gender') ?>
+						</div>
+					</div>
+				<?php endif; ?>
+                <?php fire_hook('enable.gender.exception'); ?>
+				<?php echo view('birthdate/form', array('day' => get_user_data('birth_day'), 'month' => get_user_data('birth_month'), 'year' => get_user_data('birth_year'), 'type' => 0)) ?>
+				<div class="field">
+					<div class="top">
+						<label class="control-label"><?php echo lang('what-about-you') ?></label>
+					</div>
+					<div class="bottom">
+						<textarea placeholder="" name="val[bio]" class="auto-grow-input form-control" data-height="70px"><?php echo get_user_data('bio') ?></textarea>
+					</div>
+				</div>
+				<?php fire_hook("location.filter.field", null, array()); ?>
+				<div class="field">
+					<div class="top">
+						<label class="control-label"><?php echo lang('city') ?></label>
+					</div>
+					<div class="bottom">
+						<input type="text" class="form-control" value="<?php echo get_user_data('city') ?>" name="val[city]"/>
+					</div>
+				</div>
+				<div class="field">
+					<div class="top">
+						<label class="control-label"><?php echo lang('state') ?></label>
+					</div>
+					<div class="bottom">
+						<input type="text" class="form-control" value="<?php echo get_user_data('state') ?>" name="val[state]"/>
+					</div>
+				</div>
+				<div class="field">
+					<div class="top">
+						<label class="control-label"><?php echo lang('country') ?></label>
+					</div>
+					<div class="bottom">
+						<div class="magic-select" data-name="val[country]" data-width="300px">
+							<?php load_functions('country') ?>
+							<?php $countries = get_countries() ?>
+							<?php $country_name = get_user_data('country') ?>
+							<input type="hidden" name="val[country]" value="<?php echo $country_name ?>" class="magic-select-value"/>
+							<div class="magic-select-toggle">
+								<?php echo in_array($country_name, $countries) ? ucwords($country_name) : lang('select-country') ?>
+							</div>
+							<div class="magic-select-content slimscroll" data-height="200px">
+								<?php foreach($countries as $country => $name): ?>
+									<div class="magic-select-option" data-value="<?php echo $name ?>">
+										<?php echo ucwords($name) ?>
+									</div>
+								<?php endforeach ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php foreach(get_form_custom_fields('user') as $field): ?>
+					<?php echo get_user_data($field['slug']) ?>
+					<?php $value = get_user_data($field['title'], get_user(true)) ?>
+					<?php echo view("custom-field/display", array('field' => $field, 'value' => $value, 'type' => 0)) ?>
+				<?php endforeach ?>
+			</div>
+			<div class="getstarted-footer clearfix">
+				<div class="pull-right">
+					<a href="<?php echo plugin_loaded('social') ? url_to_pager("signup-welcome").'?step=import' : url_to_pager("signup-welcome").'?step=add-people' ?>" class="btn btn-secondary"><?php echo lang('skip') ?></a>
+					<button class="btn btn-info"><?php echo lang('save-continue') ?></button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

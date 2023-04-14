@@ -1,0 +1,45 @@
+<div class="row">
+	<div class="col-md-5">
+		<h6><?php echo lang('topography-image-num', array('num' => 1)) ?></h6>
+	</div>
+	<div class="col-md-7">
+		<div class="theme-setting-image-container">
+			<?php $image = url_img(config('foxers-theme-topography-image-1',$theme_relative_path.'images/topography/one.jpg')) ?>
+			<img id="topography-image-preview-1" src="<?php echo $image ?>" class="theme-setting-image-preview" />
+			<span id="topography-image-dimension-1" class="theme-setting-image-dimension"></span>
+			<span id="topography-image-reset-1" class="theme-setting-image-reset reset-image-preview ion-close" data-preview="topography-image-preview-1" data-original-image="<?php echo $image ?>" data-image-handle="topography-image-input-1" data-dimension="topography-image-dimension-1"></span>
+		</div>
+		<input id="topography-image-input-1" name="foxers-theme-topography-image-1" type="file" class="theme-setting-image-input auto-preview-image" data-preview="topography-image-preview-1" data-dimension="topography-image-dimension-1" data-reset="topography-image-reset-1" />
+		<input type="hidden" name="file_upload_extend[]" value="foxers-theme-topography-image-1" />
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-5">
+		<h6><?php echo lang('topography-image-num', array('num' => 2)) ?></h6>
+	</div>
+	<div class="col-md-7">
+		<div class="theme-setting-image-container">
+			<?php $image = url_img(config('foxers-theme-topography-image-2',$theme_relative_path.'images/topography/two.jpg')) ?>
+			<img id="topography-image-preview-2" src="<?php echo $image ?>" class="theme-setting-image-preview" />
+			<span id="topography-image-dimension-2" class="theme-setting-image-dimension"></span>
+			<span id="topography-image-reset-2" class="theme-setting-image-reset reset-image-preview ion-close" data-preview="topography-image-preview-2" data-original-image="<?php echo $image ?>" data-image-handle="topography-image-input-2" data-dimension="topography-image-dimension-2"></span>
+		</div>
+		<input id="topography-image-input-2" name="foxers-theme-topography-image-2" type="file" class="theme-setting-image-input auto-preview-image" data-preview="topography-image-preview-2" data-dimension="topography-image-dimension-2" data-reset="topography-image-reset-2" />
+		<input type="hidden" name="file_upload_extend[]" value="foxers-theme-topography-image-2" />
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-5">
+		<h6><?php echo lang('topography-image-num', array('num' => 3)) ?></h6>
+	</div>
+	<div class="col-md-7">
+		<div class="theme-setting-image-container">
+			<?php $image = url_img(config('foxers-theme-topography-image-3',$theme_relative_path.'images/topography/three.jpg')) ?>
+			<img id="topography-image-preview-3" src="<?php echo $image ?>" class="theme-setting-image-preview" />
+			<span id="topography-image-dimension-3" class="theme-setting-image-dimension"></span>
+			<span id="topography-image-reset-3" class="theme-setting-image-reset reset-image-preview ion-close" data-preview="topography-image-preview-3" data-original-image="<?php echo $image ?>" data-image-handle="topography-image-input-3" data-dimension="topography-image-dimension-3"></span>
+		</div>
+		<input id="topography-image-input-3" name="foxers-theme-topography-image-3" type="file" class="theme-setting-image-input auto-preview-image" data-preview="topography-image-preview-3" data-dimension="topography-image-dimension-3" data-reset="topography-image-reset-3" />
+		<input type="hidden" name="file_upload_extend[]" value="foxers-theme-topography-image-3" />
+	</div>
+</div>

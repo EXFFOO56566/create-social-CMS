@@ -1,0 +1,81 @@
+<div class="box">
+	<div class="title">
+		<?php echo $video['title'] ?>
+		<a href="<?php echo url('video/delete?id='.$video['id']) ?>" class="btn btn-danger action action-button btn-sm confirm"><?php echo lang('video::delete-video') ?></a>
+	</div>
+	<div>
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<?php $current = (config('video-upload')) ? 'upload' : 'external'; ?>
+		<form action="" method="post" enctype="multipart/form-data" class="ajax-form">
+			<?php CSRFProtection::embed() ?>
+			<?php if(fire_hook('video.custom.display', true)): ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('category') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-select" data-name="val[category_id]" data-width="200px">
+							<input type="hidden" name="val[category_id]" value="<?php echo $video['category_id'] ?>" class="magic-select-value"/>
+							<?php $categories = get_video_categories(); ?>
+							<?php $category = get_video_category($video['category_id']); ?>
+							<div class="magic-select-toggle">
+								<?php echo lang($category['title']) ?>
+							</div>
+							<div class="magic-select-content">
+								<?php foreach($categories as $category): ?>
+									<?php $sub_categories = get_video_parent_categories($category['id']) ?>
+									<?php if($sub_categories): ?>
+										<div class="magic-select-label"><?php echo lang($category['title']) ?></div>
+										<?php foreach($sub_categories as $cat): ?>
+											<div class="magic-select-option" data-value="<?php echo $cat['id'] ?>">
+												<?php echo lang($cat['title']) ?>
+											</div>
+										<?php endforeach ?>
+									<?php else: ?>
+										<div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+											<?php echo lang($category['title']) ?>
+										</div>
+									<?php endif ?>
+								<?php endforeach ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endif ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('video::title') ?></label>
+				</div>
+				<div class="right">
+					<input value="<?php echo $video['title'] ?>" type="text" name="val[title]" class="form-control"/>
+				</div>
+			</div>
+
+			<?php if(fire_hook('video.custom.display', true)): ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('video::description') ?></label>
+					</div>
+					<div class="right">
+						<textarea name="val[description]" class="form-control auto-grow-input"><?php echo $video['description'] ?></textarea>
+					</div>
+				</div>
+			<?php endif; ?>
+			<?php fire_hook('video.edit.extend', $video); ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('privacy') ?></label>
+				</div>
+				<div class="right">
+					<?php $default = $video['privacy']; ?>
+					<?php fire_hook('privacy.select', 'relationship', array($default)); ?>
+				</div>
+			</div>
+			<div class="submit">
+				<button class="btn btn-info"><?php echo lang('video::save-video') ?></button>
+			</div>
+		</form>
+	</div>
+</div>

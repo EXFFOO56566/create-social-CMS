@@ -1,0 +1,60 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('page::manage-categories') ?>
+		<a href="<?php echo url_to_pager('admin-page-category-add') ?>"><?php echo lang('page::add-category') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-page-batch-action') ?>?action=delete_cat"
+					   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th style="width: 10%">ID</th>
+						<th style="width: 30%"><?php echo lang('page::category-title') ?></th>
+						<th style="width: 40%"><?php echo lang('page::category-desc') ?></th>
+						<th style="width: 20%"><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody data-url="<?php echo url_to_pager('admin-page-manage-category').'?action=order' ?>"
+					       class="admincp-sortable" style="position: relative">
+					<?php foreach($categories as $category): ?>
+						<tr class="item" id="<?php echo $category['category_id'] ?>">
+							<th>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $category['category_id'] ?>"></div>
+							</th>
+							<td style="width: 10%"><?php echo $category['category_id'] ?></td>
+							<td style="width: 30%"><?php echo lang($category['category_title']) ?></td>
+							<td style="width: 40%"><?php echo lang($category['category_desc']) ?></td>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-edit"
+										   href='<?php echo url_to_pager('admin-page-manage-category').'?action=edit&id='.$category['category_id'] ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-android-delete"
+										   href="<?php echo url_to_pager('admin-page-manage-category').'?action=delete&id='.$category['category_id'] ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

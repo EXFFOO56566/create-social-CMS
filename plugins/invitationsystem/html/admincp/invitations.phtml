@@ -1,0 +1,32 @@
+<div id="admin-invitationsystem-invitations" class="wrapper admin-invitationsystem-invitations">
+	<div class="wrapper-title">
+		<?php echo lang('invitationsystem::invitations') ?>
+		<span></span>
+	</div>
+	<div class="wrapper-content">
+		<form action="" method="get">
+			<?php CSRFProtection::embed() ?>
+			<input type="text" class="form-control" name="s" placeholder="<?php echo lang('invitationsystem::search') ?>" value="<?php echo $search ?>"/>
+			<button class="btn btn-sm btn-secondary" style="margin-top: 10px"><?php echo lang('invitationsystem::search') ?></button>
+		</form>
+		<div class="invitations">
+			<div class="row head">
+				<div class="col-sm-3"><?php echo lang('invitationsystem::inviter-name') ?></div>
+				<div class="col-sm-2"><?php echo lang('invitationsystem::inviter-username') ?></div>
+				<div class="col-sm-3"><?php echo lang('invitationsystem::invited-name') ?></div>
+				<div class="col-sm-2"><?php echo lang('invitationsystem::invited-username') ?></div>
+				<div class="col-sm-2"><?php echo lang('invitationsystem::invitation-time') ?></div>
+			</div>
+			<?php foreach($invitations->results() as $invitation): ?>
+				<div class="row body">
+					<div class="col-sm-3"><?php echo $invitation['inviter_name'] ?></div>
+					<div class="col-sm-2"><?php echo $invitation['inviter_username'] ?></div>
+					<div class="col-sm-3"><?php echo $invitation['invited_name'] ?></div>
+					<div class="col-sm-2"><?php echo $invitation['invited_username'] ?></div>
+					<div class="col-sm-2"><?php echo $invitation['time'] ?></div>
+				</div>
+			<?php endforeach ?>
+			<?php echo $invitations->links(); ?>
+		</div>
+	</div>
+</div>

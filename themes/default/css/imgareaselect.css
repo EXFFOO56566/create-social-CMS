@@ -1,0 +1,66 @@
+/*
+ * imgAreaSelect default style
+ */
+
+.imgareaselect-border1 {
+	background: url(../images/imageareaselect/border-anim-v.gif) repeat-y left top;
+}
+
+.imgareaselect-border2 {
+	background: url(../images/imageareaselect/border-anim-h.gif) repeat-x left top;
+}
+
+.imgareaselect-border3 {
+	background: url(../images/imageareaselect/border-anim-v.gif) repeat-y right top;
+}
+
+.imgareaselect-border4 {
+	background: url(../images/imageareaselect/border-h.gif) repeat-x left bottom;
+}
+
+.imgareaselect-border1, .imgareaselect-border2,
+.imgareaselect-border3, .imgareaselect-border4 {
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.imgareaselect-handle {
+	background-color: #fff;
+	border: solid 1px #000;
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.imgareaselect-outer {
+	background-color: #000;
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.awesome-cropper .modal, .awesome-cropper .modal.fade.in {
+	top: 3%
+}
+
+.awesome-cropper .modal-dialog {
+	width: 66%;
+	min-width: 60%;
+	max-width: 100%;
+	text-align: center;
+}
+
+.awesome-cropper .modal-body .col-md-5 {
+	width: 50%;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.awesome-cropper .progress {
+	display: none !important;
+}
+
+.awesome-cropper .modal-content img {
+	max-height: 100% !important;
+	max-width: 100%; !important;
+	height: unset !important;
+	width: unset !important;
+}

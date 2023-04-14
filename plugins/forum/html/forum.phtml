@@ -1,0 +1,87 @@
+<div class="box forum forum-content">
+	<div class="global-filter-container" data-url="<?php echo url_to_pager('threads') ?>">
+		<form id="forum-list-search" method="post" action="" class="form-inline list-search forum-search-form">
+			<?php CSRFProtection::embed() ?>
+			<i class="search-icon ion-ios-search"></i>
+			<input id="forum-filter-search" value="<?php echo $search ?>" type="text" class="form-control search-box filter-input form-control forum-search-input" data-name="s" placeholder="<?php echo lang('forum::search-topics') ?>" />
+		</form>
+		<div class="list-head">
+			<h3 class="heading"><?php echo lang('forum::topics') ?></h3>
+		</div>
+		<div id="topics-filter" class="filter-pane topics-filter">
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<select id="forum-filter-category" onchange="return loadPage(this.value)" class="c-select forum-c-select filter-input" name="c">
+				<option value="<?php echo forum_get_forum_slug_link(forum_remove_get_var(forum_remove_get_var($url, 's'), 'c')) ?>"><?php echo lang('forum::all-categories') ?></option>
+				<?php foreach(forum_get_categories() as $category): ?>
+					<option <?php echo input('c') == $category['id'] ? 'selected' : '' ?> value="<?php echo forum_get_forum_slug_link(forum_assign_get_var(forum_remove_get_var($url, 's'), 'c', $category['id'])) ?>"><?php echo lang($category['title']) ?></option>
+				<?php endforeach ?>
+			</select>
+			<select id="forum-filter-tag" onchange="return loadPage(this.value)" class="c-select forum-c-select filter-input" name="t">
+				<option value="<?php echo forum_get_forum_slug_link(forum_remove_get_var(forum_remove_get_var($url, 's'), 't')) ?>"><?php echo lang('forum::all-tags') ?></option>
+				<?php foreach(forum_get_tags() as $tag): ?>
+					<option <?php echo input('t') == $tag['id'] ? 'selected' : '' ?> value="<?php echo forum_get_forum_slug_link(forum_assign_get_var(forum_remove_get_var($url, 's'), 't', $tag['id'])) ?>"><?php echo lang($tag['title']) ?></option>
+				<?php endforeach ?>
+			</select>
+			<select id="forum-filter-tag" onchange="return loadPage(this.value)" class="c-select forum-c-select filter-input" name="o">
+				<option <?php echo input('o') == 'l' ? 'selected' : '' ?> value="<?php echo forum_get_forum_slug_link(forum_assign_get_var(forum_remove_get_var($url, 's'), 'o', 'l')) ?>"><?php echo lang('forum::latest') ?></option>
+				<option <?php echo input('o') == 'n' ? 'selected' : '' ?> value="<?php echo forum_get_forum_slug_link(forum_assign_get_var(forum_remove_get_var($url, 's'), 'o', 'n')) ?>"><?php echo lang('forum::new') ?></option>
+				<option <?php echo input('o') == 't' ? 'selected' : '' ?> value="<?php echo forum_get_forum_slug_link(forum_assign_get_var(forum_remove_get_var($url, 's'), 'o', 't')) ?>"><?php echo lang('forum::top') ?></option>
+				<option <?php echo input('o') == 'ft' ? 'selected' : '' ?> value="<?php echo forum_get_forum_slug_link(forum_assign_get_var(forum_remove_get_var($url, 's'), 'o', 'ft')) ?>"><?php echo lang('forum::featured') ?></option>
+				<?php if(is_loggedIn()): ?>
+					<option <?php echo input('o') == 'f' ? 'selected' : '' ?> value="<?php echo forum_get_forum_slug_link(forum_assign_get_var(forum_remove_get_var($url, 's'), 'o', 'f')) ?>"><?php echo lang('forum::followed').forum_followed_count() ?></option>
+				<?php endif ?>
+			</select>
+		</div>
+		<div class="box-content">
+			<?php fire_hook('forum.topics.list.before', $threads) ?>
+			<table class="table table-striped">
+				<thead>
+				<tr>
+					<th><?php echo lang('forum::topic') ?></th>
+					<th><?php echo lang('forum::category') ?></th>
+					<th><?php echo lang('forum::users') ?></th>
+					<th><?php echo lang('forum::replies-') ?></th>
+					<th><?php echo lang('forum::views') ?></th>
+					<th><?php echo lang('forum::last-activity') ?></th>
+				</tr>
+				</thead>
+				<tbody>
+				<?php foreach($threads->results() as $thread): ?>
+					<tr class="info">
+						<td>
+							<a href="<?php echo forum_get_thread_slug_link($thread['id']) ?>" style="font-weight:bold" ajax="true"> <?php echo $thread['subject'] ?></a><?php echo forum_thread_followed_count($thread['id']) ?>
+							<br/>
+							<?php foreach(explode(' ', trim($thread['tags'])) as $tag): ?>
+								<?php if(forum_get_tag($tag)): ?>
+									<a href="<?php echo forum_get_forum_slug_link(url_to_pager('forum-slug', array('appends' => '')).'?t='.forum_get_tag($tag)['id']) ?>" style="background-color:<?php echo forum_get_tag($tag)['color'] ?>;" class="forum-tags" ajax="true"><?php echo lang(forum_get_tag($tag)['title']) ?></a>
+								<?php endif ?>
+							<?php endforeach ?>
+						</td>
+						<td>
+							<a href="<?php echo forum_get_forum_slug_link(url_to_pager('forum-slug', array('appends' => '')).'?c='.$thread['category_id']) ?>" ajax="true"><?php echo lang($thread['title']) ?></a>
+						</td>
+						<td>
+							<a href="<?php echo url($thread['op_username']) ?>" title="<?php echo $thread['op_username'] ?> - <?php echo lang('forum::original-poster') ?>" ajax="true"><img src="<?php echo forum_get_avatar(0, 75, $thread['op_username']) ?>" class="forum-avatar-thumb forum-avatar-thumb-home"/></a>
+							<?php if($thread['nor'] > 0): ?>
+								<a href="<?php echo url($thread['rp_username']) ?>" title="<?php echo $thread['rp_username'] ?> - <?php echo lang('forum::most-recent-poster') ?>" ajax="true"><img src="<?php echo forum_get_avatar(0, 75, $thread['rp_username']) ?>" class="forum-avatar-thumb forum-avatar-thumb-home"/></a>
+							<?php endif ?>
+						</td>
+						<td><?php echo $thread['nor'] ?></td>
+						<td><?php echo $thread['nov'] ?></td>
+						<td><?php echo forum_timelength((time() - strtotime($thread['last_replied'])), true) ?></td>
+					</tr>
+				<?php endforeach ?>
+				</tbody>
+			</table>
+			<?php if($threads->total): ?>
+				<?php if($threads->total > config('pagination-length-forum', 20)): ?>
+					<?php echo $threads->links(true) ?>
+				<?php endif ?>
+			<?php else: ?>
+				<div class="alert alert-info"><?php echo lang('forum::no-topic-found-here') ?></div>
+			<?php endif ?>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,159 @@
+<div class="box music">
+	<div class="title"><?php echo lang('music::add-music') ?></div>
+	<div>
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<?php $current = (config('external-music', false)) ? 'external' : 'upload'; ?>
+		<form action="<?php echo url_to_pager('music-create') ?>" class="ajax-form" method="post" enctype="multipart/form-data">
+			<?php CSRFProtection::embed() ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label" style="visibility: hidden"><?php echo lang('music::source') ?></label>
+				</div>
+				<div class="bottom" style="display: none">
+					<div class="magic-select" data-name="val[source]" data-width="300px">
+						<div class="magic-select-toggle">
+							<?php echo lang('music::upload') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option music-source-option" data-value="upload">
+								<?php echo lang('music::upload') ?>
+							</div>
+							<div class="magic-select-option music-source-option" data-value="external">
+								<?php echo lang('music::external') ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php if(fire_hook('add.music.link', true)): ?>
+				<div class="field music-source-selector">
+					<div class="left source upload <?php // echo ($current == 'external') ? 'music-hide-field' : null ?>">
+						<label class="control-label"><?php echo lang('music::file') ?></label>
+					</div>
+					<div class="right">
+						<input type="file" id="file" name="music_file" accept="audio/mpeg" class="form-control"/>
+					</div>
+				</div>
+			<?php endif ?>
+			<?php if(config('external-music', false)): ?>
+				<div class="field source external <?php echo ($current == 'upload') ? 'music-hide-field' : null ?>">
+					<div class="left">
+						<label class="control-label"><?php echo lang('music::link') ?></label>
+					</div>
+					<div class="right">
+						<input value="<?php echo input('val.link') ?>" name="val[link]" type="text" class="form-control"/>
+						<span class="help-block"><?php echo lang('music::external-url-info') ?></span>
+					</div>
+				</div>
+			<?php endif ?>
+			<div class="field source external <?php // echo ($current == 'external') ? : null ?>">
+				<?php fire_hook('add.music.link.extend'); ?>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('category') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[category_id]" data-width="200px">
+						<?php $categories = get_music_categories(); ?>
+						<div class="magic-select-toggle">
+							<?php echo lang('select-category') ?>
+						</div>
+						<div class="magic-select-content">
+							<?php foreach($categories as $category): ?>
+								<?php $sub_categories = get_music_parent_categories($category['id']) ?>
+								<?php if($sub_categories): ?>
+									<div class="magic-select-label"><?php echo lang($category['title']) ?></div>
+									<?php foreach($sub_categories as $cat): ?>
+										<div class="magic-select-option" data-value="<?php echo $cat['id'] ?>">
+											<?php echo lang($cat['title']) ?>
+										</div>
+									<?php endforeach ?>
+								<?php else: ?>
+									<div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+										<?php echo lang($category['title']) ?>
+									</div>
+								<?php endif ?>
+							<?php endforeach ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php if(fire_hook('add.music.link', true)): ?>
+				<div class="music-details-container <?php // echo ($current == 'external') ? "music-hide-field" : null ?>">
+					<div class="field">
+						<div class="left">
+							<label for="val[title]" class="control-label"><?php echo lang('music::title') ?></label>
+						</div>
+						<div class="right">
+							<input value="<?php echo input('val.title') ?>" type="text" name="val[title]" class="form-control"/>
+						</div>
+					</div>
+					<div class="field">
+						<div class="left">
+							<label for="val[artist]" class="control-label"><?php echo lang('music::artist') ?></label>
+						</div>
+						<div class="right">
+							<input value="<?php echo input('val.artist') ?>" type="text" name="val[artist]" class="form-control"/>
+						</div>
+					</div>
+					<div class="field">
+						<div class="left">
+							<label for="val[album]" class="control-label"><?php echo lang('music::album') ?></label>
+						</div>
+						<div class="right">
+							<input value="<?php echo input('val.album') ?>" type="text" name="val[album]" class="form-control"/>
+						</div>
+					</div>
+					<div class="field">
+						<div class="left">
+							<label for="val[cover_art]" class="control-label"><?php echo lang('music::cover-art') ?></label>
+						</div>
+						<div class="right">
+							<div class="magic-input-image-preview" data-name="cover_art">
+								<span class="dimension"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
+			<?php if(fire_hook('entity.modification.true', false)): ?>
+				<?php fire_hook('modification.entity.type'); ?>
+			<?php else: ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('host') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-select" data-name="val[entity]" data-width="300px">
+							<div class="magic-select-toggle">
+								<img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+								<?php echo get_user_name(); ?>
+							</div>
+							<div class="magic-select-content slimscroll" data-height="200px">
+								<div class="magic-select-option" data-value="user-<?php echo get_userid() ?>">
+									<img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+									<?php echo get_user_name(); ?>
+								</div>
+								<?php fire_hook('entity.select.list') ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('privacy') ?></label><br/>
+				</div>
+				<div class="right">
+					<?php fire_hook('privacy.select'); ?>
+				</div>
+			</div>
+			<div class="submit">
+				<input type="submit" class="btn btn-info" value="<?php echo lang('music::add-music') ?>"/>
+			</div>
+		</form>
+	</div>
+</div>

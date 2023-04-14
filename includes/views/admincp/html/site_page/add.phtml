@@ -1,0 +1,70 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang("add-new-page") ?>
+		<a class="btn btn-sm btn-outline-secondary" href="<?php echo url_to_pager('admin-site-page-list') ?>" style="float: right; margin-left: 8px;"><?php echo lang('pages') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<form action="" class="wrapper-form adm" method="post">
+			<?php CSRFProtection::embed() ?>
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('page-title') ?> (English)</label>
+				<div class="col-sm-9">
+					<input type="text" name="val[title][english]" class="form-control" value=""/>
+					<a href="" class="other-languages-link" onclick="return show_other_languages('#page-new-other-languages')"><?php echo lang('edit-other-languages') ?></a>
+					<div class="other-languages" id="page-new-other-languages">
+						<?php foreach(get_all_languages() as $language): ?>
+							<?php if($language['language_id'] != 'english'): ?>
+								<input class="form-control" type="text" name="val[title][<?php echo $language['language_id'] ?>]" placeholder="<?php echo lang('page-title') ?>"/>
+								<br>
+								<p class="help-block"><?php echo $language['language_title'] ?></p>
+							<?php endif ?>
+						<?php endforeach ?>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('slug') ?></label>
+				<div class="col-sm-9">
+					<input type="text" name="val[slug]" class="form-control" value=""/>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('page-description') ?></label>
+				<div class="col-sm-9">
+					<input type="text" name="val[description]" class="form-control" value=""/>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('page-keywords') ?></label>
+				<div class="col-sm-9">
+					<input type="text" name="val[keywords]" class="form-control" value=""/>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('content') ?></label>
+				<div class="col-sm-9">
+					<textarea name="val[content][english]" class="ckeditor"></textarea><br>
+					<a href="" class="other-languages-link" onclick="return show_other_languages('#page-info-other-languages-content')"><?php echo lang('edit-other-languages') ?></a><br>
+					<div class="other-languages" id="page-info-other-languages-content">
+						<?php foreach(get_all_languages() as $language): ?>
+							<?php if($language['language_id'] != 'english'): ?>
+								<textarea name="val[content][<?php echo $language['language_id'] ?>]" class="ckeditor"><?php echo lang('content') ?></textarea>
+								<br>
+								<p class="help-block"><?php echo $language['language_title'] ?></p>
+							<?php endif ?>
+						<?php endforeach ?>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-9">
+					<input type="submit" value="<?php echo lang('add') ?>" class="btn btn-info"/>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

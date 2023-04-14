@@ -1,0 +1,37 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<p><?php echo lang('photo::edit-photo') ?></p>
+		<span><?php echo lang('photo::edit-photo-desc') ?></span>
+	</div>
+	<div class="wrapper-content">
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<form action="" method="post">
+			<?php CSRFProtection::embed() ?>
+			<div class="row" style="margin-bottom: 30px">
+				<div class="col-sm-5">
+					<h6>
+						<label for="val[featured]"><?php echo lang('photo::photo-feature') ?>: </label>
+					</h6>
+					<p class="form-description"><?php echo lang('photo::edit-photo-featured-desc') ?>.</p>
+				</div>
+				<div class="col-sm-5">
+					<div class="input-field col s10">
+						<select name="val[featured]" class="form-control">
+							<option value="0" <?php if($photo['featured'] == 0): ?> selected="selected" <?php endif ?>><?php echo lang('photo::not-featured') ?></option>
+							<option value="1" <?php if($photo['featured'] == 1): ?> selected="selected" <?php endif ?>><?php echo lang('photo::featured') ?></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="padding-top: 32px;">
+				<div class="col-sm-5"></div>
+				<div class="col-sm-7">
+					<input type="submit" value="<?php echo lang('photo::save') ?>" class="btn btn-info"/>
+				</div>
+			</div>
+			<input type="hidden" name="val[photo_id]" value="<?php echo $photo['id'] ?>"/>
+		</form>
+	</div>
+</div>

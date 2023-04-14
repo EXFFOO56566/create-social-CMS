@@ -1,0 +1,71 @@
+<div class="box music">
+	<div class="title"><?php echo lang('music::edit-playlist') ?></div>
+	<div>
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<form action="" method="post" enctype="multipart/form-data" class="ajax-form">
+			<?php CSRFProtection::embed() ?>
+			<div class="field">
+				<div class="left">
+					<label for="val[title]" class="control-label"><?php echo lang('music::title') ?></label>
+				</div>
+				<div class="right">
+					<input value="<?php echo input('val.title', $playlist['title'] ?>" type="text" name="val[title]" class="form-control" placeholder="<?php echo lang('music::title') ?>"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label for="val[description]" class="control-label"><?php echo lang('music::description') ?></label>
+				</div>
+				<div class="right">
+					<input value="<?php echo input('val.description') ? input('val.description') : $playlist['description'] ?>" type="text" name="val[description]" class="form-control" placeholder="<?php echo lang('music::description') ?>"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label for="val[music_search]" class="control-label"><?php echo lang('music::add-music') ?></label>
+				</div>
+				<div class="right">
+					<input autocomplete="off" value="<?php echo input('val.music_search') ?>" type="text" name="val[music_search]" class="form-control" onblur="$('#music-playlist-editor-search-result').fadeOut('fast'));" onfocus="music.playlist.editor.searchMusic(this)" onkeyup="music.playlist.editor.searchMusic(this, 'music-items-1', 'music-playlist-editor-search-result-1')" placeholder="<?php echo lang('music::search-musics') ?>"/>
+					<div style="height: 0px; overflow: visible; z-index: 9999; position: relative;">
+						<div id="music-playlist-editor-search-result-1">
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label for="val[musics]" class="control-label"></label>
+				</div>
+				<div class="right">
+					<div id="music-items-1">
+						<?php $musics = input('val.musics', unserialize($playlist['musics'])); ?>
+						<?php foreach($musics as $slug): ?>
+							<?php if(music_exists($slug)): ?>
+								<?php $music = get_music($slug); ?>
+								<div id="<?php echo $music['slug'] ?>" class="music-item">
+									<span class="title"><?php echo trim($music['title']) == '' ? $music['title'] : $music['artist'].' - '.$music['title'] ?></span>
+									<input name="val[musics][]" value="<?php echo $music['slug'] ?>" type="hidden">
+									<a href="#" onclick="return music.playlist.editor.removeMusic('<?php echo $music['slug'] ?>')" class="close"><i class="ion-android-close"></i></a>
+								</div>
+							<?php endif ?>
+						<?php endforeach ?>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('privacy') ?></label>
+				</div>
+				<div class="right">
+					<?php fire_hook('privacy.select', 'relationship', $playlist['privacy']); ?>
+				</div>
+			</div>
+			<div class="submit">
+				<button class="btn btn-info"><?php echo lang('music::save-playlist') ?></button>
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,38 @@
+<div class="box page">
+	<div class="global-filter-container" data-url="<?php echo url('pages') ?>">
+		<form id="page-list-search" method="post" onsubmit="return run_global_filter()" action="" class="form-inline list-search">
+			<?php CSRFProtection::embed() ?>
+			<input type="hidden" class="filter-input form-control" data-name="type" value="<?php echo input('type', 'browse') ?>"/>
+			<i class="search-icon ion-ios-search"></i>
+			<input value="<?php echo input('term') ?>" type="text" class="form-control search-box filter-input" data-name="term" placeholder="<?php echo lang('search') ?>"/>
+		</form>
+		<div class="list-head">
+			<h3 class="heading"><?php echo lang('page::pages') ?></h3>
+		</div>
+		<div class="filter-pane">
+			<select id="video-category-list" onchange="return run_global_filter()" data-name="category" class="c-select filter-input">
+				<option <?php echo (input('category', 'all') == 'all') ? 'selected' : null ?> value="all"><?php echo lang('video::all-categories') ?></option>
+				<?php foreach(get_page_categories() as $category): ?>
+					<option <?php echo (input('category', 'all') == $category['category_id']) ? 'selected' : null ?> value="<?php echo $category['category_id'] ?>"><?php echo lang($category['category_title']) ?></option>
+				<?php endforeach ?>
+			</select>
+
+			<select id="video-filter-select" onchange="return run_global_filter()" data-name="filter" class="c-select filter-input">
+				<option value="all"><?php echo lang('all') ?></option>
+				<option <?php echo (input('filter') == 'featured') ? 'selected' : null ?> value="featured"><?php echo lang('featured') ?></option>
+			</select>
+		</div>
+	</div>
+	<div id="group-list-container" class="box-content clearfix list-listing-container">
+		<?php foreach($pages->results() as $page): ?>
+			<?php echo view('page::display', array('page' => $page)) ?>
+		<?php endforeach ?>
+	</div>
+	<div class="box-content">
+		<?php if($pages->total): ?>
+			<?php echo $pages->append(array('term' => input('term'), 'filter' => input('filter', 'all'), 'type' => input('type', 'browse'), 'category' => input('category')))->links() ?>
+		<?php else: ?>
+			<?php echo lang('page::no-pages-found') ?>
+		<?php endif ?>
+	</div>
+</div>

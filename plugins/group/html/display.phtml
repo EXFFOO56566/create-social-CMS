@@ -1,0 +1,64 @@
+<div class="group-wrapper">
+	<ul class="group-wrapper-ul">
+		<li id="">
+			<div class="group-main">
+				<div class="group-4-jm">
+					<div class="group-4-jy">
+						<img class="group-ihtk img" src="<?php echo get_group_logo(200, $group) ?>"
+						     alt="<?php echo ucwords($group['group_title']) ?>"
+						     aria-label="<?php echo $group['group_title'] ?>" role="img" style="width:80px;height:80px">
+						<div class="group-4-jk">
+							<div class="group-266w">
+								<a href="<?php echo group_url(null, $group) ?>" ajax="true">
+									<h5><?php echo ucwords($group['group_title']) ?></h5>
+								</a>
+							</div>
+							<div class="group-266x">
+								<div class="group-2aka group-fsm group-fwn group-fcg">
+									<?php $friends = get_group_firends($group['group_id']);
+									if(count($friends) > 0) echo count($friends)." ".lang('friends')." . " ?> <?php echo count(get_group_members_id($group['group_id'])) ?> <?php echo lang('group::members') ?>
+								</div>
+							</div>
+							<div class="group-266-">
+								<div class="group-43qc">
+									<ul class="uiList group-4cg3 group-509 group-4ki">
+									<?php $set_counter = count($friends); ?>
+									<?php if($set_counter > 7) $set_counter = 7; ?>
+									<?php $i = 1; ?>
+										<?php foreach($friends as $friend): ?>
+											<?php
+											$user = find_user($friend);
+											if($i <= $set_counter):?>
+												<li class="group-friends_li">
+													<a class="link" href="<?php echo profile_url('', $user) ?>">
+														<img class="group-s0 group-54ru img"
+														     src="<?php echo get_avatar(200, $user) ?>"
+														     alt="<?php echo $user['first_name']." ".$user['last_name'] ?>"
+														     data-jsid="img">
+													</a>
+												</li>
+												<?php $i++; endif; ?>
+										<?php endforeach; ?>
+										<?php if(count($friends) > 7): ?>
+											<li style = "border-radius:15px" class="_43q8 _43q7 _43qa _49c8">
+												<a rel="dialog" role="button"
+												   data-hover="tooltip"
+												   data-tooltip-content=""
+												   id="js_28x">+<?php echo(count($friends) - 7) ?></a>
+											</li>
+										<?php endif; ?>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php if(is_loggedIn() and !is_group_admin($group, null, false)): ?>
+						<?php $status = (is_group_member($group['group_id'])) ? 1 : 0 ?>
+						<div class="group-4-jm">
+							<a onclick="return join_group(this)" data-id="<?php echo $group['group_id'] ?>" role="button" class="_42ft _4jy0 _3nmc _3nmc _4jy3 _517h _51sy" href="#" data-status="<?php echo $status ?>" data-join="<?php echo lang('group::group-join') ?>" data-leave="<?php echo lang('group::joined-group') ?>" rel="async-post" id="joinButton_126910720662724"><?php echo ($status) ? lang('group::leave-group') : lang('group::join-group') ?> </a>
+						</div>
+					<?php endif ?>
+				</div>
+		</li>
+	</ul>
+</div>

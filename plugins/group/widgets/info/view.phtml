@@ -1,0 +1,56 @@
+<?php if(isset($app->profileGroup)): ?>
+	<?php if(group_can_add_member($app->profileGroup)): ?>
+		<div class="box">
+			<div class="box-content">
+				<div id="input_container">
+					<img src="<?php echo img("group::images/plus.png") ?>" id="input_img">
+					<input id="group-tags-suggestion-input" data-friend-only="true" autocomplete="off" data-target="#group-tags-suggestion" type="text" class="user-tag-input form-control input" placeholder="<?php echo lang('group::ad-member-to-group') ?>"/>
+				</div>
+				<div class="user-suggestion-list box" id="group-tags-suggestion" data-id="<?php echo $app->profileGroup['group_id'] ?>"></div>
+			</div>
+		</div>
+	<?php endif ?>
+	<div class="box ">
+
+		<ul id="profile-side-info">
+			<li>
+				<span><i class="ion-android-people"></i> </span>
+				<strong><?php echo count(get_group_members_id($app->profileGroup['group_id'])) ?></strong> <?php echo lang('group::members') ?>
+			</li>
+			<li>
+				<span><i class="ion-ios-locked-outline"></i> <?php echo lang('privacy') ?>:</span> <?php echo ($app->profileGroup['privacy'] == 1) ? lang('public') : lang('private') ?>
+			</li>
+
+			<li>
+				<span><i class="ion-ios-information-outline"></i> <?php echo lang('page::about') ?>:</span> <?php echo output_text($app->profileGroup['group_description']) ?>
+			</li>
+
+		</ul>
+	</div>
+<?php endif ?>
+<style>
+	#input_container {
+		position: relative;
+		border: solid 1px #d2cccc;
+	}
+
+	.input {
+		height: 25px !important;
+		width: 100%;
+		background-color: transparent;
+		margin: 2px 0 0;
+		padding: 3px;
+		-webkit-appearance: none;
+		-webkit-border-radius: 0;
+		border: 0;
+		box-sizing: border-box;
+	}
+
+	#input_img {
+		position: absolute;
+		bottom: 5px;
+		right: 5px;
+		width: 15px;
+		height: 15px;
+	}
+</style>

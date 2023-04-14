@@ -1,0 +1,59 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('help::manage-help') ?>
+		<a href="<?php echo url_to_pager('admincp-help-add') ?>"><?php echo lang('help::add-help') ?></a> |
+		<a href="<?php echo url_to_pager('admincp-help-add') ?>?category=1"><?php echo lang('help::add-category') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<div class="list-table-container">
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th>ID</th>
+						<th><?php echo lang('help::title') ?></th>
+						<th><?php echo lang('help::modify-time') ?></th>
+						<th><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody data-url="<?php echo url_to_pager('admincp-help-manage').'?action=order' ?>" class="admincp-sortable" style="position: relative">
+					<?php foreach($categories as $category): ?>
+						<tr class="item" id="<?php echo $category['id'] ?>">
+							<th>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $category['id'] ?>"></div>
+							</th>
+							<td><?php echo $category['id'] ?></td>
+							<td><?php echo lang($category['title']) ?></td>
+							<td>
+								<?php echo date('d F Y  g:ia', $category['modify_time']) ?>
+							</td>
+
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-edit"
+										   href='<?php echo url_to_pager('admincp-help-manage').'?action=edit&id='.$category['id'] ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-android-delete"
+										   href="<?php echo url_to_pager('admincp-help-manage').'?action=delete&id='.$category['id'] ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
+	</div>
+</div>

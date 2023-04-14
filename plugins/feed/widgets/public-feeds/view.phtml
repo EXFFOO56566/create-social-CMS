@@ -1,0 +1,31 @@
+<?php $feeds = get_feeds('public') ?>
+<div id="feed-lists" data-type="public" data-type-id="" data-offset="0">
+	<div class="line"></div>
+	<?php $i = 0;
+	foreach($feeds as $feed):fire_hook('feed.lists.inline', null, array($i));
+		$i++ ?>
+		<?php echo view('feed::feed', array('feed' => $feed)) ?>
+	<?php endforeach ?>
+
+
+</div>
+<?php if(!count($feeds)): ?>
+	<div class="feed-empty text-center">
+		<i class="ion-android-bicycle"></i>
+		<h3><?php echo lang('no-post-show') ?></h3>
+		<a href="<?php echo url('suggestions') ?>" ajax="true" class="btn btn-secondary btn-upper"><?php echo lang('find-people') ?></a>
+	</div>
+<?php endif ?>
+<?php if(count($feeds)): ?>
+	<div class="feed-load-more">
+		<div class="col-sm-12 no-padding">
+			<div class="feed-loading">
+				<div class="feed_loading_post">
+					<div class="feed_loading_post_child2">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif ?>

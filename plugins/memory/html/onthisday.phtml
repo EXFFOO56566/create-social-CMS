@@ -1,0 +1,8 @@
+<?php if($memories): ?>
+	<?php echo view('memory::post', array('memories' => $memories)); ?>
+<?php else: ?>
+	<div class="feed-empty text-center">
+		<i class="ion-android-bicycle"></i>
+		<h3><?php echo lang('memory::no-memory') ?></h3>
+	</div>
+<?php endif ?>

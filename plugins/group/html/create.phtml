@@ -1,0 +1,80 @@
+<div class="md-container">
+	<div class="box">
+		<div class="title"><?php echo lang('group::create-group') ?></div>
+		<div class="box-content">
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<form action="<?php echo url('group/create') ?>" method="post" enctype="multipart/form-data" class="ajax-form">
+				<?php CSRFProtection::embed() ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('group::group-title') ?></label>
+					</div>
+					<div class="right">
+						<input value="<?php echo input('val.title') ?>" type="text" name="val[title]" class="form-control"/>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label "><?php echo lang('group::description') ?></label>
+					</div>
+					<div class="right">
+						<textarea name="val[description]" class="form-control auto-grow-input"><?php echo input('val.description') ?></textarea>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label "><?php echo lang('profile-cover') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-input-image-preview" data-name="group_logo">
+							<span class="dimension"></span>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label "><?php echo lang('category') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-select" data-name="val[category_id]" data-width="200px">
+							<div class="magic-select-toggle">
+								<?php echo lang('select-category') ?>
+							</div>
+							<div class="magic-select-content">
+								<?php $categories = get_group_categories(); ?>
+								<?php foreach($categories as $category): ?>
+									<div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+										<?php echo lang($category['title']) ?>
+									</div>
+								<?php endforeach ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label "><?php echo lang('privacy') ?></label>
+					</div>
+					<div class="right">
+						<?php fire_hook('privacy.select', 'group', array()); ?>
+						<div class="help-block">
+							<div>
+								<strong><?php echo lang('public') ?>: </strong>
+								<?php echo lang('group::group-public-note') ?>
+							</div>
+							<div>
+								<strong><?php echo lang('private') ?>: </strong>
+								<?php echo lang('group::group-private-note') ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="submit">
+					<input type="submit" value="<?php echo lang('group::create-group') ?>" class="btn btn-info action-button"/>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

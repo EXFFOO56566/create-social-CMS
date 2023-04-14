@@ -1,0 +1,99 @@
+<div id="FindEventMenu">
+	<div role="complementary" aria-label="" class="find-event">
+		<div class="find-event-header">
+            <span class="find-event-header-content">
+                <?php echo lang("event::find-events") ?>
+            </span>
+		</div>
+		<div class="find-content">
+			<ul class="find-content-ul">
+				<li class="find-content-li">
+					<a ajax="true" class="find-event-link" href="<?php echo url_to_pager('events') ?>?type=select&param=today">
+						<img class="find-event-img" height="24" src="<?php echo img('event::images/today.png') ?>" width="24" alt="">
+						<span class="find-event-text"><?php echo lang('today') ?></span>
+					</a>
+				</li>
+				<li class="find-content-li">
+					<a ajax="true" class="find-event-link" href="<?php echo url_to_pager('events') ?>?type=select&param=tomorrow">
+						<img class="find-event-img" height="24" src="<?php echo img('event::images/tomorrow.png') ?>" width="24" alt="">
+						<span class="find-event-text"><?php echo lang('tomorrow') ?></span>
+					</a>
+				</li>
+				<li class="find-content-li">
+					<a ajax="true" class="find-event-link" href="<?php echo url_to_pager('events') ?>?type=select&param=week">
+						<img class="find-event-img" height="24" src="<?php echo img('event::images/week.png') ?>" width="24" alt="">
+						<span class="find-event-text"><?php echo lang('this-week') ?></span>
+					</a>
+				</li>
+				<li class="find-content-li choose-event" onclick="document.getElementById('dateRangePicker').click()">
+                    <span>
+                        <div role="button" style="position: relative" tabindex="0" id="">
+                            <input id="dateRangePicker" type="text" class="dateRangePicker" style="position:absolute;visibility: hidden;width: 100%;"/>
+                            <div class="find-event-link" href="<?php echo url_to_pager('events') ?>?type=select&param=choose">
+                                <i style="background-image: url(<?php echo img('event::images/choose.png') ?>)" class="find-event-img choose-img-event choose-event-img" height="24" width="24" alt=""></i>
+                                <span class="find-event-text"><?php echo lang('choose-date') ?></span>
+                            </div>
+                        </div>
+                    </span>
+				</li>
+			</ul>
+		</div>
+		<div class="event-categories">
+			<ul class="event-categories-ul">
+			<?php $categories = get_event_categories(); ?>
+			<?php $moreCategories = array(); ?>
+				<?php $i = 1; foreach($categories as $category): ?>
+					<?php $image = $category['icon'] ? url_img($category['icon'], 75) : img('event::images/event-category.png') ?>
+					<?php if($i <= 5): ?>
+						<li class="event-categories-li">
+							<div class="clearfix">
+								<div style="float:left">
+                            <span class="event-categories-icon-span">
+                                <img height="20" src="<?php echo $image ?>" width="20" alt="" style="display: block;">
+                            </span>
+								</div>
+								<div class="find-event-cat-url">
+									<a href="<?php echo url_to_pager('events') ?>?f=1&type=upcoming&term=&category=<?php echo $category['id'] ?>"> <?php echo lang($category['title']) ?></a>
+								</div>
+							</div>
+						</li>
+					<?php else: ?>
+					<?php $moreCategories[] = $category; ?>
+					<?php endif;?>
+				<?php $i++; endforeach; ?>
+				<?php if(count($moreCategories) > 0): ?>
+				<div id="more-event-category">
+				<?php $i = 1; foreach($moreCategories as $category): ?>
+					<li class="event-categories-li">
+						<div class="clearfix">
+							<div style="float:left">
+								<span class="event-categories-icon-span">
+									<img height="20" src="<?php echo $image ?>" width="20" alt="" style="display: block;">
+								</span>
+							</div>
+								<div class="find-event-cat-url">
+									<a href="<?php echo url_to_pager('events') ?>?f=1&type=upcoming&term=&category=<?php echo $category['id'] ?>"> <?php echo lang($category['title']) ?></a>
+								</div>
+						</div>
+					</li>
+					<?php endforeach ?>
+				</div>
+				<?php endif; ?>
+			</ul>
+			<?php if(count(get_event_categories()) > 5): ?>
+				<div class="event-category-more">
+					<a morelabel="More" lesslabel="Less" class="event-categories-widget-more-buttton" onclick="return show_more_content('#more-event-category',this)" href="#"><?php echo lang('show-more') ?></a>
+				</div>
+			<?php endif; ?>
+		</div>
+	</div>
+</div>
+
+<style>
+	.event-categories-icon-span {
+		margin-right: 5px;
+		display: block;
+		text-align: center;
+		width: 20px;
+	}
+</style>

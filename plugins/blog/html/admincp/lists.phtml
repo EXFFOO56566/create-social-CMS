@@ -1,0 +1,78 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		Manage Blogs
+	</div>
+	<div class="wrapper-content">
+		<form action="" method="get" style="margin: 20px 0">
+			<?php CSRFProtection::embed() ?>
+			<input type="text" class="form-control" name="term" placeholder="<?php echo lang('search') ?>"/>
+
+			<button class="btn btn-sm btn-secondary" style="margin-top: 10px"><?php echo lang('search') ?></button>
+		</form>
+		<div class="list-table-container">
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users" data-id="0"></div>
+						</th>
+						<th>ID</th>
+						<th><?php echo lang('title') ?></th>
+						<th><?php echo lang('blog::written-by') ?></th>
+						<th><?php echo lang('blog::views') ?></th>
+						<th><?php echo lang('status') ?></th>
+						<th><?php echo lang('featured') ?></th>
+						<th><?php echo lang('blog::last-update') ?></th>
+						<th><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($blogs->results() as $blog): ?>
+						<?php $blog = arrange_blog($blog); ?>
+						<tr class="item" id="<?php echo $blog['id'] ?>">
+							<td>
+								<div class="list-table-select" data-group="users" data-id="<?php echo $blog['id'] ?>"></div>
+							</td>
+							<td><?php echo $blog['id'] ?></td>
+							<td>
+								<a href="<?php echo url('blog/'.$blog['slug']) ?>"><?php echo lang($blog['title']) ?></a>
+							</td>
+							<td>
+								<a ajax="true" href="<?php echo url($blog['publisher']['id']) ?>"><?php echo $blog['publisher']['name'] ?></a>
+							</td>
+							<td>
+								<?php echo $blog['views'] ?>
+							</td>
+							<td>
+								<?php echo ($blog['status']) ? 'Published' : 'Draft' ?>
+							</td>
+							<td>
+								<?php echo ($blog['featured']) ? 'Yes' : 'No' ?>
+							</td>
+							<td>
+								<?php echo date('d F Y  g:ia', $blog['update_time']) ?>
+							</td>
+
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a class="ion-edit" href='<?php echo url_to_pager('admincp-blog-manage').'?action=edit&id='.$blog['id'] ?>'></a> |
+										<a class="admin-confirm ion-android-delete" href="<?php echo url_to_pager('admincp-blog-manage').'?action=delete&id='.$blog['id'] ?>"></a>
+									</div>
+								</div>
+							</td>
+
+
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php echo $blogs->links() ?>
+	</div>
+</div>

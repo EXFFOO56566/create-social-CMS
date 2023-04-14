@@ -1,0 +1,48 @@
+<?php $fields = input("val.fields"); $v = $fields && (in_array($field['title'], $fields) || isset($fields[$field['title']])) ? $fields[$field['title']] : null; $value = isset($value) ? $value : $v;  $type = isset($type) ? $type : 1  ?>
+<div class="field">
+	<div class="<?php echo $type == 1 ? 'left' : 'top' ?>">
+		<label class="control-label"><?php echo lang($field["title"]) ?>:</label>
+	</div>
+	<div class="<?php echo $type == 1 ? 'right' : 'bottom' ?>">
+		<?php if($field['field_type'] == "text"): ?>
+			<input class="form-control" value="<?php echo $value ?>" type="text" placeholder="<?php echo lang($field["title"]) ?>" name="val[fields][<?php echo $field['title'] ?>]"/>
+		<?php elseif($field['field_type'] == "longtext"): ?>
+			<textarea class="form-control" placeholder="<?php echo lang($field["title"]) ?>" name="val[fields][<?php echo $field['title'] ?>]"><?php echo $value ?></textarea>
+		<?php elseif($field['field_type'] == "selection"): ?>
+			<div class="magic-select" data-name="val[fields][<?php echo $field['title'] ?>]" data-width="100%">
+				<?php $data = explode(",", $field["field_data"]); ?>
+				<?php array_walk($data, function(&$value, &$key) {$value = trim($value); $key = trim($key);}); ?>
+				<input type="hidden" name="val[fields][<?php echo $field['title'] ?>]" value="<?php echo trim($value) ?>" class="magic-select-value" />
+				<div class="magic-select-toggle">
+					<?php if(in_array(trim($value), $data)): ?>
+						<?php echo trim($value) ?>
+					<?php else: ?>
+						<?php echo isset($data[0]) ? $data[0] : lang('select-option') ?>
+					<?php endif; ?>
+				</div>
+				<div class="magic-select-content">
+					<?php foreach($data as $v): ?>
+						<div class="magic-select-option" data-value="<?php echo $v ?>">
+							<?php echo $v ?>
+						</div>
+					<?php endforeach ?>
+				</div>
+			</div>
+		<?php elseif($field['field_type'] == "boolean"): ?>
+			<div class="magic-select" data-name="val[fields][<?php echo $field['title'] ?>]" data-width="60px">
+				<input type="hidden" name="val[notify-following-you]" value="<?php echo $value ?>" class="magic-select-value" />
+				<div class="magic-select-toggle">
+					<?php echo $value == 1 ? lang('yes') : lang('no') ?>
+				</div>
+				<div class="magic-select-content">
+					<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+					<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+				</div>
+			</div>
+		<?php endif ?>
+		<?php if(!isset($offDescription)): ?>
+			<p class="help-block"><?php echo lang($field['description']) ?></p>
+		<?php endif ?>
+	</div>
+</div>
+<div class="dropdown-divider"></div>

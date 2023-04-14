@@ -1,0 +1,95 @@
+.memory-feed {
+    position: relative;
+    text-align: center;
+}
+
+.memory-feed-head {
+    width: 100%;
+    height: 90px;
+    color: black;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.memory-registration .memory-feed-head {
+
+}
+
+.memory-relationship .memory-feed-head {
+
+}
+
+.memory-birthday_reminder .memory-feed-head {
+
+}
+
+.memory-post .memory-feed-head {
+    background-color: #FFBB77;
+}
+
+.memory-feed-head-image {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    pointer-events: none;
+    padding-top: 37px;
+}
+
+.memory-feed-head-title {
+    display: inline-block;
+    width: calc(100% - 120px);
+    padding: 8px 0px;
+    font-size: 18px !important;
+    text-transform: capitalize;
+    padding-top: 8px;
+}
+
+.memory-feed-head-title a {
+    font-size: 18px !important;
+}
+
+.memory-registration .memory-feed-head-title a,
+.memory-registration .memory-feed-head-title {
+
+}
+
+.memory-relationship .memory-feed-head-title a,
+.memory-relationship .memory-feed-head-title {
+
+}
+
+.memory-post .memory-feed-head-title a,
+.memory-post .memory-feed-head-title {
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.memory-more-link {
+    display: block;
+    font-size: 16px;
+}
+
+.memory-registration .memory-more-link {
+
+}
+
+.memory-relationship .memory-more-link {
+
+}
+
+.memory-post .memory-more-link {
+    color: #FFFFFF;
+}
+
+.memory-feed-body .avatar {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    margin: 8px;
+    border-radius: 50%;
+}
+
+.memory-share i {
+    line-height: 20px;
+}

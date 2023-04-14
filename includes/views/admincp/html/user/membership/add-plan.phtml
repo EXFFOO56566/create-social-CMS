@@ -1,0 +1,91 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('membership-plans') ?>
+
+	</div>
+	<div class="wrapper-content">
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<form method="post" action="" class="wrapper-form" <?php fire_hook('membership.plan.attribute') ?>>
+			<?php CSRFProtection::embed() ?>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('plan-type') ?></label>
+				<div class="col-sm-9">
+
+					<select onchange="membership_admin_change_form(this)" class="form-group c-select" name="val[type]">
+						<option value="free"><?php echo lang('free') ?></option>
+						<option value="one-time"><?php echo lang('one-time-payment') ?></option>
+						<option value="recurring"><?php echo lang('recurring') ?></option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group row plan-price" style="display:none">
+				<label class="col-sm-3 form-control-label"><?php echo lang('plan-price') ?> (<?php echo config('default-currency') ?>)</label>
+				<div class="col-sm-9">
+
+					<input type="text" class="form-control" name="val[price]" placeholder="<?php echo lang('plan-price') ?>"/><br/>
+				</div>
+			</div>
+			<div class="form-group row recurring-container" style="display:none">
+				<label class="col-sm-3 form-control-label"><?php echo lang('recurring-cycle') ?></label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" name="val[cycle_number]" placeholder="<?php echo lang('number') ?>"/><br/>
+					<select class="form-group c-select" name="val[cycle_type]">
+						<option value="day"><?php echo lang('days') ?></option>
+						<option value="week"><?php echo lang('weeks') ?></option>
+						<option value="month"><?php echo lang('months') ?></option>
+						<option value="year"><?php echo lang('years') ?></option>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('plan-user-role') ?></label>
+				<div class="col-sm-9">
+
+					<select class="form-group c-select" name="val[role]">
+						<?php foreach(list_user_roles() as $role): ?>
+							<option value="<?php echo $role['role_id'] ?>"><?php echo $role['role_title'] ?></option>
+						<?php endforeach ?>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('plan-title') ?></label>
+				<div class="col-sm-9">
+					<?php foreach(get_all_languages() as $language): ?>
+						<input class="form-control" type="text" name="val[title][<?php echo $language['language_id'] ?>]" placeholder="<?php echo lang('plan-title') ?>"/>
+						<br>
+						<p class="help-block"><?php echo $language['language_title'] ?></p>
+					<?php endforeach ?>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('plan-description') ?></label>
+				<div class="col-sm-9">
+
+					<?php foreach(get_all_languages() as $language): ?>
+						<textarea name="val[desc][<?php echo $language['language_id'] ?>]" class="form-control" placeholder="<?php echo lang('plan-title') ?>"></textarea>
+						<p class="help-block"><?php echo $language['language_title'] ?></p>
+					<?php endforeach ?>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('recommended') ?></label>
+				<div class="col-sm-9">
+
+					<select class="form-group c-select" name="val[recommend]">
+						<option value="0"><?php echo lang('no') ?></option>
+						<option value="1"><?php echo lang('yes') ?></option>
+					</select>
+				</div>
+			</div>
+			<?php fire_hook('add.plan.more') ?>
+			<button class="btn btn-info"><?php echo lang('add-plan') ?></button>
+		</form>
+	</div>
+</div>

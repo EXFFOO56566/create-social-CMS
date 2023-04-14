@@ -1,0 +1,15 @@
+
+<form action="<?php echo url_to_pager('stripe-process', array(
+    'id' => $id,
+    'price' => $price,
+    'type' => urlencode($type))) ?>?name=<?php echo urlencode($name) ?>&description=<?php echo urlencode($description)?>&return_url=<?php echo urlencode($return_url)?>&cancel_url=<?php echo urlencode($cancel_url)?>&coupon=<?php echo $coupon?><?php echo  (input('webview')) ? "&webview=true&api_userid=".input('api_userid') : '';?>" method="POST">
+	<?php CSRFProtection::embed() ?>
+	<script
+			src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+			data-key="<?php echo config('stripe-publishable-key') ?>"
+			data-name="<?php echo config('site-name') ?>"
+			data-description="<?php echo lang($description) ?>"
+			data-currency="<?php echo config('default-currency') ?>"
+			data-amount="<?php echo (int) $price * 100 ?>">
+	</script>
+</form>

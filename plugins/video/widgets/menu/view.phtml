@@ -1,0 +1,159 @@
+<div class="box">
+	<?php if(user_has_permission('can-add-video')): ?>
+		<div class="box-content">
+			<a class="btn btn-block btn-info action-button" href="<?php url_to_pager('video-create') ?>" data-toggle="modal" data-target="#video-create-modal"><i class="ion-ios-plus-empty"></i> <?php echo lang('video::add-new-video') ?>
+			</a>
+			<div id="video-create-modal" class="modal fade" role="dialog">
+				<div class="modal-dialog modal-lg1">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<form action="<?php echo url_to_pager('video-create') ?>" method="post" class="ajax-form" enctype="multipart/form-data">
+							<div class="modal-form-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<p class="modal-title pull-left"><?php echo lang('add-video') ?></p>
+							</div>
+							<div class="modal-body">
+								<?php $current = (config('video-upload', false) and config('video-encoder', 'none') != 'none') ? 'upload' : 'external'; ?>
+								<?php CSRFProtection::embed() ?>
+								<?php if(fire_hook('video.custom.display', true)): ?>
+									<div class="field">
+										<div class="top">
+											<label class="control-label"><?php echo lang('video::source') ?></label>
+										</div>
+										<div class="bottom">
+											<div class="magic-select" data-name="val[source]" data-width="200px">
+												<div class="magic-select-toggle">
+													<?php if(config('video-upload', false) and config('video-encoder', 'none') != 'none'): ?>
+														<?php echo lang('video::upload-from-computer') ?>
+													<?php else: ?>
+														<?php echo lang('video::external-link') ?>
+													<?php endif ?>
+												</div>
+												<div class="magic-select-content">
+													<?php if(config('video-upload', false) and config('video-encoder', 'none') != 'none'): ?>
+														<div class="magic-select-option video-source-option" data-value="upload">
+															<?php echo lang('video::upload-from-computer') ?>
+														</div>
+													<?php endif ?>
+													<div class="magic-select-option video-source-option" data-value="external">
+														<?php echo lang('video::external-link') ?>
+													</div>
+												</div>
+											</div>
+											<div class="video-source-selector" style="margin-top: 20px">
+												<?php if(config('video-upload', false)): ?>
+													<div class=" source upload <?php echo ($current == 'external') ? 'video-hide-field' : null ?>">
+														<input type="file" id="file" name="video_file">
+													</div>
+												<?php endif ?>
+												<div class="source external <?php echo ($current == 'upload') ? 'video-hide-field' : null ?>">
+													<div class="form-group ">
+														<input value="<?php echo input('val.link') ?>" name="val[link]" type="text" class="form-control">
+														<span class="help-block"><?php echo lang('video::external-url-info') ?></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="field">
+										<div class="top">
+											<label class="control-label"><?php echo lang('category') ?></label><br/>
+										</div>
+										<div class="bottom">
+											<div class="magic-select" data-name="val[category_id]" data-width="200px">
+												<?php $categories = get_video_categories(); ?>
+												<div class="magic-select-toggle">
+													<?php echo lang('select-category') ?>
+												</div>
+												<div class="magic-select-content">
+													<?php foreach($categories as $category): ?>
+														<?php $sub_categories = get_video_parent_categories($category['id']) ?>
+														<?php if($sub_categories): ?>
+															<div class="magic-select-label"><?php echo lang($category['title']) ?></div>
+															<?php foreach($sub_categories as $cat): ?>
+																<div class="magic-select-option" data-value="<?php echo $cat['id'] ?>">
+																	<?php echo lang($cat['title']) ?>
+																</div>
+															<?php endforeach ?>
+														<?php else: ?>
+															<div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+																<?php echo lang($category['title']) ?>
+															</div>
+														<?php endif ?>
+													<?php endforeach ?>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="video-details-container <?php echo ($current == 'external') ? "video-hide-field" : null ?>">
+										<div class="field">
+											<div class="top">
+												<label class="control-label"><?php echo lang('video::title') ?></label>
+											</div>
+											<div class="bottom">
+												<input value="<?php echo input('val.title') ?>" type="text" name="val[title]" class="form-control"/>
+											</div>
+										</div>
+										<div class="field">
+											<div class="top">
+												<label class="control-label"><?php echo lang('video::description') ?></label>
+											</div>
+											<div class="bottom">
+												<textarea name="val[description]" class="form-control"><?php echo input('val.description') ?></textarea>
+											</div>
+										</div>
+									</div>
+								<?php endif ?>
+								<?php $sql = fire_hook('video.create.extend'); ?>
+								<div class="field">
+									<div class="top">
+										<label class="control-label"><?php echo lang('host') ?></label>
+									</div>
+									<div class="bottom">
+										<div class="magic-select" data-name="val[entity]" data-width="300px">
+											<div class="magic-select-toggle">
+												<img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+												<?php echo get_user_name(); ?>
+											</div>
+											<div class="magic-select-content slimscroll" data-height="200px">
+												<div class="magic-select-option" data-value="user-<?php echo get_userid() ?>">
+													<img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+													<?php echo get_user_name(); ?>
+												</div>
+												<?php fire_hook('entity.select.list') ?>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label"><?php echo lang('privacy') ?></label>
+									</div>
+									<div class="bottom">
+										<?php fire_hook('privacy.select'); ?>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<div class="submit">
+									<button class="btn btn-info action-button"><?php echo lang('video::add-video') ?></button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endif ?>
+	<ul class="menu">
+		<?php foreach(get_menus("videos-menu") as $menu): ?>
+			<li>
+				<a ajax="true" href="<?php echo $menu->link ?>"><?php echo lang($menu->title) ?></a>
+			</li>
+		<?php endforeach ?>
+		<li>
+			<a ajax="true" href="<?php echo url('videos?type=mine') ?>"><?php echo lang('video::my-videos') ?></a>
+		</li>
+		<!--<li><a href="<?php echo url('videos?type=friends') ?>"><?php echo lang('video::friends-videos') ?></a> </li>-->
+	</ul>
+</div>

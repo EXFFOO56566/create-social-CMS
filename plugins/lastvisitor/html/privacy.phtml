@@ -1,0 +1,9 @@
+<div class="field">
+	<div class="left">
+		<label class="control-label"><?php echo lang('lastvisitor::who-can-see-visitors') ?></label>
+	</div>
+	<div class="right">
+		<?php fire_hook('privacy.select', 'relationship', array(get_privacy('who_can_see_visitors', config('default-latestvisitor-privacy', 1)), 'val[who_can_see_visitors]')); ?>
+		<p class="help-block"><?php echo lang('lastvisitor::who-can-see-visitors') ?></p>
+	</div>
+</div>

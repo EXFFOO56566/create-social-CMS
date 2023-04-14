@@ -1,0 +1,111 @@
+<div class="md-container">
+	<div class="box">
+		<div class="title"><?php echo lang('event::add-event') ?></div>
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<form action="<?php echo url_to_pager('event-create') ?>" method="post" enctype="multipart/form-data" class="ajax-form">
+			<?php CSRFProtection::embed() ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('event::event-category') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select event-category" data-name="val[category]" data-width="200px">
+						<?php $categories = get_event_categories(); ?>
+						<div class="magic-select-toggle">
+							<?php echo lang('select-category') ?>
+						</div>
+						<div class="magic-select-content">
+							<?php foreach($categories as $category): ?>
+								<div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+									<?php echo lang($category['title']) ?>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('event::event-title') ?></label>
+				</div>
+				<div class="right">
+					<input value="<?php echo input('val.title') ?>" type="text" name="val[title]" class="form-control" placeholder="<?php echo lang('event::event-title') ?>"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('event::description') ?></label>
+				</div>
+				<div class="right">
+					<textarea name="val[description]" class="form-control auto-grow-input<?php fire_hook('event.form.description.class') ?>" data-height="55px" placeholder="<?php echo lang('event::event-title') ?>"><?php echo input('val.description') ?></textarea>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('profile-cover') ?></label>
+				</div>
+				<div class="right">
+					<div style="width:100% !important;" class="magic-input-image-preview" data-name="cover_art">
+						<span class="dimension"></span>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('privacy') ?></label>
+				</div>
+				<div class="right">
+					<?php fire_hook('privacy.select', 'event'); ?>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('event::event-host') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select event-host" data-name="val[entity]" data-width="200px">
+						<div class="magic-select-toggle">
+							<img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+							<?php echo get_user_name(); ?>
+						</div>
+						<div class="magic-select-content slimscroll" data-height="200px">
+							<div class="magic-select-option" data-value="user-<?php echo get_userid() ?>">
+								<img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+								<?php echo get_user_name(); ?>
+							</div>
+							<?php fire_hook('entity.select.list') ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('event::location') ?></label>
+				</div>
+				<div class="right">
+					<input id="feed-editor-geocomplete" value="<?php echo input('val.location') ?>" type="text" name="val[location]" placeholder="<?php echo lang('event::location') ?>" class="form-control"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('event::address') ?></label>
+				</div>
+				<div class="right">
+					<textarea id="feed-editor-geocomplete" name="val[address]" class="form-control auto-grow-input" data-height="55px" placeholder="<?php echo lang('event::address') ?>"><?php echo input('val.address') ?></textarea>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('event::event-time') ?></label>
+				</div>
+				<div class="right">
+					<input type="text" name="val[start_time]" class="datetimepicker form-control" placeholder="<?php echo lang('event::start-time') ?>"/>
+					<?php echo lang('to') ?>
+					<input type="text" name="val[end_time]" class="datetimepicker form-control" placeholder="<?php echo lang('event::end-time') ?>"/>
+				</div>
+			</div>
+			<?php fire_hook('more.event.fields', null, array()); ?>
+	</div>
+</div>

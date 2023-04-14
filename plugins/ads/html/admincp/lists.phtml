@@ -1,0 +1,95 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('ads::manage-ads') ?>
+		<a class="btn btn-secondary"
+		   href="<?php echo url_to_pager('admin-ads-create') ?>"><?php echo lang('ads::create-ads') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-ads-batch-action') ?>?action=activate"
+					   class="action-link list-table-select-action"
+					   data-group="users"><?php echo lang('activate') ?></a>
+					<a href="<?php echo url_to_pager('admin-ads-batch-action') ?>?action=deactivate"
+					   class="action-link list-table-select-action"
+					   data-group="users"><?php echo lang('deactivate') ?></a>
+					<a href="<?php echo url_to_pager('admin-ads-batch-action') ?>?action=paid"
+					   class="action-link list-table-select-action" data-group="users">Paid</a>
+					<a href="<?php echo url_to_pager('admin-ads-batch-action') ?>?action=unpaid"
+					   class="action-link list-table-select-action" data-group="users">Unpaid</a>
+					<a href="<?php echo url_to_pager('admin-ads-batch-action') ?>?action=delete"
+					   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+					<?php fire_hook('admin.user.list.actions'); ?>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users" data-id="0"></div>
+						</th>
+						<th style="width: 10%"><?php echo lang('ads::creator') ?></th>
+						<th style="width: 20%"><?php echo lang('ads::campaign-name') ?></th>
+						<th style="width: 15%"><?php echo lang('ads::campaign-type') ?></th>
+						<th style="width: 10%"><?php echo lang('ads::bid-type') ?></th>
+						<th style="width: 10%"><?php echo lang('ads::plan') ?></th>
+						<th style="width: 5%"><?php echo lang('ads::usage') ?></th>
+						<th style="width: 5%"><?php echo lang('ads::impressions') ?></th>
+						<th style="width: 5%"><?php echo lang('ads::clicks') ?></th>
+						<th style="width: 5%"><?php echo lang('ads::paid') ?></th>
+						<th style="width: 5%"><?php echo lang('ads::status') ?></th>
+						<th style="width: 10%"><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php $lists = get_ads(); ?>
+					<?php foreach($lists->results() as $ads): ?>
+						<tr>
+							<td>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $ads['ads_id'] ?>"></div>
+							</td>
+							<td>
+								<?php $user = find_user($ads['user_id']) ?>
+								<a href="<?php echo profile_url(null, $user) ?>"><img
+											src="<?php echo get_avatar(75, $user) ?>" style="width: 35px"/></a>
+
+							</td>
+							<td><?php echo $ads['name'] ?></td>
+							<td><?php echo $ads['ads_class'] ?></td>
+							<td><?php echo ($ads['plan_type'] == 1) ? lang('ads::clicks') : lang('ads::impression') ?></td>
+							<td><?php
+								$plan = get_plan($ads['plan_id']);
+								if($plan) echo lang($plan['name']);
+								?></td>
+							<td><?php echo $ads['quantity'] ?></td>
+							<td><?php echo $ads['impression_stats'] ?></td>
+							<td><?php echo $ads['clicks_stats'] ?></td>
+							<td><?php echo ($ads['paid'] == 1) ? lang('yes') : lang('no') ?></td>
+							<td><?php echo ($ads['status'] == 1) ? lang('active') : '' ?></td>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a class="ion-edit"
+										   href='<?php echo url_to_pager('admincp-ads-edit', array('id' => $ads['ads_id'])) ?>'></a>
+										|
+										<a class="admin-confirm ion-android-delete"
+										   href="<?php echo url_to_pager('ads-delete', array('id' => $ads['ads_id'])) ?>?admin=true"></a>
+									</div>
+								</div>
+							</td>
+
+
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div><?php echo $lists->links() ?>
+	</div>
+</div>

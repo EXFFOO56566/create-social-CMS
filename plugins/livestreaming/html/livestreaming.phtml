@@ -1,0 +1,18 @@
+<div class="each-item clearfix">
+    <div class="left">
+        <?php if($livestream['featured']):?>
+            <span class="featured-tag"><?php _lang('featured')?></span>
+        <?php endif?>
+        <a ajax="true" href="<?php echo get_livestream_url($livestream)?>" style="background-image:url(<?php echo ($livestream['preview_path']) ? url_img($livestream['preview_path']) : img('livestream::images/preview.png')?>)">
+    </div>
+    <?php $owner = get_livestream_owner($livestream);?>
+    <div class="right">
+        <span class="item-title"><a ajax="true" href="<?php echo get_livestream_url($livestream)?>"><?php echo ($livestream['title']) ? $livestream['title'] : lang('livestream::untitled-livestream')?></a> </span>
+        <div class="item-info">
+            <span><?php echo $livestream['view_count']?> <?php _lang('livestream::views')?> - <span class="feed-time"> <span class="timeago " title="<?php echo date('c', $livestream['start_time'])?>"><?php echo date('c', $livestream['start_time'])?></span></span></span>
+            <?php _lang('livestream::by')?> <a ajax="true" href="<?php echo $owner['link']?>"><?php echo $owner['name']?></a>
+        </div>
+        <p class="item-desc"><?php echo $livestream['description']?></p>
+        <span class="livestream-social-share-link"><?php if($livestream['privacy'] == 1 && plugin_loaded('sharer')) echo view('sharer::share_link', array('link' => url("livestream/".$livestream['slug']))) ?></span>
+    </div>
+</div>

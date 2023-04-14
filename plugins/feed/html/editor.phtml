@@ -1,0 +1,375 @@
+<?php
+$default = user_privacy("feed-editor-privacy", 1);
+$privacy = (isset($privacy)) ? $privacy : $default;
+$avatar = (isset($avatar)) ? $avatar : get_avatar(75); ?>
+<div id="feed-editor-underlay">
+	<div id="feed-editor-container">
+		<div id="feed-editor">
+			<form style="margin: 0;padding: 0" id="feed-editor-form" action="" method="post">
+				<?php CSRFProtection::embed() ?>
+				<div id="post-editor-indicator">
+					<img src="<?php echo img('images/loading.gif') ?>"/>
+					<span id="feed-media-upload-indicator">0%</span>
+				</div>
+				<input type="hidden" name="val[privacy]" value="<?php echo $privacy ?>" id="feed-editor-privacy"/>
+				<input type="hidden" name="val[type]" value="<?php echo isset($type) ? $type : 'feed' ?>"/>
+				<input type="hidden" name="val[type_id]" value="<?php echo isset($type_id) ? $type_id : '' ?>"/>
+				<input type="hidden" name="val[type_data]" value="<?php echo isset($type_data) ? $type_data : '' ?>"/>
+				<input type="hidden" name="val[entity_id]" value="<?php echo isset($entity_id) ? $entity_id : get_userid() ?>"/>
+				<input type="hidden" name="val[entity_type]" value="<?php echo isset($entity_type) ? $entity_type : 'user' ?>"/>
+				<input type="hidden" name="val[to_user_id]" value="<?php echo isset($to_user_id) ? $to_user_id : null ?>"/>
+				<input type="hidden" name="val[background]" value="<?php echo isset($background) ? $background : null ?>" class="feed-editor-background-input">
+				<div class="head">
+					<?php if(user_has_permission('can-upload-photo-feed')): ?>
+						<div class="menu">
+							<span class="file-input"><input accept="image/*" multiple="" onchange="feed.editor.processMedia('image')" type="file" id="feed-editor-image-input" name="image[]"></span>
+							<a id="feed-editor-image-selector" href="" onclick="return feed.editor.choose('#feed-editor-image-input', 'image')"><i class="ion-camera green"></i><label><?php echo lang('feed::photo') ?></label></a>
+						</div>
+					<?php endif ?>
+					<?php if(user_has_permission('can-upload-video-feed')): ?>
+						<div class="menu">
+							<?php if(plugin_loaded('video') && config('video-upload', false) && config('video-encoder') != 'none'): ?>
+								<span class="file-input"><input accept="video/mp4" onchange="feed.editor.processMedia('video')" type="file" id="feed-editor-video-input" name="video"/></span>
+								<a id="feed-editor-video-selector" href="" onclick="return feed.editor.choose('#feed-editor-video-input', 'video')"><i class="ion-ios-videocam blue"></i><label><?php echo lang('feed::video') ?></label></a>
+							<?php endif; ?>
+							<?php if(config('enable-feed-voice-post', 1)): ?>
+								<div id="feed-editor-voice-recorder" class="feed-editor-voice-recorder voice-recorder">
+									<input name="voice" type="hidden" value="" class="voice-input" />
+									<a href="#" class="control">
+										<i class="ion-mic-a record"></i>
+										<i class="ion-stop stop"></i>
+									</a>
+									<div class="actions">
+										<a class="ion-close close" href="#"></a>
+										<a class="ion-play play" href="#"></a>
+									</div>
+									<span class="label"><?php echo lang('feed::voice') ?></span>
+								</div>
+							<?php endif; ?>
+						</div>
+					<?php endif ?>
+					<div id="feed-editor-minimize" class="menu">
+						<i id="feed-editor-minimize-button" class="ion-close"></i>
+					</div>
+				</div>
+				<div class="body">
+					<div class="feed-editor-avatar-container">
+						<a ajax="true" href="<?php echo profile_url() ?>" class="avatar"><img class="feed-avatar" src="<?php echo $avatar ?>"/></a>
+					</div>
+					<div id="feed-editor-content-container">
+						<div id="feed-editor-content">
+							<textarea id="feed-editor-textarea" data-height="40px" data-mention="#feed-editor-mention" class="auto-grow-input mention-input <?php echo (config('enable-feed-text-limit', false)) ? 'textarea-limit' : null ?>" data-text-limit="<?php echo config('maximum-feed-text-limit', 150) ?>" data-text-limit-count-target="#feed-editor-text-limit" name="val[content]" placeholder="<?php echo lang('feed::whats-happening') ?>"></textarea>
+							<div class="feed-editor-background" style="display: none">
+								<textarea id="feed-editor-textarea-bg" class="auto-grow-input mention-input <?php echo (config('enable-feed-text-limit', false)) ? 'textarea-limit' : null ?>" data-text-limit="<?php echo config('maximum-feed-text-limit', 150) ?>" data-text-limit-count-target="#feed-editor-text-limit" placeholder="<?php echo lang('feed::whats-happening') ?>" style="background:none;text-align:center; " maxlength="255" x></textarea>
+							</div>
+							<div class="feed-bg-container">
+								<table cols="9" cellspacing="0" cellpadding="0" class="feed-editor-colors" style="display:none">
+									<tbody>
+									<tr>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'default')">
+													<div class="colorcircle"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color1')">
+													<div class="colorcircle color1" style="background-color: rgb(255, 0, 71);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color2')">
+													<div class="colorcircle color2" style="background-color: rgb(243, 83, 105);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color3')">
+													<div class="colorcircle color3" style="background-color: rgb(93, 63, 218);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color4')">
+													<div class="colorcircle color4" style="background-color: rgb(23, 172, 255);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color5')">
+													<div class="colorcircle color5" style="background-color: rgb(74, 144, 226);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color6')">
+													<div class="colorcircle color6" style="background-color: rgb(93, 63, 218);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color7')">
+													<div class="colorcircle color7" style="background-color: rgb(95, 102, 115);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color8')">
+													<div class="colorcircle color8" style="background-color: rgb(93, 63, 218);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color9')">
+													<div class="colorcircle color9" style="background-color: rgb(95, 102, 115);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color10')">
+													<div class="colorcircle color10" style="background-color: rgb(95, 102, 115);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color11')">
+													<div class="colorcircle color11" style="background-color: rgb(95, 102, 115);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color12')">
+													<div class="colorcircle color12" style="background-color: rgb(95, 102, 115);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color13')">
+													<div class="colorcircle color13" style="background-color: rgb(95, 102, 115);"></div>
+												</a>
+											</div>
+										</td>
+										<td>
+											<div class="colorbox">
+												<a href="#" onclick="return feed.editor.toggleBackground('open', 'color14')">
+													<div class="colorcircle color14" style="background-color: rgb(95, 102, 115);"></div>
+												</a>
+											</div>
+										</td>
+
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div id="feed-editor-activity-container"></div>
+							<div id="feed-editor-link-container">
+								<div class="link-indicator">
+									<img src="<?php echo img('images/loading.gif') ?>"/>
+									<?php echo lang('feed::retrieving-link-details') ?>
+								</div>
+								<div class="link-content"></div>
+							</div>
+							<div id="feed-editor-mention" class="mention-user-list box">
+								<img src="<?php echo img('images/loading.gif') ?>" class="indicator"/>
+								<div class="listing user-suggestion-list"></div>
+							</div>
+							<div class="" id="feed-editor-check-in-input-container">
+								<i class="ion-android-pin"></i>
+								<input id="feed-editor-geocomplete" class="feed-geocomplete" autocomplete="off" type="text" name="val[location]" placeholder="<?php echo lang('where-are-you') ?>"/>
+								<a href="" onclick="return feed.editor.removeCheckIn()"><i class="ion-close"></i></a>
+							</div>
+                            <div class="" id="feed-editor-gif-input-container">
+                                <i class="ion-images green"></i>
+                                <input type="hidden" class="feed-editor-gif-value" name="val[gif]" value="">
+                                <input id="feed-editor-gif" class="feed-search-editor-gif" autocomplete="off" type="text" name="" placeholder="<?php echo lang('search') ?>"/>
+                                <img id="gif-feed-indicator" style="display:none" src="<?php echo img('images/loading.gif') ?>" class="indicator gif-feed-indicator"/>
+                                <a href="" onclick="return feed.editor.removeGif()"><i class="ion-close"></i></a>
+                                <div class="feed-gif-search-results"></div>
+                            </div>
+							<div id="photo-feed-media-selected-info" class="feed-media-selected-info">
+								<i class="ion-camera"></i>
+								<span class="count">0</span> <?php echo lang('photos-selected') ?>
+								<a class="remove" onclick="return feed.editor.removeImage()" href=""><i class="ion-close"></i></a>
+							</div>
+							<div id="video-feed-media-selected-info" class="feed-media-selected-info">
+								<i class="ion-ios-videocam"></i>
+								<span class="count">0</span> <?php echo lang('video-selected') ?>
+								<a class="remove" onclick="return feed.editor.removeVideo()" href=""><i class="ion-close"></i></a>
+							</div>
+							<div id="file-feed-media-selected-info" class="feed-media-selected-info">
+								<i class="ion-document-text"></i>
+								<span class="count">0</span> <?php echo lang('files-selected') ?>
+								<a class="remove" onclick="return feed.editor.removeFile()" href=""><i class="ion-close"></i></a>
+							</div>
+							<div id="feed-editor-tags-container">
+								<span style="display: none" class="" id="user-<?php echo get_userid() ?>"> </span>
+								<span class="input-field">
+	                                <input data-friend-only="true" autocomplete="off" data-target="#feed-tags-suggestion" type="text" class="user-tag-input" placeholder="<?php echo lang('tag-people-in-post') ?>"/>
+	                                <div class="user-suggestion-list box" id="feed-tags-suggestion"></div>
+	                            </span>
+							</div>
+                            <?php echo fire_hook("feed.editor.container")?>
+							<div class="feed-editor-feeling-container dropdown clearfix">
+								<div class="feeling-left">
+									<?php $feelings = get_feelings_list();
+									$firstFeeling = $feelings[0]; ?>
+									<a id="dropdown-link" href="" data-toggle="dropdown"><img src="<?php echo img("images/status/{$firstFeeling}.png") ?>"/><?php echo lang("feed::{$firstFeeling}") ?>
+									</a>
+									<ul class="dropdown-menu">
+										<?php foreach($feelings as $feeling): ?>
+											<li>
+												<a onclick="return feed.editor.loadFeeling(this)" href="" data-type="<?php echo $feeling ?>" class="dropdown-item"><img src="<?php echo img("images/status/{$feeling}.png") ?>"/> <?php echo lang("feed::{$feeling}") ?>
+													<i class="ion-chevron-right pull-right"></i></a>
+											</li>
+										<?php endforeach ?>
+									</ul>
+								</div>
+								<div class="feeling-right">
+									<input type="hidden" name="val[feeling_type]" id="feed-editor-feeling-type" value="<?php echo $firstFeeling ?>">
+									<input type="hidden" name="val[feeling_data]" id="feed-editor-feeling-data" value="">
+									<input type="text" autocomplete="off" name="val[feeling_text]" onblur="return feed.editor.removeFeeling(this)" onkeyup="return feed.editor.listenMediaFeeling(this)" id="feed-editor-feeling-text"/>
+									<div id="feed-feeling-selected-suggestion"></div>
+									<div id="feed-feeling-suggestion"></div>
+								</div>
+							</div>
+							<div class="feed-editor-poll-container">
+								<input type="hidden" value="0" name="val[poll]" id="feed-poll-enable-input"/>
+								<div class="poll-options-container">
+									<div class="options">
+										<i class="ion-ios-plus-outline"></i>
+										<input placeholder="<?php echo lang('feed::option') ?>" type="text" name="val[poll_options][]"/>
+									</div>
+									<div class="options">
+										<i class="ion-ios-plus-outline"></i>
+										<input placeholder="<?php echo lang('feed::option') ?>" type="text" name="val[poll_options][]"/>
+									</div>
+								</div>
+								<a style="display:inline-block;" href="" onclick="return feed.editor.addOptions()"><i class="ion-ios-plus"></i> <?php echo lang('feed::add-option') ?>
+								</a>
+								<span class="">
+	                                <label class="c-input c-checkbox">
+	                                    <input name="val[poll_multiple]" type="checkbox">
+	                                    <span class="c-indicator"></span>
+		                                <?php echo lang('feed::enable-multiple-section') ?>
+	                                </label>
+	                            </span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 center-col actions clearfix">
+							<div class="row">
+								<div class="col-md-4">
+									<ul class="editor-action">
+										<li id="feed-editor-check-in-input-selector">
+											<a onclick="return feed.editor.toggleCheckIn()" title="" href=""><i class="ion-ios-location red"></i><label><?php echo lang('feed::check-in') ?></label></a>
+										</li>
+                                        <li id="feed-editor-gif-input-selector">
+                                            <a onclick="return feed.editor.toggleGif()" title="" href=""><i class="ion-images green"></i><label><?php echo lang('gif') ?></label></a>
+                                        </li>
+										<?php if(!isset($offTagging) and user_has_permission('can-tag-users-feed')): ?>
+											<li id="feed-editor-tags-input-selector">
+												<a onclick="return feed.editor.showTags()" data-toggle="tooltip" title="<?php lang('feed::tag-people-hint') ?>" href=""><i class="ion-ios-personadd-outline brown"></i><label><?php echo lang('feed::tag') ?></label></a>
+											</li>
+										<?php endif ?>
+										<?php fire_hook('feed.editor.modal.actions', null, array('column' => 1)); ?>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<ul class="editor-action">
+										<?php if(config('enable-feed-poll', true) and user_has_permission('can-create-poll')): ?>
+											<li>
+												<a id="feed-editor-poll-toggle" data-revert="<?php echo lang('feed::whats-happening') ?>" data-holder="Ask question.." onclick="return feed.editor.openPoll(this)" href="" class=""><i class="ion-stats-bars purple"></i><label><?php echo lang('feed::create-poll') ?></label></a>
+											</li>
+										<?php endif ?>
+										<?php if(user_has_permission('can-use-feeling')): ?>
+											<li class="feed-feeling-trigger">
+												<a href="" title=""><i class="ion-android-happy blue"></i><label><?php echo lang('feed::feelings') ?></label></a>
+											</li>
+										<?php endif ?>
+										<?php fire_hook('feed.editor.modal.actions', null, array('column' => 2)); ?>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<ul class="editor-action">
+										<?php if(user_has_permission('can-share-file-feed')): ?>
+											<li>
+												<span class="file-input"><input onchange="feed.editor.processMedia('file')" multiple type="file" id="feed-editor-file-input" name="file[]"/></span>
+												<a onclick="return feed.editor.choose('#feed-editor-file-input', 'file')" href=""><i class="ion-android-cloud-outline gold"></i><label><?php echo lang('feed::file') ?></label></a>
+											</li>
+										<?php endif ?>
+										<li>
+											<div>
+												<div class="emoticon-box  pull-right" style="right: 0; top:20px"></div>
+												<a data-target="feed-editor-textarea" data-action="0" title="<?php echo lang('emoticons::add-emoticon') ?>" class="emoticon-button" href="#"><i class="ion-happy-outline emo-button magenta"></i><label><?php echo lang('emoticons::emoticons') ?></label></a>
+											</div>
+										</li>
+										<li>
+											<a class="feed-background-trigger" onclick=" return feed.editor.toggleBackground()" href="" title=""><i class="ion-ios-color-wand-outline yellow"></i><label><?php echo lang('feed::background') ?></label></a>
+										</li>
+										<?php fire_hook('feed.editor.modal.actions', null, array('column' => 3)); ?>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="foot clearfix">
+					<div class="right-buttons pull-right">
+						<?php if(config('enable-feed-text-limit', false)): ?>
+							<span id="feed-editor-text-limit"><?php echo config('maximum-feed-text-limit', 150) ?></span>
+						<?php endif ?>
+
+						<div class=" dropdown" style="display: inline-block">
+							<?php if(!isset($offPrivacy) or (isset($offPrivacy) and !$offPrivacy)): ?>
+								<a id="feed-editor-privacy-toggle" href="" class="dropdown-toggle btn btn-secondary btn-sm" data-toggle="dropdown">
+									<?php $editorPrivacy = user_privacy("feed-editor-privacy", config('default-relationship-privacy', 1)); ?>
+									<?php $relationshipMethod = config('relationship-method', 3); ?>
+									<?php if($editorPrivacy == 1): ?>
+										<i class="ion-earth" data-toggle="tooltip" title="<?php echo lang('public') ?>"></i></span>
+									<?php elseif($editorPrivacy == 2): ?>
+										<i class="ion-ios-people" data-toggle="tooltip" title="<?php if($relationshipMethod == 1): echo lang('followers-only'); elseif($relationshipMethod == 2): echo lang('friends-only'); elseif($relationshipMethod == 3): echo lang('relationship::friends-followers'); endif; ?>"></i>
+									<?php else: ?>
+										<i class="ion-android-lock" data-toggle="tooltip" title="<?php echo lang('feed::only-me') ?>"></i>
+									<?php endif ?>
+								</a>
+								<?php if(!isset($app->profilePage) && !isset($app->profileGroup)): ?>
+									<ul id='feed-privacy-dropdown' class='dropdown-menu dropdown-menu-right'>
+										<li>
+											<a data-id="1" class="dropdown-item" href="javascript:void(0)"><i class="ion-android-globe"></i><span><?php echo lang('public') ?></span></a>
+										</li>
+										<li>
+											<a data-id="2" class="dropdown-item" href="javascript:void(0)"><i class="ion-ios-people"></i><span><?php if($relationshipMethod == 1): echo lang('followers-only'); elseif($relationshipMethod == 2): echo lang('friends-only'); elseif($relationshipMethod == 3): echo lang('relationship::friends-followers'); endif; ?></span></a>
+										</li>
+										<li>
+											<a data-id="3" class="dropdown-item" href="javascript:void(0)"><i class="ion-android-lock"></i><span><?php echo lang('feed::only-me') ?></span>
+											</a>
+										</li>
+									</ul>
+								<?php endif; ?>
+							<?php endif; ?>
+						</div>
+						<button class="btn btn-info btn-sm"> <?php echo lang('post') ?></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="feed-editor-placeholder"></div>
+

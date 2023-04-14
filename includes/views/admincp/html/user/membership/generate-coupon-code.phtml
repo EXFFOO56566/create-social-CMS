@@ -1,0 +1,126 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<h2>Coupon Code Generator</h2>
+	</div>
+	<div class="wrapper-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<form class = "wrapper-form" action="" method="post" id="coupon_form">
+						<table class="table table-striped">
+							<tr>
+								<th>Parameter</th>
+								<th>Description</th>
+								<th>Value</th>
+							</tr>
+							<tr>
+								<th>Number of coupons</th>
+								<td>The number of coupons codes to be generated. Default is one.</td>
+								<td>
+									<input class="form-control" type="number" name="val[no_of_coupons]" value="1" min="1"/>
+								</td>
+							</tr>
+							<tr>
+								<th>Length</th>
+								</th>
+								<td>The number of characters the coupon code will contain. Default is 6.</td>
+								<td>
+									<input class="form-control" type="number" name="val[length]" value="6" min="1"/>
+								</td>
+							</tr>
+							<tr>
+								<th>Prefix</th>
+								<td>The coupon code will be prepended with the characters entered. Leave empty if you don't want any prefix.</td>
+								<td>
+									<input class="form-control" type="text" name="val[prefix]" value=""/>
+								</td>
+							</tr>
+							<tr>
+								<th>Suffix</th>
+								<td>The coupon code will be appended with the characters entered. Leave empty if you don't want any suffix.</td>
+								<td>
+									<input class="form-control" type="text" name="val[suffix]" value=""/>
+								</td>
+							</tr>
+							<tr>
+								<th>Use Numbers?</th>
+								<td>Choose whether you want the coupon code to contain numbers.</td>
+								<td>
+									<select class="form-control" name="val[numbers]">
+										<option value="false">No</option>
+										<option selected value="true">Yes</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>Use Letters?</th>
+								<td>Choose whether you want the coupon code to contain alphabets.</td>
+								<td>
+									<select class="form-control" name="val[letters]">
+										<option value="false">No</option>
+										<option selected value="true">Yes</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>Use Symbols</th>
+								<td>Choose whether you want the coupon code to contain non-alphanumeric characters.</td>
+								<td>
+									<select class="form-control" name="val[symbols]">
+										<option selected value="false">No</option>
+										<option value="true">Yes</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>Use Mixed Case</th>
+								<td>Choose whether you want the coupon code to contain both lowercase and uppercase alphabets.</td>
+								<td>
+									<select class="form-control" name="val[mixed_case]">
+										<option selected value="false">No</option>
+										<option value="true">Yes</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>Mask</th>
+								<td>Choose how you want the coupon code to be grouped. For example (XXX-XXX) will group the coupon code of 6 characters into 2)</td>
+								<td>
+									<input class="form-control" type="text" name="val[mask]" value="" placeholder="XXX-XXX"/>
+								</td>
+							</tr>
+							<tr>
+								<th>Discount</th>
+								<td>The number of percent discount to be subtracted from the original price. Default is 5</td>
+								<td>
+									<input class="form-control" type="text" name="val[discount]" value="5"/>
+								</td>
+							</tr>
+							<tr>
+								<th>Multiple Use</th>
+								<td>Set the number of time the coupon code can be used.</td>
+								<td>
+									<input class="form-control" type="text" name="val[no_of_use]" value="1"/>
+								</td>
+							</tr>
+							<tr>
+								<th>Activate</th>
+								<td>Activate the Coupon code?</td>
+								<td>
+									<select class="form-control" name="val[active]">
+										<option selected value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+						<div class="col-md-offset-8 col-md-4">
+							<button type="submit" class="btn btn-success pull-right">Generate</button>
+							<br/><br/>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

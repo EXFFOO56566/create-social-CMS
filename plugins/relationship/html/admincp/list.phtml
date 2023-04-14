@@ -1,0 +1,59 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('relationship::family-relationship') ?>
+		<a href="<?php echo url_to_pager('admin-relationship-add') ?>" class="btn btn-success btn-sm"><?php echo lang('add') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<div class="row list-table-select-actions hide" data-group="users">
+			<div class="col-sm-12">
+				<a href="<?php echo url_to_pager('admin-relations-batch-action') ?>?action=delete"
+				   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped list-table">
+				<thead>
+				<tr>
+					<th>
+						<div class="list-table-select" data-group="users" data-id="0"></div>
+					</th>
+					<th>ID</th>
+					<th><?php echo lang('title') ?></th>
+					<th><?php echo lang('gender') ?></th>
+                    <th><?php echo lang('status') ?></th>
+					<th><?php echo lang('type') ?></th>
+					<th><?php echo lang('actions') ?></th>
+				</tr>
+				</thead>
+				<tbody>
+				<?php foreach($relationships as $relationship): ?>
+					<tr>
+						<td>
+							<div class="list-table-select" data-group="users"
+							     data-id="<?php echo $relationship['id'] ?>"></div>
+						</td>
+						<td><?php echo $relationship['id'] ?></td>
+						<td><?php echo lang($relationship['relationship']) ?></td>
+						<td><?php echo lang($relationship['gender']) ?></td>
+                        <td><?php echo $status = $relationship['status']?lang('active'):lang('not-active')  ?></td>
+						<td><?php echo $relationship['type']  ?></td>
+						<td>
+							<div class="dropdown actions">
+								<a href="#" data-toggle="dropdown">
+									<i class="ion-android-settings"></i>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right">
+									<a class="ion-edit" href='<?php echo url_to_pager('admin-relationship-edit').'?id='.$relationship['id'] ?>'></a> |
+									<a class="admin-confirm ion-android-delete" href="<?php echo url_to_pager('admin-relationship-delete').'?id='.$relationship['id'] ?>"></a>
+								</div>
+							</div>
+						</td>
+
+
+					</tr>
+				<?php endforeach ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

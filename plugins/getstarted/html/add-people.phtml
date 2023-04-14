@@ -1,0 +1,37 @@
+<div class="panel-container" style="padding: 0px;">
+	<div class="title" style="margin: 0px 0px; padding: 16px 0px;">
+	<i class="ion-android-person-add"></i> <?php echo lang('add-people') ?>
+	</div>
+	<?php echo fire_hook('get.started.menu', null, array()); ?>
+	<div >
+		<div class="getstarted-content" id="people-container">
+			<div class="user-lists slimscroll" style="height: 300px;overflow:hidden" data-height="300px">
+				<?php $users = relationship_suggest(20, null, true); foreach($users->results() as $user): ?>
+					<div class="media media-md user">
+						<div class="media-left">
+							<a style="margin-top: 15px;display: block" href="" class="media-object"><img class="responsive-img" src="<?php echo get_avatar(75, $user) ?>"/>
+							</a>
+						</div>
+						<div class="media-body">
+
+							<h6 style="color: #000000"><?php echo get_user_name($user) ?></h6>
+
+							<?php if(plugin_loaded('relationship')): ?>
+								<?php echo view('relationship::button', array('userid' => $user['id'])) ?>
+							<?php endif ?>
+						</div>
+					</div>
+
+				<?php endforeach ?>
+			</div>
+		</div>
+		<?php fire_hook('show.doctors.container', null, array()); ?>
+		<div class="getstarted-footer clearfix">
+			<div class="pull-right">
+				<a href="<?php echo url_to_pager("signup-welcome").'?step=finish' ?>" class="btn btn-secondary"><?php echo lang('skip') ?></a>
+				<a href="<?php echo url_to_pager("signup-welcome").'?step=finish' ?>" class="btn btn-info"><?php echo lang('continue') ?></a>
+			</div>
+		</div>
+
+	</div>
+</div>

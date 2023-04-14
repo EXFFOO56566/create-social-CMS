@@ -1,0 +1,65 @@
+<div class="wrapper">
+    <div class="wrapper-title">
+        <?php echo lang('Add Relationship') ?>
+
+    </div>
+    <div class="wrapper-content">
+        <?php if(isset($message)): ?>
+            <div class="alert alert-danger"><?php echo $message ?></div>
+        <?php endif ?>
+        <form method="post" action="" class="wrapper-form">
+            <?php CSRFProtection::embed() ?>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php echo lang('title') ?></label>
+                <div class="col-sm-9">
+                    <input class="form-control" value="" type="text" name="val[title][english]" placeholder="<?php echo lang('title') ?>"/><br>
+                    <p class="help-block"><?php echo lang('English')?></p>
+                    <a href="" class="other-languages-link" onclick="return show_other_languages('#other-languages-content')"><?php echo lang('edit-other-languages') ?></a>
+                    <div class="other-languages" id="other-languages-content">
+                        <?php foreach(get_all_languages() as $language): ?>
+                            <?php if ($language['language_id'] !="english"): ?>
+                                <input class="form-control" type="text" name="val[title][<?php echo $language['language_id'] ?>]" placeholder="<?php echo lang('title') ?>"/>
+                                <br>
+                                <p class="help-block"><?php echo $language['language_title'] ?></p>
+                            <?php endif; ?>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php echo lang('gender') ?></label>
+                <div class="col-sm-9">
+                    <select class="form-control c-select" name="val[gender]">
+                        <option value="male"><?php echo lang('male') ?></option>
+                        <option value="female"><?php echo lang('female') ?></option>
+                        <option value="status"><?php echo lang('Personal Status') ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php echo lang('type') ?></label>
+                <div class="col-sm-9">
+                    <select class="form-control c-select" name="val[type]">
+                        <option value="relation"><?php echo lang('Relation') ?></option>
+                        <option value="status"><?php echo lang('Personal Status') ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php echo lang('active') ?></label>
+                <div class="col-sm-9">
+                    <select class="form-control c-select" name="val[status]">
+                        <option value="0"><?php echo lang('no') ?></option>
+                        <option value="1"><?php echo lang('yes') ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"></label>
+                <div class="col-sm-9">
+                    <button class="btn btn-info"><?php echo lang('save') ?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

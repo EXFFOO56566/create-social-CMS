@@ -1,0 +1,54 @@
+<?php if(config('enable-birthdate', true)): ?>
+	<?php $type = isset($type) ? $type : 1 ?>
+	<?php $day =  isset($day) ? $day : 1 ?>
+	<?php $months = config('months') ?>
+	<?php $month =  isset($month) ? $month : 'january' ?>
+	<?php $current_year = date('Y'); $min_age = config("birthdate-min-age", 10); $max_year = $current_year - $min_age; ?>
+	<?php $year =  isset($year) ? $year: $max_year ?>
+	<div class="field">
+		<div class="<?php echo $type == 1 ? 'left' : 'top' ?>">
+			<label class="control-label"><?php echo lang('date-of-birth') ?>:</label><br/>
+		</div>
+		<div class="<?php echo $type == 1 ? 'right' : 'bottom' ?>">
+			<div class="magic-select" data-name="val[birth_day]" data-width="60px">
+				<input type="hidden" name="val[birth_day]" value="<?php echo $day ?>" class="magic-select-value" />
+				<div class="magic-select-toggle">
+					<?php echo $day ? $day : lang('day') ?>
+				</div>
+				<div class="magic-select-content slimscroll" data-height="200px">
+					<?php for($i = 1; $i <= 31; $i++): ?>
+						<div class="magic-select-option" data-value="<?php echo $i ?>">
+							<?php echo $i ?>
+						</div>
+					<?php endfor ?>
+				</div>
+			</div>
+			<div class="magic-select" data-name="val[birth_month]" data-width="120px">
+				<input type="hidden" name="val[birth_month]" value="<?php echo $month ?>" class="magic-select-value" />
+				<div class="magic-select-toggle">
+					<?php echo $month && isset($months[$month]) ? $months[$month] : lang('month') ?>
+				</div>
+				<div class="magic-select-content slimscroll" data-height="200px">
+					<?php foreach($months as $n => $k): ?>
+						<div class="magic-select-option" data-value="<?php echo $n ?>">
+							<?php echo $k ?>
+						</div>
+					<?php endforeach ?>
+				</div>
+			</div>
+			<div class="magic-select" data-name="val[birth_year]" data-width="80px">
+				<input type="hidden" name="val[birth_year]" value="<?php echo $year ?>" class="magic-select-value" />
+				<div class="magic-select-toggle">
+					<?php echo $year ? $year : lang('year') ?>
+				</div>
+				<div class="magic-select-content slimscroll" data-height="200px">
+					<?php for($i = $max_year; $i >= 1940; $i--): ?>
+						<div class="magic-select-option" data-value="<?php echo $i ?>">
+							<?php echo $i ?>
+						</div>
+					<?php endfor ?>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif ?>

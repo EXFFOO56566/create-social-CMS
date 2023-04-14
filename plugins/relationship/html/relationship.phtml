@@ -1,0 +1,74 @@
+<div class="box">
+    <div class="title"><?php echo lang('relationship::relationships') ?></div>
+	<div class="box-content">
+        <div class="left relation-edit">
+            <span style="margin: 0px; padding: 10px 0px; font-weight: bold;"> <?php echo lang('status') ?> :</span>
+            <span class="r-status" style="margin: 0px; padding: 10px 0px; font-size: 16px;"><?php echo $status = isset($user['m_status']) && $user['m_status'] ? lang(get_family_relationship($user['m_status'])['relationship']) : ''; ?></span>
+            <div class="right relation-edit-icon">
+                <?php if(get_userid() == find_user($app->profileUser['id'])['id']): ?>
+                    <div class="" id="relationship-edit">
+                        <a href="#"><i class="ion-edit"></i><?php echo "  ".lang('edit') ?></a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+		
+            <div class="box-content" id="relation-edit" style="display: none; background-color: #f6f7f9">
+                <div class="form-group row">
+                    <div class="col-sm-3"><span style="margin: 0px; padding: 10px 0px; font-weight: bold;"> <?php echo lang('status') ?> :</span></div>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="relation-status">
+                            <option value="0">Choose Status:</option>
+                            <?php $statuses = get_relationships('','status');?>
+                            <?php foreach ($statuses as $status):?>
+                                <option <?php if ($status['id'] == $user['m_status']) echo "selected" ?> value="<?php echo $status['id']?>"><?php echo lang($status['relationship'])?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+                        <button id="relationship-save" class="btn btn-primary"> <?php echo lang('save') ?></button>
+                        <button id="relationship-cancel" class="btn btn-default"> <?php echo lang('cancel')?></button>
+                    </div>
+                </div>
+            </div>
+			<div role="heading" aria-level="5" class="title"><?php echo lang('relationship::family-members') ?></div>
+		<?php if(get_userid() == find_user($app->profileUser['id'])['id']): ?>
+				<div class="box-content">
+					<input id="relationship-tags-suggestion-input" data-friend-only="true" autocomplete="off" data-target="#relationship-tags-suggestion" type="text" class="user-tag-input form-control" placeholder="<?php echo lang('relation::add-family-to-relationship') ?>"/>
+					<div class="user-suggestion-list box" id="relationship-tags-suggestion" data-id=""></div>
+					<div id="family-container"></div>
+				</div>
+		<?php endif; ?>
+		<div>
+			<ul id="relationship-families">
+				<?php
+				$families = get_family_members($user['id']);
+				foreach($families as $family):
+                     $id = ($family['user_id'] == $user['id'])?$family['with_id']:$family['user_id'];
+					$relation_detail = find_user($id) ;
+                    $relationship = get_family_relationship($family['relation_type']);
+                    $relationship = $relationship?$relationship['relationship']:'Undefined'; ?>
+					<li style="border-top: 1px solid #dadcde;padding-top: 12px;padding-bottom: 12px;">
+						<div class="edit-relation-details-<?php echo $relation_detail['id'] ?>">
+							<div class="left relation-more">
+								<img id="relation-avatar" src="<?php echo get_avatar(75, $relation_detail) ?>">
+								<div class="bold"> <?php echo $relation_detail['first_name']." ".$relation_detail['last_name'] ?> </div>
+								<?php $status = $family['status']; ?>
+								<div> <?php echo lang($relationship) ?><?php if($status == 0): echo lang('relation::request-pending'); elseif($status == 2): echo lang('relation::request-decline'); endif; ?></div>
+							</div>
+							<div class="right relation-delete">
+								<?php if(get_userid() == find_user($app->profileUser['id'])['id']): ?>
+                                    <a href="#" onclick="return relationship_edit(this)" id="edit-relation-click" data-r ="<?php echo $family['relation_type'] ?>" data-id="<?php echo $relation_detail['id'] ?>"><i class="ion-edit"></i><?php echo "  ".lang('edit') ?></a>
+									<a href="javascript::void(0)" onclick="return confirm.url('<?php echo url_to_pager('delete-request') ?>?id=<?php echo $family['id'] ?>&userid=<?php echo $family['user_id'] ?>')"><i class="ion-android-delete"></i> <?php echo "  ".lang('relation::delete-relation') ?></a> <?php endif; ?>
+							</div>
+						</div>
+                        <div id="edit-relation-details-<?php echo $relation_detail['id'] ?>"></div>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+	</div>
+</div>

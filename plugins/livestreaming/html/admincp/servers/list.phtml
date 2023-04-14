@@ -1,0 +1,35 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('livestreaming::livestream-servers') ?>
+		<a class="btn btn-sm btn-danger" href="<?php echo url('admincp/livestream/server/add') ?>"><?php echo lang('livestreaming::add-server') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<table class="table table-bordered">
+			<thead>
+			<tr>
+				<th style="width: 3%">ID</th>
+				<th style="width: 25%"><?php echo lang('livestreaming::server-name') ?></th>
+				<th style="width: 35%"><?php echo lang('livestreaming::server-address') ?></th>
+				<th style="width: 10%"><?php echo lang('livestreaming::server-port') ?></th>
+				<th style="width: 12%"><?php echo lang('livestreaming::server-type') ?></th>
+				<th style="width: 15%"><?php echo lang('actions') ?></th>
+			</tr>
+			</thead>
+			<tbody data-url="<?php echo url_to_pager('admin-livestream-manage-server').'?action=order&id='.input('id') ?>" class="admincp-sortable">
+			<?php foreach($servers as $server): ?>
+				<tr class="item" id="<?php echo $server['id'] ?>">
+					<td><?php echo $server['id'] ?></td>
+					<td><?php echo lang($server['title']) ?></td>
+					<td><?php echo $server['address'] ?></td>
+					<td><?php echo $server['port'] ? $server['port'] : 80 ?></td>
+					<td><?php echo lang($server['type']) ?></td>
+					<td>
+						<a href="<?php echo url_to_pager('admin-livestream-manage-server').'?action=edit&id='.$server['id'] ?>" class="btn btn-info btn-sm"><?php echo lang('edit') ?></a>
+						<a href="<?php echo url_to_pager('admin-livestream-manage-server').'?action=delete &id='.$server['id'] ?>" class="btn btn-danger btn-sm admin-confirm"><?php echo lang('delete') ?></a>
+					</td>
+				</tr>
+			<?php endforeach ?>
+			</tbody>
+		</table>
+	</div>
+</div>

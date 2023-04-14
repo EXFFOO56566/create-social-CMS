@@ -1,0 +1,20 @@
+<?php load_functions('like::like');
+$total = count_reactors($type, $type_id);
+$limit = isset($limit) ? $limit : 5;
+$people = get_reactors($type, $type_id, $limit) ?>
+<?php if($people): ?>
+	<div class="users">
+		<?php foreach($people as $user): ?>
+			<a href="<?php echo profile_url(null, $user) ?>" ajax="true" data-toggle="tooltip" title="<?php echo get_user_name($user) ?>">
+				<img class="img" src="<?php echo get_avatar(75, $user) ?>"/>
+				<img src="<?php echo get_react_image($user['like_type']) ?>" class="react-image"/>
+			</a>
+		<?php endforeach; ?>
+		<?php if($total > count($people)): ?>
+			<a href="" data-otitle="<?php echo lang('like::people-reacted-this') ?>" onclick="return show_reactors(this, '<?php echo $type ?>', '<?php echo $type_id ?>')" class="more">
+				<span>+<?php echo($total - count($people)) ?></span>
+				<i class="ion-android-more-horizontal"></i>
+			</a>
+		<?php endif; ?>
+	</div>
+<?php endif; ?>

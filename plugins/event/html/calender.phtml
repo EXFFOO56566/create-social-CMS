@@ -1,0 +1,186 @@
+<?php $week = array('SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT') ?>
+<div style=" margin-top: 17px">
+	<div class="upcoming-dashboard">
+		<div>
+			<div class="upcoming-event">
+				<div class="upcoming-event-heading">
+                    <span itemcomponent="span" class="upcoming-event-heading-1">
+					<?php echo ucwords(segment(2)) ?>
+	                    <span></span>
+                    </span>
+					<div style="clear: both"></div>
+				</div>
+				<div style="border-top: 1px solid #e5e5e5;">
+					<ul style="padding:12px;margin: 0px;list-style-type: none; padding-left: 12px !important;">
+						<?php if(!$events->total): ?>
+							<div class="alert alert-info"><?php echo lang('event::no-event-display') ?></div>
+						<?php else: ?>
+							<?php $i = 1 ?>
+							<?php foreach($events->results() as $event):$event = arrange_event($event); ?>
+								<?php //if ($i <= 4):?>
+								<li style="list-style: none; margin-bottom: 16px;">
+									<div class="upcoming-event-body">
+										<div style="zoom: 1" direction="left">
+											<div style="float: left; width: 200px; height: 120px; border-radius: 4px; background: rgba(0,0,0,0.06) url(<?php echo get_event_logo($event) ?>); background-size: cover;">
+												<div class="upcoming-event-dt">
+													<div style="font-weight: bold;"> <?php echo get_event_date($event)." ".get_event_date($event, 'day', 'd') ?> </div>
+													<div style="padding: 4px 0px;"> <?php echo $week[get_event_date($event, 'day', 'w')]; ?></div>
+												</div>
+											</div>
+											<div>
+												<div style="zoom: 1; overflow: hidden;display: block" direction="right">
+													<div>
+														<div style="padding-left: 12px;">
+															<header style="position: relative">
+																<a href="<?php echo event_url(null, $event) ?>" ajax="true">
+																	<h3 style="font-size: 18px;line-height: 18px;">  <?php echo ucwords($event['event_title']) ?> </h3>
+																</a>
+															</header>
+															<div style="font-size: 12px;line-height: 16px;">
+																<span><?php echo date('h A', $event['start_time']) ?></span>
+																<span role="presentation" aria-hidden="true"> · </span>
+																<span><?php echo $event['address'].", ".$event['location'] ?>.</span>
+															</div>
+															<div style="height: 20px;zoom:1">
+																<div style="float: left; padding: 3px 0px;">
+																	<div class="event-icon event-icon-1">
+																		<div style="display: flex">
+                                                                                <span style="display: inline-block">
+                                                                                    <div style="z-index: 1;  border: 2px solid #fff; border-radius: 50%;overflow: hidden;height: 16px; width: 16px; background-color: #4267b2;position: relative;">
+                                                                                        <i class="upcoming-event-icon" height="8" width="8" alt="" style="margin: 4px; background-image: url("<?php echo img('event::images/static.png') ?>")"></i>
+                                                                                    </div>
+                                                                                </span>
+																		</div>
+																	</div>
+																</div>
+																<div style="display: block">
+																	<div style="overflow: hidden">
+                                                                <span style="    color: #90949c;display: block; font-size: 12px; line-height: 22px;">
+                                                                    <span class="event-interested-button"> <?php echo manage_interested(count_event_going($event['event_id'])) ?></span>
+                                                                </span>
+																	</div>
+																</div>
+															</div>
+															<div style="margin: 4px 0;">
+																<div style=" display: inline-block; margin: 0 4px 0 0;">
+																	<div>
+																		<div style="vertical-align: middle; display: inline-block">
+																			<a style="border: 0; padding: 2px; 4px" class="event-link-dt">
+                                                                                    <span style="display: inline-block;">
+                                                                                        <i alt="" class="event-feed-interested-dt"></i>
+	                                                                                    <?php if(is_loggedIn() && $event['user_id'] != get_userid()): ?>
+		                                                                                    <div class="box-content clearfix" style="display: inline-block; padding: 0px 4px;">
+                                                                                                <span style="padding: 4px 4px 0px 0px; display: inline-block; vertical-align: middle;"><?php echo lang('event::rsvp') ?>:</span>
+                                                                                                <select onchange="event_rsvp(this, '<?php echo $event['event_id'] ?>')" data-id="" class="c-select pull-right" style="padding: 4px 0px; display: inline-block; vertical-align: middle;">
+                                                                                                    <?php $value = get_event_my_rsvp($event['event_id']) ?>
+	                                                                                                <option <?php echo ($value == 0) ? 'selected' : null ?> value="0"><?php echo lang('event::not-going') ?></option>
+                                                                                                    <option <?php echo ($value == 1) ? 'selected' : null ?> value="1"><?php echo lang('event::going') ?></option>
+                                                                                                    <option <?php echo ($value == 2) ? 'selected' : null ?> value="2"><?php echo lang('event::maybe') ?></option>
+                                                                                                </select>
+                                                                                            </div>
+	                                                                                    <?php endif; ?>
+                                                                                    </span>
+																			</a>
+																		</div>
+																	</div>
+																</div>
+																<div style="margin-right: 4px;display: inline-block">
+																	<span class="event-social-share"><?php if(plugin_loaded('sharer')) echo view('sharer::share_link', array('link' => url('event/'.$event['event_id']))) ?></span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="event-clear"></div>
+									</div>
+								</li>
+								<?php $i++ ?>
+								<?php //endif;?>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</ul>
+				</div>
+				<div class="box-content" style="height: 34px">
+					<div class="more-upcoming-event" style="padding-top:8px">
+						<?php echo $events->append(array('term' => input('term'), 'type' => input('type', 'upcoming'), 'category' => input('category')))->links(true) ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php if(event_suggestion()): ?>
+		<div style="min-height: 200px;">
+			<div style="margin-top: 12px;padding-bottom: 120px;">
+				<div style="margin: 8px 0 0 18px;">
+					<div style="margin-left: -18px;">
+						<div role="feed">
+							<div class="event-article-role" role="article">
+								<div style="margin-bottom: 4px;">
+									<div style="padding: 12px;">
+										<span style="font-size: 14px; font-weight: bold;line-height: 18px;"> <?php echo lang('event::suggested-for-you') ?></span>
+									</div>
+									<div style="overflow: hidden; position: relative;">
+										<div>
+											<div style="margin-left: -10px; overflow: hidden;">
+												<div class="jcarousel-wrapper">
+													<div id="" class="event-slider">
+														<ul class="event-browse-feed">
+															<?php $event = arrange_event(event_suggestion()); ?>
+															<li class="event-browse-feed-li">
+																<div style="width: 290px;;border: 1px solid #dddfe2; border-radius: 2px;margin-left: 12px;">
+																	<div class="event-browse-feed-img">
+																		<a href="#" style="display: block">
+																			<div class="uiScaledImageContainer" style=" width: 286px;height: 150px;">
+																				<img src="<?php echo $event['host']['avatar'] ?>" style="border: 0" class="scaledImageFitHeight">
+																			</div>
+																		</a>
+																	</div>
+																	<div style="height: 50px;margin: 8px;overflow: hidden;">
+																		<div class="event-browse-feed-time">
+                                                            <span class="event-browse-feed-time-content">
+                                                                <span style="color: #fa3e3e;padding: 2px 0;" class="time-event-feed"> <?php echo get_event_date($event) ?> </span>
+                                                                <span class="time-event-feed-1"> <?php echo get_event_date($event, 'day', 'd') ?> </span>
+                                                            </span>
+																		</div>
+																		<div class="event-feed-header-content">
+																			<div style="white-space: nowrap;">
+																				<div style="overflow: hidden;text-overflow: ellipsis;width: 220px;">
+																					<span class="event-feed-title"> <a href="#"> <?php echo ucwords(lang($event['event_title'])) ?> </a> </span>
+																				</div>
+																				<div class="event-time-venue">
+																					<span> <?php echo $event['address'].", ".$event['location'] ?>.</span>
+																				</div>
+																				<div class="event-time-venue"> <?php echo count_event_interested($event['event_id'])." ".lang('event::are-interested') ?></div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="event-feed-interested">
+																		<div style="float: left">
+                                                            <span>
+                                                                <a onclick="event_rsvp(this, '<?php echo $app->profileEvent['event_id'] ?>')" data-id="3" <?php $inte = user_interests($app->profileEvent['event_id']);
+                                                                echo ($inte > 0) ? 'data-current = 1' : 'data-current = 1' ?>href="#" class="event-action-button-a"> Interested <span class="event-interested-stats"><?php echo count_event_interested($event['event_id']) ?></span></a>
+                                                            </span>
+																		</div>
+																		<div class="event-feed-interest-more"></div>
+																	</div>
+																</div>
+															</li>
+														</ul>
+													</div>
+												</div>
+												<a href="#" class="jcarousel-control-prev">&lsaquo;</a>
+												<a href="#" class="jcarousel-control-next">&rsaquo;</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
+</div>

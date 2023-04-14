@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<link href="<?php echo asset_link('css/video-js.min.css') ?>" type="text/css" rel="stylesheet"/>
+		<link href="<?php echo asset_link('css/videojs.ads.css') ?>" type="text/css" rel="stylesheet"/>
+		<link href="<?php echo asset_link('css/videojs-preroll.css') ?>" type="text/css" rel="stylesheet"/>
+		<link href="<?php echo asset_link('css/videojs-overlay.css') ?>" type="text/css" rel="stylesheet"/>
+		<link href="<?php echo asset_link('css/videojs.thumbnails.css') ?>" type="text/css" rel="stylesheet"/>
+		<script type="text/javascript" src="<?php echo asset_link('js/video.js') ?>"></script>
+		<script type="text/javascript" src="<?php echo asset_link('js/jquery.js') ?>"></script>
+		<script type="text/javascript" src="<?php echo asset_link('js/videojs.ads.js') ?>"></script>
+		<script type="text/javascript" src="<?php echo asset_link('js/preroll-overlay.js') ?>?nocache=1"></script>
+		<script type="text/javascript" src="<?php echo asset_link('js/videojs.thumbnails.js') ?>"></script>
+		<!--script type="text/javascript" src="<?php // echo asset_link('js/jquery.visible.js') ?>"></script-->
+		<script type="text/javascript" src="<?php echo asset_link('js/isInViewport.js') ?>"></script>
+		<!--<script type="text/javascript" src="--><?php //echo asset_link('js/vissense.min.js') ?><!--"></script>-->
+		<script>videojs.options.flash.swf = "<?php echo asset_link('js/video-js.swf')?>";</script>
+	</head>
+	<body>
+		<video id="p" class="video video-js vjs-default-skin vjs-big-play-centered" poster="" controls width="100%" height="<?php echo input('height', 300) ?>" style="width: 100%" data-setup='{"example_option":true<?php fire_hook('video.js.data.setup') ?>}'>
+			<input type="hidden" name="ads" class="ads" value="0" />
+			<source src="<?php echo $link ?>" type="video/mp4" />
+			<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+		</video>
+		<?php if(!input('api')): ?>
+			<script>
+				<?php $ads = get_render_ads($type = 'all', $limit = '1', $class = 'video'); $sn = 0; ?>
+				<?php foreach ($ads as $ad): ?>
+			        videojs('p', {}, function() {
+			            var player = this;
+			            player.preroll({
+			                src: {
+			                    src: '<?php echo url($ad['video']); ?>',
+			                    type: 'video/mp4'
+			                },
+			                href: '<?php echo url($ad['link']); ?>',
+			                countView: '', //URL for incrementing video views
+                            click : top.baseUrl + 'ads/clicked?id=' + '<?php echo $ad['ads_id'] ?>' + '&csrf_token=' + top.requestToken,
+			                adsOptions: {debug: false}
+			            });
+			        });
+					<?php $sn++; ?>
+				<?php endforeach; ?>
+				<?php if ($sn == 0): ?>
+					<?php $overlay = get_render_ads($type = 'all', $limit = '1', $class = 'overlay'); ?>
+					<?php foreach ($overlay as $image): ?>
+						<?php $link = url($image['link']); $overlayimage = url($image['image']); ?>
+				        videojs('p', {}, function() {
+				            var player = this;
+				            player.overlay({
+				                content: '<button id="close" onclick="hideOverlay()">X</button><a href="<?php echo $link; ?>" target="_blank" class="ads-click" data-id="<?php echo $image['ads_id'] ?>"><img src="<?php echo $overlayimage; ?>" width="100%" height="75px"></a>',
+				                debug: false,
+				                overlays: [{
+			                        start: 3,
+			                        end: 'pause',
+			                        align: 'bottom'
+			                    }]
+				            });
+				        });
+					<?php endforeach; ?>
+				<?php endif; ?>
+
+		        function hideOverlay() {
+		            $(".vjs-overlay").hide();
+		        }
+                $(function() {
+                    $(document).on('click', '.ads-click', function() {
+                        $.ajax({
+                            url : top.baseUrl + 'ads/clicked?id=' + $(this).data('id') + '&csrf_token=' + top.requestToken,
+                        });
+                    });
+                })
+			</script>
+		<?php endif ?>
+	</body>
+</html>

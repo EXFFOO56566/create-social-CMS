@@ -1,0 +1,46 @@
+<td>
+	<div class="list-table-select" data-group="plugins" data-id="<?php echo $plugin; ?>"></div>
+</td>
+<?php $colors = array('cabaret', 'seance', 'wisteria', 'royal-blue', 'spray', 'madison', 'chambray', 'malibu', 'steel-blue', 'jelly-bean', 'downy', 'saffron', 'crusta', 'lynch', 'edward');
+$key = array_rand($colors, 1);
+$color = $colors[$key]; ?>
+<td>
+	<div align="center" class="align-item-center <?php echo $color; ?>" style="border-radius: 50%; width: 50px;
+        height: 50px;">
+		<h1 class="white"><?php $lt = substr($info['title'], 0, 1);
+			echo strtoupper($lt); ?></h1>
+	</div>
+</td>
+<td>
+	<h5><?php echo $info['title'] ?></h5>
+	<p><?php echo $info['description'] ?></p>
+</td>
+<td><?php echo $info['version'] ?></td>
+<td><?php echo $info['author'] ?></td>
+<td style="position: relative">
+	<?php if(plugin_exists($plugin)): ?>
+		<div style="position: absolute; top: 0px; right: 0px; padding: 4px 16px; background-color: #81CFE0; color: #FFFFFF;"><?php echo lang('active') ?></div>
+	<?php endif; ?>
+	<div class="dropdown actions">
+		<a href="#" data-toggle="dropdown">
+			<i class="ion-android-settings"></i>
+		</a>
+		<div class="dropdown-menu dropdown-menu-right">
+			<?php if(plugin_exists($plugin)): ?>
+				<a title="<?php echo lang('deactivate') ?>"
+				   href="<?php echo url_to_pager("manage-plugins") ?>?action=deactivate&id=<?php echo $plugin ?>"
+				   class="ion-ios-close text-info"></a>
+			<?php else: ?>
+				<a title="<?php echo lang('activate') ?>"
+				   href="<?php echo url_to_pager("manage-plugins") ?>?action=activate&id=<?php echo $plugin ?>"
+				   class="ion-ios-checkmark text-success plugin-activate"></a>
+			<?php endif; ?>
+			<a title="<?php echo lang('update') ?>"
+			   href="<?php echo url_to_pager("manage-plugins") ?>?action=update&id=<?php echo $plugin ?>"
+			   class="ion-android-arrow-dropup-circle text-primary"></a>
+			<a title="<?php echo lang('delete') ?>"
+			   href="<?php echo url_to_pager("manage-plugins") ?>?action=delete&id=<?php echo $plugin ?>"
+			   class="admin-confirm ion-android-delete text-danger"></a>
+		</div>
+	</div>
+</td>

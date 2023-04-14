@@ -1,0 +1,82 @@
+<div class="box">
+	<div class="global-filter-container" data-url="<?php echo url('marketplace') ?>">
+		<form id="marketplace-list-search" method="post" onsubmit="return marketplace.filter()" action="" class="form-inline list-search">
+			<?php CSRFProtection::embed() ?>
+			<i class="search-icon ion-ios-search"></i>
+			<input id="marketplace-keyword-filter" value="<?php echo input('s') ?>" type="text" class="form-control search-box filter-input" name="s" data-name="s" placeholder="<?php echo lang('search') ?>" />
+		</form>
+		<div class="list-head">
+			<h3 class="heading"><?php echo lang('marketplace::marketplace') ?></h3>
+		</div>
+		<div class="filter-pane">
+			<form id="marketplace-list-filter" method="post" onsubmit="return marketplace.filter()" action="" class="form-inline list-filter">
+				<select id="marketplace-category-filter" name="c" data-name="c" class="c-select filter-input">
+					<option value=""><?php echo lang('marketplace::all-categories') ?></option>
+					<?php foreach(marketplace_get_categories() as $category): ?>
+						<option <?php echo input('c') == $category['id'] ? 'selected' : '' ?> value="<?php echo $category['id'] ?>"><?php echo lang($category['title']) ?></option>
+					<?php endforeach ?>
+				</select>
+				<input id="marketplace-min-price-filter" type="number" name="p0" data-name="p0" min="0" value="<?php echo input('p0') ?>" class="c-input filter-input" placeholder="<?php echo lang('marketplace::min-price') ?>" />
+				<input id="marketplace-max-price-filter" type="number" name="p1" data-name="p1" min="0" value="<?php echo input('p1') ?>" class="c-input filter-input" placeholder="<?php echo lang('marketplace::max-price') ?>" />
+				<input id="marketplace-location-filter" type="text" name="l" data-name=l" value="<?php echo input('l') ?>" class="c-input filter-input marketplace-geocomplete" placeholder="<?php echo lang('marketplace::location') ?>" />
+				<input id="marketplace-featured-filter" type="checkbox" name="f" data-name="f" value="1" <?php echo input('f') ? 'checked' : '' ?> class="c-input filter-input" /><label for="marketplace-featured-filter"><?php echo lang('marketplace::featured') ?></label>
+				<input id="marketplace-submit-filter" type="submit" value="<?php echo lang('marketplace::filter') ?>" class="filter-input" />
+			</form>
+		</div>
+	</div>
+	<div class="box-content">
+		<div class="marketplace-listings row active-with-click">
+			<?php echo $message ?>
+			<?php $colors = array('Red', 'Red', 'Pink', 'Purple', 'Deep-Purple', 'Indigo', 'Blue', 'Light-Blue', 'Cyan', 'Teal', 'Green', 'Light-Green', 'Lime', 'Yellow', 'Amber', 'Orange', 'Deep-Orange', 'Brown', 'Grey', 'Blue-Grey') ?>
+			<?php foreach($listings->results() as $listing): ?>
+				<?php $listing_image = $listing['image'] ? url_img($listing['image'], 200) : img('marketplace::images/no_image.jpg', 75) ?>
+				<?php $description = trim($listing['description']) == '' ? '<em>'.lang('marketplace::no-description').'</em>' : $listing['description'] ?>
+				<?php $price = is_numeric($listing['price']) ? config('currency', '$').$listing['price'] : $listing['price']; ?>
+				<?php $price = trim($listing['price']) == '' ? '<span class="free">'.lang('marketplace::free').'</span>' : $price; ?>
+				<div class="col-md-4 col-sm-6 col-xs-12">
+					<article class="material-card <?php echo $colors[(int) ((substr(str_pad($listing['id'], 2, '0',STR_PAD_LEFT), 0, 1) % 2 == 0 ? '' : '1').substr(str_pad($listing['id'], 2, '0',STR_PAD_LEFT), -1))] ?>">
+						<?php if($listing['featured'] == 1): ?>
+							<div class="marketplace-featured-badge"><?php echo lang('marketplace::featured') ?></div>
+						<?php endif ?>
+						<h2>
+							<?php if($listing['approved'] == 1 && $listing['active'] == 1): ?>
+								<span><a href="<?php echo url_to_pager('marketplace-listing', array('slug' => $listing['slug'])) ?>" ajax="true"><?php echo $listing['title'] ?></a></span>
+							<?php else: ?>
+								<span><?php echo $listing['title'] ?></span>
+							<?php endif ?>
+							<strong><i class="fa fa-fw fa-star"></i><?php echo $price ?></strong>
+						</h2>
+						<div class="mc-content">
+							<?php if($listing['approved'] == 1 && $listing['active'] == 1): ?>
+								<a class="img-container" href="<?php echo url_to_pager('marketplace-listing', array('slug' => $listing['slug'])) ?>" ajax="true">
+									<img class="img-responsive" src="<?php echo $listing_image ?>">
+								</a>
+							<?php else: ?>
+								<div class="img-container">
+									<img class="img-responsive" src="<?php echo url_img($listing_image, 200) ?>">
+								</div>
+							<?php endif ?>
+							<div class="mc-description"><?php echo str_limit($description, 50) ?></div>
+						</div>
+						<a class="mc-btn-action"><i class="fa fa-bars"></i></a>
+						<div class="mc-footer">
+							<h4><?php echo lang($listing['category_title']) ?></h4>
+							<a target="_blank" href="<?php echo url($listing['username']) ?>" class="ion-person"></a>
+							<?php if(filter_var($listing['link'], FILTER_VALIDATE_URL)): ?>
+								<a target="_blank" href="<?php echo $listing['link'] ?>" class="ion-link"></a>
+							<?php endif ?>
+							<?php echo plugin_loaded('sharer') ? view('sharer::share_link', array('link' => url_to_pager('marketplace-listing', array('slug' => $listing['slug'])))) : '' ?>
+						</div>
+					</article>
+				</div>
+			<?php endforeach ?>
+			<?php if($listings->total): ?>
+				<?php if($listings->total > config('pagination-limit-listings', 20)): ?>
+					<?php echo $listings->links() ?>
+				<?php endif ?>
+			<?php else: ?>
+				<div class="alert alert-info" style="width: 100%; margin: 0px 14px;"><?php echo lang('marketplace::no-listing-found') ?></div>
+			<?php endif ?>
+		</div>
+	</div>
+</div>

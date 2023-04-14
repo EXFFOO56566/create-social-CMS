@@ -1,0 +1,90 @@
+<div class="panel-container card register-pane-container">
+    <div class="title"><?php echo lang('signup-for-account') ?></div>
+    <div class="card-block">
+        <?php if($message): ?>
+            <div class="alert alert-danger">
+                <?php echo $message ?>
+            </div>
+        <?php endif ?>
+        <form id="signup-form" action="<?php echo url_to_pager('signup') ?>" method="post" enctype="multipart/form-data">
+            <?php CSRFProtection::embed() ?>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input class="form-control form-control-lg" value="<?php echo input('val.first_name') ?>" type="text" name="val[first_name]" placeholder="<?php echo lang('your-first-name') ?>" required/>
+                    </div>
+                    <div class="col-md-6">
+                        <input class="form-control form-control-lg" value="<?php echo input('val.last_name') ?>" type="text" name="val[last_name]" placeholder="<?php echo lang('your-last-name') ?>" required/>
+                    </div>
+                </div>
+            </div>
+            <?php fire_hook('users.category.signup', null, array()); ?>
+            <?php if(!fire_hook('users.category.exist', false)): ?>
+            <div class="form-group">
+                <input class="form-control form-control-lg " value="<?php echo input('val.username') ?>" type="text" name="val[username]" placeholder="<?php echo lang('choose-username') ?>" required/>
+            </div>
+            <?php endif; ?>
+            <div class="form-group">
+                <input class="form-control form-control-lg" value="<?php echo input('val.email_address') ?>" type="email" name="val[email_address]" placeholder="<?php echo lang('your-email-address') ?>"/>
+            </div>
+            <div class="form-group">
+                <input class="form-control form-control-lg" value="<?php echo input('val.password') ?>" type="password" name="val[password]" placeholder="<?php echo lang('choose-password') ?>" required/>
+            </div>
+            <div class="form-group">
+                <input class="form-control form-control-lg" value="<?php echo input('val.cpassword') ?>" type="password" name="val[cpassword]" placeholder="<?php echo lang('confirm-password') ?>" required/>
+            </div>
+            <div class="form-group">
+                <select class=" form-control" name="val[country]">
+                    <option value=""><?php echo lang('select-country') ?></option>
+                    <?php foreach(get_countries() as $country => $name): ?>
+                        <option <?php echo (input("val.country") == $name) ? "selected" : null ?> value="<?php echo $name ?>"><?php echo ucwords($name) ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label><?php echo lang('gender') ?></label>
+                    <select class=" form-control" name="val[gender]">
+                        <option <?php echo (input("val.gender") == "male") ? "selected" : null ?> value="male"><?php echo lang('male') ?></option>
+                        <option <?php echo (input("val.gender") == "female") ? "selected" : null ?> value="female"><?php echo lang('female') ?></option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <?php echo view('birthdate/form', array('day' => input('val.birth_day'), 'month' => input('val.birth_month'), 'year' => input('val.birth_year'))) ?>
+                </div>
+            </div>
+            <?php if(config($app->theme.'-signup-avatar-upload', 0)): ?>
+                <div class="form-group">
+                    <label><?php echo lang('upload-photo') ?></label>
+                    <div class="avatar-preview-box">
+                        <input id="user-avatar-input" type="hidden" name="val[avatar]"/>
+                    </div>
+                </div>
+            <?php endif ?>
+            <?php foreach(get_form_custom_fields('user') as $field): ?>
+                <?php echo view("custom-field/display", array('field' => $field, 'offDescription' => true)) ?>
+            <?php endforeach ?>
+            <?php echo fire_hook('signup.form.extend', null, array('')) ?>
+	        <div class="signup-tc"><input id="signup-tos" type="checkbox" name="val[tos]" value="1" /><label for="signup-tos"><?php echo lang('signup-tos') ?></label></div>
+            <?php if(get_setting("enable-captcha")): ?>
+                <?php if(get_setting("enable-captcha") == '1'): ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" placeholder="<?php echo lang('enter-text-below') ?>" name="captcha" id="captcha-input" required/>
+                        </div>
+                        <div class="col s6">
+                            <img id="captcha-image" src="<?php echo url("captcha.php") ?>"/>
+                            <a style="position: relative;bottom: 10px" href="javascript:void(0)" onclick="document.getElementById('captcha-image').src='<?php echo url('captcha.php') ?>?'+Math.random(); document.getElementById('captcha-input').focus();"><i class="ion-ios-reload"></i></a><br/>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="g-recaptcha" data-sitekey="<?php echo config('recaptcha-key'); ?>"></div>
+                    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=en"></script>
+                <?php endif ?>
+            <?php endif ?>
+            <div class="" style="text-align: center">
+                <button style="margin-top: 40px" class="btn btn-info"><?php echo lang('signup') ?> </button>
+            </div>
+        </form>
+    </div>
+</div>

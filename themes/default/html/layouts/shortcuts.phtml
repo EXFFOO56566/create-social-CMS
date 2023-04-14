@@ -1,0 +1,114 @@
+<?php $shortcuts_menu = array(); $limit = config('side-shortcuts-menu-limit', 5); ?>
+<?php if(plugin_loaded('group')): ?>
+	<?php $group_shortcuts_menu = perfectUnserialize(get_privacy('group-shortcuts-menu', perfectSerialize(array()))); ?>
+	<?php foreach($group_shortcuts_menu as $id): ?>
+		<?php $group = find_group($id); ?>
+		<?php if($group): ?>
+			<?php $shortcuts_menu[] = array('title' => $group['group_title'], 'link' => group_url(null, $group), 'image' => get_group_logo(75, $group)) ?>
+		<?php endif; ?>
+	<?php endforeach; ?>
+<?php endif; ?>
+<?php if(plugin_loaded('page')): ?>
+	<?php $page_shortcuts_menu = perfectUnserialize(get_privacy('page-shortcuts-menu', perfectSerialize(array()))) ?>
+	<?php foreach($page_shortcuts_menu as $id): ?>
+		<?php $page = find_page($id); ?>
+		<?php if($page): ?>
+			<?php $shortcuts_menu[] = array('title' => $page['page_title'], 'link' => page_url(null, $page), 'image' => get_page_logo(75, $page)) ?>
+		<?php endif; ?>
+	<?php endforeach; ?>
+<?php endif; ?>
+<?php if(plugin_loaded('game')): ?>
+	<?php $game_shortcuts_menu = perfectUnserialize(get_privacy('game-shortcuts-menu', perfectSerialize(array()))) ?>
+	<?php foreach($game_shortcuts_menu as $id): ?>
+		<?php $game = find_game($id); ?>
+		<?php if($game): ?>
+			<?php $shortcuts_menu[] = array('title' => $game['game_title'], 'link' => game_url(null, $game), 'image' => get_game_logo(75, $game)) ?>
+		<?php endif; ?>
+	<?php endforeach; ?>
+<?php endif; ?>
+<div class="side-menu-heading">
+	<div class="left"><?php echo lang('shortcuts') ?></div>
+	<div class="right">
+		<a id="side-shortcut-menu-modal-button" href="#" class="shortcut-menu-modal-button" data-toggle="modal" data-target="#side-shortcut-menu-modal"><?php echo lang('edit') ?></a>
+	</div>
+	<div class="modal fade" id="side-shortcut-menu-modal" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form id="side-menu-shortcuts-form" method="post" action="">
+					<div class="modal-header">
+						<h4 class="modal-title"><?php echo lang('edit-shortcuts') ?></h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<p><?php echo lang('shortcut-form-info') ?></p>
+						<?php if(plugin_loaded('group')): ?>
+							<?php $groups = get_groups('member')->results() ?>
+							<?php foreach($groups as $group): ?>
+								<div class="field">
+									<div class="left">
+										<input name="val[group-shortcuts-menu][]" type="checkbox" value="<?php echo $group['group_id'] ?>" <?php echo in_array($group['group_id'], $group_shortcuts_menu) ? ' checked' : '' ?> />
+									</div>
+									<div class="right">
+										<label class="control-label"><?php echo $group['group_title'] ?></label>
+									</div>
+								</div>
+							<?php endforeach; ?>
+						<?php endif; ?>
+						<?php if(plugin_loaded('page')): ?>
+							<?php $pages = get_pages('mine')->results() ?>
+							<?php foreach($pages as $page): ?>
+								<div class="field">
+									<div class="left">
+										<input name="val[page-shortcuts-menu][]" type="checkbox" value="<?php echo $page['page_id'] ?>" <?php echo in_array($page['page_id'], $page_shortcuts_menu) ? ' checked' : '' ?> />
+									</div>
+									<div class="right">
+										<label class="control-label"><?php echo $page['page_title'] ?></label>
+									</div>
+								</div>
+							<?php endforeach; ?>
+						<?php endif; ?>
+						<?php if(plugin_loaded('game')): ?>
+							<?php $games = get_games('me')->results() ?>
+							<?php foreach($games as $game): ?>
+								<div class="field">
+									<div class="left">
+										<input name="val[game-shortcuts-menu][]" type="checkbox" value="<?php echo $game['game_id'] ?>" <?php echo in_array($game['game_id'], $game_shortcuts_menu) ? ' checked' : '' ?> />
+									</div>
+									<div class="right">
+										<label class="control-label"><?php echo $game['game_title'] ?></label>
+									</div>
+								</div>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-info" name="status"><?php echo lang('save') ?></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<?php foreach(array_slice($shortcuts_menu, 0, $limit) as $menu_item): ?>
+	<div class="menu-item">
+		<a class="menu-item-link left" ajax="true" href="<?php echo $menu_item['link'] ?>">
+			<span class="thumb"><img src="<?php echo $menu_item['image'] ?>"/></span>
+			<span class="title"><?php echo lang($menu_item['title']) ?></span>
+		</a>
+	</div>
+<?php endforeach ?>
+<?php if(count($shortcuts_menu) > $limit): ?>
+	<div id="side-shortcuts-menu-more-items" class="menu-more-items">
+		<?php foreach(array_slice($shortcuts_menu, $limit) as $menu_item): ?>
+			<div class="menu-item">
+				<a class="menu-item-link left" ajax="true" href="<?php echo $menu_item['link'] ?>">
+					<span class="thumb"><img src="<?php echo $menu_item['image'] ?>"/></span>
+					<span class="title"><?php echo lang($menu_item['title']) ?></span>
+				</a>
+			</div>
+		<?php endforeach ?>
+	</div>
+	<div class="shortcuts-menu-more menu-more">
+		<a morelabel=" <?php echo lang('see-more') ?>..." lesslabel=" <?php echo lang('see-less') ?>" class="main-menu-more-button ion-arrow-down-b" onclick="return show_more_content('#side-shortcuts-menu-more-items', this)" href="#"> <?php echo lang('show-more') ?></a>
+	</div>
+<?php endif; ?>

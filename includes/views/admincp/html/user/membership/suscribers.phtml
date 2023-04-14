@@ -1,0 +1,81 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('suscribers') ?>
+
+	</div>
+	<div class="wrapper-content">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a href="<?php echo url_to_pager('admincp-membership-suscribers') ?>" class="nav-link <?php echo ($filter == 'all') ? 'active' : null ?>"><?php echo lang('all-subscriber') ?></a>
+			</li>
+			<li class="nav-item">
+				<a href="<?php echo url_to_pager('admincp-membership-suscribers') ?>?filter=active" class="nav-link <?php echo ($filter == 'active') ? 'active' : null ?>"><?php echo lang('active-subscriber') ?></a>
+			</li>
+			<li class="nav-item">
+				<a href="<?php echo url_to_pager('admincp-membership-suscribers') ?>?filter=non-active" class="nav-link <?php echo ($filter == 'non-active') ? 'active' : null ?>"><?php echo lang('non-active-subscriber') ?></a>
+			</li>
+			<?php fire_hook('admin.filter.membership.subscriber'); ?>
+		</ul>
+		<div class="list-table-container">
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th style="width: 5%"><?php echo lang('avatar') ?></th>
+						<th style="width: 20%"><?php echo lang('name') ?></th>
+						<th style="width: 15%"><?php echo lang('username') ?></th>
+						<th style="width: 15%"><?php echo lang('membership-type') ?></th>
+						<th style="width: 15%"><?php echo lang('country') ?></th>
+						<th style="width: 15%"><?php echo lang('email-address') ?></th>
+						<th style="width: 15%"><?php echo lang('last-seen') ?></th>
+						<th style="width: 20%"><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($users->results() as $user): ?>
+						<tr>
+							<th>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $user['id'] ?>"></div>
+							</th>
+							<td>
+								<a href="<?php echo profile_url(null, $user) ?>"><img src="<?php echo get_avatar(75, $user) ?>" style="width: 30px;height: 30px"/></a>
+							</td>
+							<td>
+								<a href="<?php echo profile_url(null, $user) ?>"><?php echo get_user_name($user) ?></a>
+							</td>
+							<td>
+								<a href="<?php echo profile_url(null, $user) ?>"><?php echo $user['username'] ?></a>
+							</td>
+							<td><?php echo lang($user['title']) ?></td>
+							<td><?php echo $user['country'] ?></td>
+							<td><?php echo ucwords($user['email_address']) ?></td>
+							<td><?php echo date('l jS \of F Y h:i:s A', $user['online_time']) ?></td>
+
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-edit"
+										   href='<?php echo url_to_pager('admin-user-action') ?>?type=edit&id=<?php echo $user['id'] ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-android-delete"
+										   href="<?php echo url_to_pager('admin-user-action') ?>?type=delete&id=<?php echo $user['id'] ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+
+			<?php echo $users->links(); ?>
+		</div>
+	</div>

@@ -1,0 +1,16 @@
+<?php echo view('layouts/menu') ?>
+<div class="dashboard-content" style="padding: 0">
+    <?php theme_extend('main.extend') ?>
+    <!--Side bar menu-->
+    <?php $enable_side_menu = config('show-sidebar', true) && in_array(app()->currentColumn, array(ONE_COLUMN_LAYOUT, TWO_COLUMN_RIGHT_LAYOUT, TOP_TWO_COLUMN_RIGHT_LAYOUT, BOTTOM_TWO_COLUMN_RIGHT_LAYOUT, TOP_NO_CONTAINER_TWO_COLUMN_RIGHT_LAYOUT)) ?>
+        <?php if ($enable_side_menu): ?>
+        <div class="container">
+            <?php echo $content ?>
+        </div>
+        <?php else: ?>
+            <?php echo $content ?>
+        <?php endif ?>
+    </div>
+</div>
+
+

@@ -1,0 +1,89 @@
+<div class="md-container">
+	<div class="box">
+		<div class="title"><?php echo lang('edit') ?></div>
+		<div class="box-content" style="padding: 20px 10%">
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<form action="" method="post" class="ajax-form">
+				<?php CSRFProtection::embed() ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('group::group-title') ?></label>
+					</div>
+					<div class="right">
+						<input value="<?php echo get_group_details('group_title') ?>" type="text" name="val[group_title]" class="form-control"/>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('group::description') ?></label>
+					</div>
+					<div class="right">
+						<textarea name="val[group_description]" class="form-control auto-grow-input"><?php echo $app->profileGroup['group_description'] ?></textarea>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('privacy') ?></label>
+					</div>
+					<div class="right">
+						<?php $default = get_group_details('privacy'); ?>
+						<?php fire_hook('privacy.select', 'group', array($default)); ?>
+						<p class="help-block">
+							<strong><?php echo lang('everyone') ?>: </strong>
+							<?php echo lang('group::group-public-note') ?>
+						</p>
+						<p class="help-block">
+							<strong><?php echo lang('private') ?>: </strong>
+							<?php echo lang('group::group-private-note') ?>
+						</p>
+						</p>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('group::group-who-can-post') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-select" data-name="val[who_can_post]" data-width="200px">
+							<?php $group_privacy = get_group_details('who_can_post'); $privacy = array('1' => lang('group::members'), '2' => lang('group::moderators-admins'), '3' => lang('group::admins')); ?>
+							<input type="hidden" name="val[who_can_post]" value="<?php echo $group_privacy ?>" class="magic-select-value"/>
+							<div class="magic-select-toggle">
+								<?php echo isset($privacy[$group_privacy]) ? $privacy[$group_privacy] : lang('group::members') ?>
+							</div>
+							<div class="magic-select-content">
+								<?php foreach($privacy as $id => $name): ?>
+									<div class="magic-select-option" data-value="<?php echo $id ?>"><?php echo $name ?></div>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('group::group-who-can-add-member') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-select" data-name="val[who_can_add_member]" data-width="200px">
+							<?php $group_privacy = get_group_details('who_can_add_member'); $privacy = array('1' => lang('group::members'), '2' => lang('group::moderators-admins'), '3' => lang('group::admins')); ?>
+							<input type="hidden" name="val[who_can_add_member]" value="<?php echo $group_privacy ?>" class="magic-select-value"/>
+							<div class="magic-select-toggle">
+								<?php echo isset($privacy[$group_privacy]) ? $privacy[$group_privacy] : lang('group::members') ?>
+							</div>
+							<div class="magic-select-content">
+								<?php foreach($privacy as $id => $name): ?>
+									<div class="magic-select-option" data-value="<?php echo $id ?>"><?php echo $name ?></div>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="submit">
+					<button class="btn btn-secondary action-button"><?php echo lang('save') ?></button>
+					<a href="javascript::void(0)" onclick="return confirm.url('<?php echo url_to_pager('group-delete', array('id' => $app->profileGroup['group_id'])) ?>')" class="btn btn-danger action-button"><?php echo lang('delete') ?></a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

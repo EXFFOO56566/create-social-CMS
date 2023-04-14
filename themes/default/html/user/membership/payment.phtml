@@ -1,0 +1,66 @@
+<div class=" lg-title"><?php echo lang('select-payment-method') ?></div>
+<div class="container">
+	<div class="box" style="margin: 5% 15%">
+		<div class="box-content">
+			<h6 class="title"><?php echo lang('ads::transaction-details') ?></h6>
+			<?php
+			$coupon = "";
+			$user = get_user();
+			if(config('promotion-coupon', 0)) {
+				$coupon = input('coupon');
+				$data = array('price' => $plan['price'], 'status' => 0);
+				if($coupon) {
+					$data = fire_hook('promotion.coupon.calculate', $data, array($coupon));
+					if($data['status'] == "1") {
+						$plan['price'] = $data['price'];
+					}
+				}
+			}
+			?>
+			<table class="table table-bordered">
+				<thead>
+				<tr>
+					<th></th>
+					<th></th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td><?php echo lang('username') ?></td>
+					<td><?php echo $user['username'] ?></td>
+				</tr>
+				<tr>
+					<td><?php echo lang('Plan Title') ?></td>
+					<td><?php echo lang($plan['title']) ?></td>
+				</tr>
+				<tr>
+					<td><?php echo lang('ads::plan-description') ?></td>
+					<td><?php echo lang($plan['description']) ?></td>
+				</tr>
+				<tr>
+					<td><?php echo lang('ads::amount') ?></td>
+					<td><?php echo $plan['price'] ?> (<?php echo config('default-currency') ?>)</td>
+				</tr>
+				</tbody>
+			</table>
+			<?php
+			if(config('promotion-coupon', 0)) {
+				if(!$coupon || $data['status'] == 0) {
+					fire_hook('promotion.coupon.field', $coupon);
+					?>
+					<?php if($coupon) {
+						if($data['status'] == "0"): ?>
+							<span class="alert-danger"> <?php echo lang('coupon-error') ?></span> <?php endif;
+					}
+				}
+			} ?>
+			<h6><?php echo lang('Select payment method') ?></h6>
+			<div style="text-align:center">
+				<img style="width:200px" src="<?php echo img('images/payment-options.png') ?>"/>
+			</div>
+			<ul class="nav ads-payment-method">
+				<?php fire_hook('payment.buttons.extend', null, array('membership-plan', $plan['id'], lang($plan['title']), lang($plan['description']), $plan['price'], url_to_pager('membership-payment-success').'?id='.$plan['id'].'&csrf_token='.CSRFProtection::getToken(), url_to_pager('membership-payment-cancel').'?id='.$plan['id'])) ?>
+			</ul>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,31 @@
+<div class="wrapper">
+	<div class="wrapper-title"><?php echo lang('custom-jc') ?></div>
+	<div class="wrapper-content">
+        <form method="post" class="wrapper-form">
+            <div class="row form-group">
+                <div class="col-sm-3">
+                    <?php echo lang("Custom Css")?>
+                </div>
+                <div class="col-sm-9">
+                    <textarea class="codemirror-textarea form-control" name="val[custom-css]" placeholder="<?php echo lang('custom-css-description')?>"> <?php echo get_admin_setting('custom-css', lang('custom-css-description')) ?></textarea>
+                </div>
+            </div>
+            <hr />
+            <div class="row form-group">
+                <div class="col-sm-3">
+                    <?php echo lang("Custom Js")?>
+                </div>
+                <div class="col-sm-9">
+                    <textarea class="codemirror-textarea form-control" name="val[custom-js]" placeholder="<?php echo lang('custom-js-description')?>"> <?php echo get_admin_setting('custom-js', lang('custom-js-description')) ?> </textarea>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-3">
+                </div>
+                <div class="col-sm-9">
+                    <button class="btn btn-primary" type="submit"> <?php echo lang('save')?></button>
+                </div>
+            </div>
+        </form>
+	</div>
+</div>

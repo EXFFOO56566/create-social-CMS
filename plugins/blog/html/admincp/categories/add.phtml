@@ -1,0 +1,35 @@
+<div class="wrapper">
+	<div class="wrapper-title"><?php echo lang('blog::add-category') ?>  </div>
+	<div class="wrapper-content">
+		<form method="post" action="" enctype="multipart/form-data" class="wrapper-form">
+			<?php CSRFProtection::embed() ?>
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label"><?php echo lang('blog::category-title') ?></label>
+				<div class="col-sm-9">
+					<?php foreach(get_all_languages() as $language): ?>
+						<input class="form-control" type="text" name="val[title][<?php echo $language['language_id'] ?>]" placeholder="<?php echo lang('game::category-title') ?>"/>
+						<br>
+						<p class="help-block"><?php echo $language['language_title'] ?></p>
+					<?php endforeach ?>
+				</div>
+			</div>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php echo lang('music::parent-category') ?></label>
+                <div class="col-sm-9">
+                    <select class="c-select" name="val[category]">
+                        <option value="0"><?php echo lang('music::none') ?></option>
+                        <?php foreach(get_blog_categories() as $category): ?>
+                            <option value="<?php echo $category['id'] ?>"><?php echo lang($category['title']) ?></option>
+                        <?php endforeach ?>
+                    </select>
+
+                </div>
+            </div>
+
+			<button class="btn btn-info"><?php echo lang('blog::add-category') ?></button>
+		</form>
+	</div>
+</div>

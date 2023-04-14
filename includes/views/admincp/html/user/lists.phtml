@@ -1,0 +1,209 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('manage-members') ?>
+		<span><?php echo lang('manage-members-desc') ?></span>
+	</div>
+	<div class="wrapper-content">
+		<div class="row">
+			<div class="col-sm-12">
+				<a href="<?php echo url_to_pager('admin-members-list') ?>" class="filter-link <?php echo ($filter == 'active') ? 'active' : null ?>"><?php echo lang('active-members') ?></a>
+				<a href="<?php echo url_to_pager('admin-members-list') ?>?filter=non-active" class="filter-link <?php echo ($filter == 'non-active') ? 'active' : null ?>"><?php echo lang('non-active') ?></a>
+				<a href="<?php echo url_to_pager('admin-members-list') ?>?filter=banned" class="filter-link <?php echo ($filter == 'banned') ? 'active' : null ?>"><?php echo lang('banned') ?></a>
+				<a href="<?php echo url_to_pager('admin-members-list') ?>?filter=verified" class="filter-link <?php echo ($filter == 'verified') ? 'active' : null ?>"><?php echo lang('verified') ?></a>
+				<a href="<?php echo url_to_pager('admin-members-list') ?>?filter=online" class="filter-link <?php echo ($filter == 'online') ? 'active' : null ?>"><?php echo lang('online-members') ?></a>
+				<a href="<?php echo url_to_pager('admin-user-action') ?>?type=add" class="filter-link"><?php echo lang('add-member') ?></a>
+				<a href="<?php echo url_to_pager('admin-user-action-batch') ?>?action=export&all=all&ids=0,0" class="filter-link" data-group="users"><?php echo lang('export-users') ?></a>
+				<a href="#" class="filter-link" onclick="return show_other_languages('.search-toggle')"><i class="ion-ios-settings-strong"></i> <?php echo lang('filter') ?>
+				</a>
+				<?php fire_hook('admin.filter.user.type'); ?>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 search-toggle" style="display: none">
+				<form method="post" class="wrapper-form" action="">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="clearfix row">
+								<div class="form-group col-sm-3">
+									<label><?php echo lang('search') ?></label>
+									<input placeholder="<?php echo lang('search') ?>" class="form-control" type="text" name="val[keyword]" value="" size="15">
+								</div>
+								<div class="form-group col-sm-3">
+									<label><?php echo lang('within') ?></label>
+									<select class="form-control" name="val[type]">
+										<option value="" selected="selected"><?php echo lang('any') ?></option>
+										<option value="email_address"><?php echo lang('email') ?></option>
+										<option value="first_name"><?php echo lang('first-name') ?></option>
+										<option value="last_name"><?php echo lang('last-name') ?></option>
+									</select>
+								</div>
+								<div class="form-group col-sm-3">
+									<label><?php echo lang('role') ?></label>
+									<select class="form-control" name="val[role]">
+										<option value=""><?php echo lang('any') ?></option>
+										<?php foreach(list_user_roles() as $role): ?>
+											<option value="<?php echo $role['role_id'] ?>"><?php echo $role['role_title'] ?></option>
+										<?php endforeach ?>
+									</select>
+								</div>
+								<div class="form-group col-sm-3">
+									<label><?php echo lang('gender') ?></label>
+									<select class="form-control" name="val[gender]">
+										<option value="male"><?php echo lang('male') ?></option>
+										<option value="female"><?php echo lang('female') ?></option>
+										<option value="" selected="selected">All Members</option>
+									</select>
+								</div>
+								<div class="form-group col-sm-4">
+									<label><?php echo lang('country') ?></label>
+									<select class="form-control" id="country_iso" name="val[country]">
+										<option value=""><?php echo lang('any') ?></option>
+										<?php load_functions('country') ?>
+										<?php foreach(get_countries() as $country => $name): ?>
+											<option <?php echo (input("val.country") == $name) ? "selected" : null ?> value="<?php echo $name ?>"><?php echo ucwords($name) ?></option>
+										<?php endforeach ?>
+									</select>
+								</div>
+								<div class="form-group col-sm-4">
+									<label><?php echo lang('city') ?></label>
+									<input class="form-control" type="text" name="val[city]" value="" size="15">
+								</div>
+								<div class="form-group col-sm-4">
+									<label><?php echo lang('ip-address') ?></label>
+									<input class="form-control" type="text" name="val[ip]" value="" size="10">
+								</div>
+								<input type="hidden" name="filter" value="<?php echo $filter ?>"/>
+								<div class="form-group col-sm-3">
+									<label><?php echo lang('age-grroup') ?></label>
+									<select class="form-control" name="val[from]">
+										<option value=""><?php echo lang('from') ?>:</option>
+										<?php for($i = 1; $i <= 150; $i++): ?>
+											<option value="<?php echo $i ?>"><?php echo $i ?></option>
+										<?php endfor; ?>
+									</select>
+								</div>
+								<div class="form-group col-sm-3">
+									<label>&nbsp;</label>
+									<select class="form-control" name="val[to]">
+										<option value=""><?php echo lang('to') ?>:</option>
+										<?php for($i = 1; $i <= 150; $i++): ?>
+											<option value="<?php echo $i ?>"><?php echo $i ?></option>
+										<?php endfor; ?>
+									</select>
+								</div>
+								<div class="form-group col-sm-3">
+									<label><?php echo lang('member') ?></label>
+									<select class="form-control" name="val[status]">
+										<option value="" selected="selected">All Members</option>
+										<option value="featured"><?php echo lang('featured') ?></option>
+										<option value="online"><?php echo lang('online') ?></option>
+										<option value="verified"><?php echo lang('verified') ?></option>
+										<option value="active"><?php echo lang('active') ?></option>
+										<option value="non-active"><?php echo lang('non-active') ?></option>
+									</select>
+								</div>
+								<div class="form-group col-sm-3">
+									<label><?php echo lang('sort-result-by') ?></label>
+									<select class="form-control" name="val[sort]">
+										<option selected value="id"><?php echo lang('id') ?></option>
+										<option value="first_name"><?php echo lang('first-name') ?></option>
+										<option value="last_name"><?php echo lang('last_name') ?></option>
+										<option value="join_date"><?php echo lang('join-date') ?></option>
+									</select>
+								</div>
+							</div>
+							<div class="form-btn-group">
+								<button type="submit" class="btn btn-primary" name="val[submit]"><?php echo lang('search') ?></button>
+								<button type="reset" class="btn btn-info" href=""><?php echo lang('reset') ?></button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-user-action-batch') ?>?action=activate" class="action-link list-table-select-action" data-group="users"><?php echo lang('activate') ?></a>
+					<a href="<?php echo url_to_pager('admin-user-action-batch') ?>?action=deactivate" class="action-link list-table-select-action" data-group="users"><?php echo lang('deactivate') ?></a>
+					<a href="<?php echo url_to_pager('admin-user-action-batch') ?>?action=verify" class="action-link list-table-select-action" data-group="users"><?php echo lang('verify') ?></a>
+					<a href="<?php echo url_to_pager('admin-user-action-batch') ?>?action=ban" class="action-link list-table-select-action" data-group="users"><?php echo lang('ban') ?></a>
+					<a href="<?php echo url_to_pager('admin-user-action-batch') ?>?action=delete" class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+					<a href="<?php echo url_to_pager('admin-user-action-batch') ?>?action=export" class="action-link list-table-select-action" data-group="users"><?php echo lang('export') ?></a>
+					<?php fire_hook('admin.user.list.actions'); ?>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users" data-id="0"></div>
+						</th>
+						<th><?php echo lang('avatar') ?></th>
+						<th><?php echo lang('name') ?></th>
+						<th><?php echo lang('username') ?></th>
+						<th><?php echo lang('country') ?></th>
+						<th><?php echo lang('ip-address') ?></th>
+						<th><?php echo lang('email-address') ?></th>
+						<th><?php echo lang('last-seen') ?></th>
+						<th><?php echo lang('role') ?></th>
+						<th><?php echo lang('actions') ?></th>
+						<?php //fire_hook('more.members.list.admin.table.header',null,array()); ?>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($users->results() as $user): ?>
+						<tr>
+							<td>
+								<div class="list-table-select" data-group="users" data-id="<?php echo $user['id'] ?>"></div>
+							</td>
+							<td>
+								<a href="<?php echo profile_url(null, $user) ?>"><img src="<?php echo get_avatar(75, $user) ?>" style="width: 30px;height: 30px" class="thumb"/></a>
+							</td>
+							<td>
+								<a href="<?php echo profile_url(null, $user) ?>" class="title"><?php echo get_user_name($user) ?></a>
+							</td>
+							<td>
+								<a href="<?php echo profile_url(null, $user) ?>"><?php echo $user['username'] ?></a>
+							</td>
+							<td><?php echo ucwords($user['country']) ?></td>
+							<td><?php echo $user['ip_address'] ?></td>
+							<td><?php echo $user['email_address'] ?></td>
+							<td><?php echo date('l jS \of F Y h:i:s A', $user['online_time']) ?></td>
+							<td>
+								<?php $userRole = ($user['role']) ? $user['role'] : 2; ?>
+								<?php foreach(list_user_roles() as $role): ?>
+									<?php if($role['role_id'] == $userRole): ?>
+										<?php echo $role['role_title'] ?>
+										<?php break ?>
+									<?php endif ?>
+								<?php endforeach ?>
+							</td>
+							<?php //fire_hook('more.members.admin.list.table.results',$user,array()); ?>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<?php echo fire_hook('admin.user.manager.members.actions.buttons.extend', null, array('', $user['id'])); ?>
+										<a href="<?php echo url_to_pager('admin-user-action') ?>?type=edit&id=<?php echo $user['id'] ?>" class="ion-edit"></a>
+										<a href="<?php echo url_to_pager('admin-user-action') ?>?type=delete&id=<?php echo $user['id'] ?>" class="admin-confirm ion-android-delete"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row pagination">
+			<div class="col-sm-12">
+				<?php echo $users->links(); ?>
+			</div>
+		</div>
+	</div>
+</div>

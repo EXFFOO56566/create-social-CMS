@@ -1,0 +1,163 @@
+body{
+    background-color: #F8F8FA;
+    font-family: 'PT Sans', sans-serif !important;
+    font-weight: 400;
+}
+#header ,body.home:not(.scrolled-64) #header{
+    display: block !important;
+    border-bottom: solid 1px #E2E2E2 !important;
+    height: 60px !important;
+    position: fixed !important;
+    background: white !important;
+    z-index: 999;
+}
+#header .container{
+    width: 100% !important;
+    max-width: 100% !important;
+}
+#header .navbar-brand{
+    border-right: solid 1px #F8F8FA;
+    height: 60px;
+}
+#header-search{
+    background: white !important;
+    width: 300px !important;
+}
+#header-search i{
+    color: grey;
+}
+#header-search input{
+    border: none;
+    box-shadow: none;
+    color: black !important;
+}
+#header .navbar-nav .nav-link i{
+    color: black !important;
+}
+#header .event-nav-item .nav-link{
+    color: #000000 !important;
+    text-transform: uppercase;
+    height: 60px;
+    border-right: solid 1px #F8F8FA;
+    position: relative;
+    bottom: 5px !important;
+}
+.explore-more-menu {
+    width: 200px !important;
+    border: solid 1px #E2E2E2 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    height: 500px;
+    overflow: auto;
+    overflow-x:hidden;
+
+}
+.explore-more-menu  a {
+    font-weight: bold;
+    font-size: 15px !important;
+    color: grey ;
+
+}
+#header .event-nav-item .event-create-nav  {
+    font-weight: bold !important;
+    color: #0abde3 !important;
+}
+#topo {
+    min-height: auto;
+    height: 70vh !important;
+    position: relative;
+}
+.home-seach-box {
+    background: linear-gradient( rgba(255, 255, 255, 0.9) 0%, white 25%);
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.25);
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    position: relative;
+    top: -150px;
+    z-index: 9;
+    text-align: center;
+    padding: 30px 0;
+
+}
+#topo #topo-content {
+    display: none;
+}
+.home-seach-box .title{
+    font-weight: lighter;
+    font-family: Segoe UI, Arial, sans-serif;
+    color: #ee5253;
+}
+.home-seach-box form{
+    margin-top: 20px;
+}
+.home-seach-box form input{
+    width: 70%;
+    border: solid 2px #EBEBED;
+    height: 40px;
+    padding: 10px ;
+}
+.home-seach-box form button{
+    height: 40px;
+}
+.home-section {
+    padding: 30px 0;
+    text-align: center;
+    width: 100%;
+}
+.home-section .title {
+    font-family: Segoe UI, Arial, sans-serif;
+    font-weight: lighter;
+    margin-bottom: 20px;
+    font-size: 25px;
+}
+.each-home-event {
+    width: 100%;
+    height: 300px;
+    transform: translate3d(0,0,0);
+    transition: box-shadow .2s cubic-bezier(0,.2,.4,1);
+    background-color: #fff;
+    box-shadow: 0 1px 0 0 rgba(0,0,0,.1);
+    text-align: left;
+}
+.each-home-event .logo{
+    width: 100%;
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+}
+.each-home-event .info{
+    padding: 10px;
+}
+.each-home-event .date{
+    text-transform: uppercase;
+    color: grey;
+}
+.each-home-event .each-title {
+    font-size: 17px;
+    font-weight: bold;
+    color: grey;
+}
+
+.home-category {
+    width: 100%;
+    border-radius: 10px;
+    background: #EDEDF0;
+    color: black;
+    padding: 10px ;
+    text-align: center;
+    display: block;
+    margin: 20px 0;
+}
+
+#chat-boxes-container .onlines-container {
+    top: 60px !important;
+}
+.header-menu-trigger  i{
+    color: black !important;
+}
+@media(max-width: 750px) {
+    .navbar-brand {
+        height: auto !important;
+    }
+}

@@ -1,0 +1,61 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<p><?php echo lang('marketplace::categories-manager') ?></p>
+		<span><?php echo lang('marketplace::categories-manager-desc') ?></span>
+	</div>
+	<div class="wrapper-content">
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-marketplace-batch-action') ?>?action=delete"
+					   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th><?php echo lang('marketplace::title') ?></th>
+						<th><?php echo lang('marketplace::actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($categories as $category): ?>
+						<tr>
+							<th>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $category['id'] ?>"></div>
+							</th>
+							<td>
+								<a href="<?php echo url_to_pager('admin-marketplace-listings-list') ?>?c=<?php echo $category['id'] ?>"><?php echo lang($category['title']) ?></a>
+							</td>
+
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-settings"
+										   href='<?php echo url_to_pager('admin-marketplace-listings-list') ?>?c=<?php echo $category['id'] ?>'></a>
+										|
+										<a ajax="true" class="ion-edit"
+										   href='<?php echo url_to_pager('admin-marketplace-category-edit') ?>?id=<?php echo $category['id'] ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-android-delete"
+										   href="<?php echo url_to_pager('admin-marketplace-category-delete') ?>?id=<?php echo $category['id'] ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

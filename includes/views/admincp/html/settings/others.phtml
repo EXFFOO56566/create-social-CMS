@@ -1,0 +1,127 @@
+<div class="wrapper">
+	<div class="container">
+		<div class="tab-content">
+			<div class="wrapper-content">
+				<div class="wrapper-title ">
+					<?php echo lang(input('type')) ?>
+					<span><?php echo lang(input('type').'-desc') ?></span>
+				</div>
+				<?php $other = ''; $type = input('type'); $id = input('id'); $plugin_side_menus = array(); $side_menu = array(); $type ? $side_menu = get_hook_settings($type) : $plugin = segment('3'); ?>
+				<div class="row">
+					<div class="col-sm-3 settings-left">
+						<div>
+							<div class="title">
+								<a href="<?php echo url('admincp/settings') ?>" class="nav-back">
+									<i class="ion-arrow-left-c"></i>
+								</a>
+							</div>
+							<ul class="setting-menu">
+								<?php if(segment(1) == "email"): ?>
+									<li class="active">
+										<a href="<?php echo url('admincp/email/settings') ?>"><i class="ion-android-mail"></i> <?php echo lang(segment(1).'-settings') ?></a>
+									</li>
+									<li>
+										<a href="<?php echo url('admincp/email/templates') ?>"><i class="ion-android-mail"></i> <?php echo lang(segment(1).'-templates') ?> </a>
+									</li>
+								<?php endif; ?>
+								<?php if(isset($associates)): ?>
+									<?php foreach($associates as $key => $menu): $menu['icon'] = isset($menu['icon']) ? $menu['icon'] : 'ion-android-settings' ?>
+										<li class="<?php echo $key == $id && !input('plugin') ? 'active' : '' ?>">
+											<a href="<?php echo url('admincp/settings') ?>?type=<?php echo $type ?>&id=<?php echo $key ?>"><i class="<?php echo $menu['icon'] ?>"></i> <?php echo $menu['title'] ?></a>
+										</li>
+									<?php endforeach; ?>
+								<?php endif; ?>
+								<?php foreach($side_menu as $key => $menu): $menu[$type]['icon'] = isset($menu[$type]['icon']) ? $menu[$type]['icon'] : 'ion-android-settings' ?>
+									<li class="<?php echo $key == input('plugin') ? 'active' : '' ?>">
+										<a href="<?php echo url('admincp/settings') ?>?type=<?php echo $type ?>&plugin=<?php echo $key ?>&id=<?php echo $id ?>"><i class="<?php echo $menu[$type]['icon'] ?>"></i> <?php echo $menu[$type]['title'] ?></a>
+									</li>
+								<?php endforeach; ?>
+								<?php if(input('type')): ?>
+									<?php if($type == "site-settings") $other = "site-other-settings" ?>
+									<?php if($type == "user") $other = "user-other-settings" ?>
+									<?php if($type == "integrations") $other = "integrations-other-settings" ?>
+									<li class="<?php echo input('other') ? 'active' : '' ?>">
+										<a href="<?php echo url('admincp/settings/others') ?>?type=<?php echo $type ?>&other=<?php echo $other ?>&id=<?php echo $id ?>"><i class="ion-ios-more"></i> <?php echo lang('other-settings') ?> </a>
+									</li>
+								<?php endif; ?>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-9 settings-right">
+						<div class="heading">
+							<h3 class="title"><?php echo lang('more-settings') ?></h3>
+							<h6 class="description"><?php echo lang('more-settings-desc') ?></h6>
+						</div>
+                        <?php if($settings): ?>
+						<form action="" class="wrapper-form" method="post">
+							<div class="panel-group" id="accordion">
+								<?php foreach($settings as $key => $other_settings): ?>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a data-toggle="collapse" data-parent="#accordion" href="#collapse1-<?php echo $key ?>"><?php echo $other_settings[$other]['title'] ?></a>
+											</h4>
+										</div>
+										<div id="collapse1-<?php echo $key ?>" class="panel-collapse collapse in">
+											<div class="panel-body">
+												<?php foreach($other_settings[$other]['settings'] as $key => $setting): ?>
+													<div class="form-group row">
+														<div class="col-sm-5">
+															<label class="form-control-label"><?php echo $setting['title'] ?></label>
+															<p class="form-description"><?php echo $setting['description'] ?></p>
+														</div>
+														<div class="col-sm-5">
+															<div class="input-field col s10">
+																<?php if($setting['type'] == 'text'): ?>
+																	<input class="form-control" id="<?php echo $key ?>" type="text" value="<?php echo get_admin_setting($key, $setting['value']) ?>" name="val[<?php echo $key ?>]" placeholder="<?php echo $setting['title'] ?>"/>
+																<?php elseif($setting['type'] == 'color'): ?>
+																	<input class="form-control color-picker" id="<?php echo $key ?>" type="text" value="<?php echo get_admin_setting($key, $setting['value']) ?>" name="val[<?php echo $key ?>]" placeholder="<?php echo $setting['title'] ?>"/>
+																<?php elseif($setting['type'] == "textarea"): ?>
+																	<textarea class="form-control" id="<?php echo $key ?>" name="val[<?php echo $key ?>]" placeholder="<?php echo $setting['title'] ?>"><?php echo get_admin_setting($key, $setting['value']) ?></textarea>
+																<?php elseif($setting['type'] == "richtext"): ?>
+																	<textarea class="form-control ckeditor" id="<?php echo $key ?>" name="val[<?php echo $key ?>]" placeholder="<?php echo $setting['title'] ?>"><?php echo get_admin_setting($key, $setting['value']) ?></textarea>
+																<?php elseif($setting['type'] == "selection"): ?>
+																	<?php if(isset($setting['data']) and is_callable($setting['data'])) {
+																		$data = call_user_func($setting['data']);
+																	} else {
+																		$data = $setting['data'];
+																	} ?>
+																	<select class="form-control c-select" id="<?php echo $key ?>" name="val[<?php echo $key ?>]">
+																		<?php foreach($data as $k => $v): ?>
+																			<option <?php echo (get_admin_setting($key, $setting['value']) == $k) ? 'selected' : null ?> value="<?php echo $k ?>"><?php echo $v ?></option>
+																		<?php endforeach ?>
+																	</select>
+																<?php elseif($setting['type'] == "boolean"): ?>
+																	<p>
+																		<label class="switch">
+																			<input type="radio" name="val[<?php echo $key ?>]" value="0" <?php echo get_admin_setting($key, $setting['value']) == '0' ? 'checked' : '' ?> />
+																			<input type="radio" name="val[<?php echo $key ?>]" value="1" <?php echo get_admin_setting($key, $setting['value']) == '1' ? 'checked' : '' ?> />
+																			<span class="slider round"></span>
+																		</label>
+																	</p>
+																<?php endif ?>
+															</div>
+														</div>
+													</div>
+												<?php endforeach ?>
+											</div>
+										</div>
+									</div>
+								<?php endforeach; ?>
+							</div>
+							<div class="row">
+								<div class="col-sm-5"></div>
+								<div class="col-sm-7">
+									<button class="btn btn-info"><?php echo lang("save-settings") ?></button>
+								</div>
+							</div>
+						</form>
+                        <?php else:?>
+                        <span style="font-size: 30px; color: #0000007d;margin: 250px;"> No Settings Found</span>
+                        <?php endif; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

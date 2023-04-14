@@ -1,0 +1,357 @@
+<?php $page_details = Pager::getSitePage($page['slug']); $column_type = $page_details['column_type']; $column_type_name = Pager::getColumnTypeName($column_type); ?>
+<div id="page-builder-wrapper" class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('page-builder') ?>
+		<a class="btn-g" href="<?php echo url_to_pager('admin-site-page-list') ?>" style="float: right; margin-left: 8px;"><i class="ion-android-menu"></i> <?php echo lang('pages-list') ?></a>
+		<button class="btn-g" onclick="return siteEditor.showAddPage()" style="float: right; margin-left: 8px;"><i class="fa fa-file"></i> <?php echo lang('new-page') ?></button>
+		<?php if($page['slug'] != 'header' && $page['slug'] != 'footer' && $page_details['page_type'] == 'auto'): ?>
+			<a href="<?php echo url('admincp/site/page/delete?id='.$page_details['id']) ?>" class="btn-g admin-confirm" style="float: right; margin-left: 8px;"><i class="ion-android-delete"></i> <?php echo lang('delete-page') ?></a>
+		<?php endif ?>
+		<div id="page-switcher-container" class="ion-ios-search" style="float: right; margin-left: 8px;">
+			<input id="page-switcher" type="search" list="pages-list" placeholder="&nbsp;&nbsp;<?php echo lang('switch-page') ?>" />
+			<datalist id="pages-list">
+				<?php foreach(Pager::getSitePages() as $static_page): ?>
+					<option value="<?php echo lang($static_page['title']) ?>" data-filter="<?php echo strtolower(lang($static_page['title'])) ?>" data-id="<?php echo $static_page['id'] ?>"><?php echo $static_page['slug'] ?></option>
+				<?php endforeach; ?>
+			</datalist>
+		</div>
+	</div>
+	<div class="wrapper-content">
+		<div class="page-builder-container">
+			<form id="page-form" action="" method="post">
+				<input type="hidden" name="val[id]" value="<?php echo $page['id'] ?>"/>
+				<input type="hidden" name="val[layout]" value="<?php echo $column_type ?>" class="layout-column-type"/>
+				<?php CSRFProtection::embed() ?>
+					<div class="row">
+						<div class="col-md-8">
+							<div class="row">
+								<div class="col-md-12 heading-container">
+									<div class="wrapper-box heading">
+										<h3><?php echo lang($page['title']) ?></h3>
+										<?php $link = rtrim($page['page_type'] == 'auto' ?  url($page['slug']) : ($page['slug'] ? url_to_pager($page['slug']) : ''), '/') ?>
+										<?php if($link): ?>
+											<a <?php echo preg_match('/\{/', $link) ? 'href="#"' : 'href="'.$link.'"  target="_blank"' ?>><?php echo $link ?></a>
+										<?php endif; ?>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12 layout-editor-container">
+									<div class="layout-editor">
+										<div class="controls clearfix">
+											<span class="controls-title"><?php echo lang('layout-editor') ?></span>
+											<?php if($page['slug'] != 'header' && $page['slug'] != 'footer'): ?>
+												<button class="btn-gs" type="button" data-toggle="modal" data-target="#layout-columns" style="float: right; margin-left: 8px;"><i class="fa fa-columns"></i> <?php echo lang('edit-column') ?></button>
+											<?php endif ?>
+											<button class="btn-gs" type="button" data-toggle="modal" data-target="#layout-widgets" style="float: right; margin-left: 8px;"><i class="ion-cube"></i> <?php echo lang('insert-widget') ?></button>
+										</div>
+										<div class="layout-container">
+											<div data-position="top" class="col layout-header <?php echo ($page['slug'] != 'header') ? 'layout-hidden' : '' ?>">
+												<?php if($page['slug'] == 'header'): ?>
+													<div class="widget">
+														<div class="title"><?php echo lang('main-header') ?></div>
+														<div class="description"><?php echo lang('main-header-desc') ?></div>
+													</div>
+													<?php echo view('pages/editor/widgets', array('widgets' => Widget::getWidgetPages($page['slug'], 'top'), 'position' => 'top')) ?>
+												<?php else: ?>
+													<div class="widget">
+														<div class="title"><?php echo lang('header') ?></div>
+														<div class="description"><?php echo lang('main-header') ?></div>
+													</div>
+												<?php endif ?>
+											</div>
+											<div class="layout-content">
+												<?php if($page['slug'] != 'header' && $page['slug'] != 'footer'): ?>
+													<div id="columns" class="<?php echo $column_type_name ?>">
+														<div data-position="top" class="top col">
+															<?php echo view('site_page/builder/widgets', array('widgets' => Widget::getWidgetPages($page['slug'], 'top'), 'position' => 'top')) ?>
+														</div>
+														<div class="middle clearfix">
+															<div data-position="left" class="left-col col">
+																<?php echo view('site_page/builder/widgets', array('widgets' => Widget::getWidgetPages($page['slug'], 'left'), 'position' => 'left')) ?>
+															</div>
+															<div data-position="middle" class="middle-col col selected">
+																<?php echo view('site_page/builder/widgets', array('widgets' => Widget::getWidgetPages($page['slug'], 'middle'), 'position' => 'middle')) ?>
+															</div>
+															<div data-position="right" class="right-col col">
+																<?php echo view('site_page/builder/widgets', array('widgets' => Widget::getWidgetPages($page['slug'], 'right'), 'position' => 'right')) ?>
+															</div>
+														</div>
+														<div data-position="bottom" class="bottom col">
+															<?php echo view('site_page/builder/widgets', array('widgets' => Widget::getWidgetPages($page['slug'], 'bottom'), 'position' => 'bottom')) ?>
+														</div>
+													</div>
+												<?php else: ?>
+													<div class="layout-hidden-content"><?php echo lang('content') ?></div>
+												<?php endif ?>
+											</div>
+											<div data-position="bottom"  class="col layout-footer <?php echo ($page['slug'] != 'footer') ? 'layout-hidden' : '' ?>">
+												<?php if($page['slug'] == 'footer'): ?>
+													<div class="col" data-position="bottom" style="min-height: 70px">
+														<?php echo view('site_page/builder/widgets', array('widgets' => Widget::getWidgetPages($page['slug'], 'bottom'), 'position' => 'bottom')) ?>
+													</div>
+												<?php else: ?>
+													<div class="widget">
+														<div class="title"><?php echo lang('footer') ?></div>
+														<div class="description"><?php echo lang('main-footer') ?></div>
+													</div>
+												<?php endif ?>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="sub-title"><?php echo lang('page-info') ?></div>
+							<div class="fields wrapper-box">
+								<div class="form-group">
+									<label><?php echo lang('page-title') ?> (English)</label>
+									<input type="text" name="val[title][english]" class="form-control" <?php echo $page['page_type'] == 'manual' ? 'disabled' : '' ?> value="<?php echo get_phrase('english', $page['title']) ?>"/>
+									<a href="" class="other-languages-link" onclick="return show_other_languages('#page-info-other-languages')"><?php echo lang('edit-other-languages') ?></a>
+									<div class="other-languages" id="page-info-other-languages">
+										<?php foreach(get_all_languages() as $language): ?>
+											<?php if($language['language_id'] != 'english'): ?>
+												<input class="form-control" <?php echo ($page['page_type'] == 'manual') ? 'disabled' : null ?> value="<?php echo get_phrase($language['language_id'], $page['title']) ?>" type="text" name="val[title][<?php echo $language['language_id'] ?>]" placeholder="<?php echo lang('page-title') ?>"/>
+												<br>
+												<p class="help-block"><?php echo $language['language_title'] ?></p>
+											<?php endif ?>
+										<?php endforeach ?>
+									</div>
+								</div>
+								<div class="form-group">
+									<label><?php echo lang('page-url-slug') ?></label>
+									<input type="text" name="val[slug]" class="form-control" value="<?php echo ltrim(preg_replace('/^'.preg_quote(rtrim(url(), '/'), '/').'/', '', $link), '/') ?>" <?php echo $page['page_type'] == 'manual' ? 'disabled' : '' ?>/>
+								</div>
+								<div class="form-group">
+									<label><?php echo lang('page-description') ?></label>
+									<input type="text" name="val[description]" class="form-control" value="<?php echo $page['description'] ?>" <?php echo $page['page_type'] == 'manual' ? 'disabled' : '' ?>/>
+								</div>
+								<div class="form-group">
+									<label><?php echo lang('page-keywords') ?></label>
+									<input type="text" name="val[keywords]" class="form-control" value="<?php echo $page['keywords'] ?>" <?php echo $page['page_type'] == 'manual' ? 'disabled' : '' ?> />
+								</div>
+							</div>
+							<div class="controls clearfix">
+								<button class="btn-gs btn-primary" style="float: right; margin-left: 8px;"><i class="fa fa-save"></i> <?php echo lang('save-changes') ?></button>
+								<?php if($page['page_type'] == 'auto'): ?>
+									<button class="btn-gs" type="button" data-toggle="modal" data-target="#page-content" style="float: right; margin-left: 8px;"><i class="ion-edit"></i> <?php echo lang('edit-content') ?></button>
+									<div id="page-content" class="modal fade">
+										<div class="modal-dialog modal-lg" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h4 class="modal-title"><?php echo lang('edit-content') ?></h4>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													<div><textarea name="val[content][english]" class="ckeditor"><?php echo get_phrase('english', $page['content']) ?></textarea></div>
+													<div><a href="" class="other-languages-link" onclick="return show_other_languages('#page-info-other-languages-content')"><?php echo lang('edit-other-languages') ?></a></div>
+													<div class="other-languages" id="page-info-other-languages-content">
+														<?php foreach(get_all_languages() as $language): ?>
+															<?php if($language['language_id'] != 'english'): ?>
+																<textarea name="val[content][<?php echo $language['language_id'] ?>]" class="ckeditor"><?php echo get_phrase($language['language_id'], $page['content']) ?></textarea>
+																<br>
+																<p class="help-block"><?php echo $language['language_title'] ?></p>
+															<?php endif ?>
+														<?php endforeach ?>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo lang('ok') ?></button>
+												</div>
+											</div>
+										</div>
+									</div>
+								<?php endif ?>
+							</div>
+						</div>
+					</div>
+					<div class="deleted-widgets"></div>
+					<div class="alert alert-success no-radius" id="layout-message" style="margin-top: 10px;display: none"><?php echo lang('successfully-saved') ?></div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="layout-widget-settings">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form action="" method="post">
+				<?php CSRFProtection::embed() ?>
+				<h4 class="modal-title"><?php echo lang('edit-widget') ?></h4>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<img style="width: 25px;margin: 20px 45%" src="<?php echo img('images/loading.gif') ?>" id="loader"/>
+					<div class="setting-content">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo lang('close') ?></button>
+					<button class="btn btn-primary"><?php echo lang('save') ?></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade page-builder-modal" id="layout-widgets">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="title">
+					<i class="ion-cube"></i> <?php echo lang('insert-widget') ?>
+				</div>
+				<input type="search" placeholder="<?php echo lang('search-widgets') ?>" data-method="filter" data-selector=".widget" />
+			</div>
+			<div class="modal-body">
+				<?php $plugins = get_activated_plugins(); ?>
+				<div class="row">
+					<div class="col-md-3 side-nav">
+						<div class="nav flex-column nav-pills" id="widget-tabs" role="tablist" aria-orientation="vertical">
+							<a id="core-widgets-tab" href="#core-widgets" data-toggle="pill" class="nav-link active" aria-controls="core-widgets" aria-selected="true"><?php echo lang('core') ?></a>
+							<?php foreach($plugins as $plugin): ?>
+								<?php if(Widget::listWidgets('plugin', $plugin)): ?>
+									<a id="<?php echo $plugin ?>-widgets-tab" href="#<?php echo $plugin ?>-widgets" data-toggle="pill" class="nav-link" aria-controls="core-widgets" aria-selected="true"><?php echo ucwords($plugin) ?></a>
+								<?php endif; ?>
+							<?php endforeach; ?>
+						</div>
+					</div>
+					<div class="col-md-9 nav-content">
+						<div class="tab-content" id="widget-tab-contents">
+							<div id="core-widgets" class="tab-pane fade show active" role="tabpanel" aria-labelledby="core-widgets-tab">
+								<div class="title"><?php echo lang('core') ?></div>
+								<?php foreach(Widget::listWidgets('core') as $widget_id => $info): ?>
+									<div class="widget grid-item col-sm-3" data-widget="<?php echo $widget_id ?>" data-filter="<?php echo strtolower($info['title']) ?>" data-setting="<?php echo isset($info['settings']) && $info['settings'] ? 1 : 0 ?>">
+										<i class="icon <?php echo isset($info['icon']) ? $info['icon'] : 'ion-cube' ?>"></i>
+										<div class="title"><?php echo $info['title'] ?></div>
+										<div class="description"><?php echo $info['description'] ?></div>
+									</div>
+								<?php endforeach ?>
+							</div>
+							<?php foreach($plugins as $plugin): ?>
+								<div id="<?php echo $plugin ?>-widgets" class="tab-pane fade" role="tabpanel" aria-labelledby="<?php echo $plugin ?>-widgets-tab">
+									<?php $widgets = Widget::listWidgets('plugin', $plugin); ?>
+									<?php if($widgets): ?>
+										<div class="title"><?php echo ucwords($plugin) ?></div>
+										<?php foreach($widgets as $widget_id => $info): ?>
+											<div class="widget grid-item col-sm-3" data-widget="<?php echo $widget_id ?>" data-setting="<?php echo isset($info['settings']) && $info['settings'] ? 1 : 0 ?>">
+												<i class="icon <?php echo isset($info['icon']) ? $info['icon'] : 'ion-cube' ?>"></i>
+												<div class="title"><?php echo $info['title'] ?></div>
+												<div class="description"><?php echo $info['description'] ?></div>
+											</div>
+										<?php endforeach ?>
+									<?php endif ?>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade page-builder-modal" id="layout-columns">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="title"><i class="fa fa-columns"></i> <?php echo lang('edit-columns') ?></div>
+				<input type="search" placeholder="<?php echo lang('search-columns') ?>" data-method="filter" data-selector=".column" />
+			</div>
+			<div class="modal-body">
+				<?php $plugins = get_activated_plugins(); ?>
+				<div class="row">
+					<div class="col-md-3 side-nav">
+						<div class="nav flex-column nav-pills" id="column-tabs" role="tablist" aria-orientation="vertical">
+							<a id="general-columns-tab" href="#general-columns" data-toggle="pill" class="nav-link active" aria-controls="general-columns" aria-selected="true"><?php echo lang('general') ?></a>
+							<a id="no-top-bottom-container-columns-tab" href="#no-top-bottom-container-columns" data-toggle="pill" class="nav-link" aria-controls="no-top-bottom-container-columns" aria-selected="true"><?php echo lang('no-top-bottom-container') ?></a>
+						</div>
+					</div>
+					<div class="col-md-9 nav-content">
+						<div class="tab-content" id="column-tab-contents">
+							<div id="general-columns" class="tab-pane fade show active" role="tabpanel" aria-labelledby="general-columns-tab">
+								<div class="title"><?php echo lang('general') ?></div>
+								<div id="predefined-columns">
+									<?php foreach(Pager::getLayouts(1) as $id => $layout): ?>
+										<a class="<?php echo $column_type == $id ? 'active' : '' ?> column grid-item col-sm-2" href="#" data-name="<?php echo $layout['name'] ?>" data-id="<?php echo $id ?>" data-filter="<?php echo strtolower($layout['title']) ?>"><img src="<?php echo $layout['image'] ?>"/></a>
+									<?php endforeach; ?>
+								</div>
+							</div>
+							<div id="no-top-bottom-container-columns" class="tab-pane fade" role="tabpanel" aria-labelledby="no-top-bottom-container-columns-tab">
+								<div class="title"><?php echo lang('no-top-bottom-container') ?></div>
+								<div id="predefined-columns">
+									<?php foreach(Pager::getLayouts(2) as $id => $layout): ?>
+										<a class="<?php echo $column_type == $id ? 'active' : '' ?> column grid-item col-sm-2" href="#" data-name="<?php echo $layout['name'] ?>" data-id="<?php echo $id ?>" data-filter="<?php echo strtolower($layout['title']) ?>"><img src="<?php echo $layout['image'] ?>"/></a>
+									<?php endforeach; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="new-page-info-modal" class="modal fade">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form onsubmit="return siteEditor.addPage(this)" action="" method="post">
+				<?php CSRFProtection::embed() ?>
+				<div class="modal-header">
+					<h4 class="modal-title"><?php echo lang('new-page') ?></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label><?php echo lang('page-title') ?>(English)</label>
+						<input type="text" name="val[title][english]" class="form-control" value=""/>
+						<a href="" class="other-languages-link" onclick="return show_other_languages('#page-new-other-languages')"><?php echo lang('edit-other-languages') ?></a>
+						<div class="other-languages" id="page-new-other-languages">
+							<?php foreach(get_all_languages() as $language): ?>
+								<?php if($language['language_id'] != 'english'): ?>
+									<input class="form-control" type="text" name="val[title][<?php echo $language['language_id'] ?>]" placeholder="<?php echo lang('page-title') ?>"/>
+									<br>
+									<p class="help-block"><?php echo $language['language_title'] ?></p>
+								<?php endif ?>
+							<?php endforeach ?>
+						</div>
+					</div>
+					<div class="form-group">
+						<label><?php echo lang('slug') ?></label>
+						<input type="text" name="val[slug]" class="form-control" value=""/>
+					</div>
+					<div class="form-group">
+						<label><?php echo lang('page-description') ?></label>
+						<input type="text" name="val[description]" class="form-control" value=""/>
+					</div>
+					<div class="form-group">
+						<label><?php echo lang('page-keywords') ?></label>
+						<input type="text" name="val[keywords]" class="form-control" value=""/>
+					</div>
+					<textarea name="val[content][english]" class="ckeditor"></textarea><br>
+					<a href="" class="other-languages-link" onclick="return show_other_languages('#page-info-other-languages-content')"><?php echo lang('edit-other-languages') ?></a><br>
+					<div class="other-languages" id="page-info-other-languages-content">
+						<?php foreach(get_all_languages() as $language): ?>
+							<?php if($language['language_id'] != 'english'): ?>
+								<textarea name="val[content][<?php echo $language['language_id'] ?>]" class="ckeditor"><?php echo lang('content') ?></textarea>
+								<br>
+								<p class="help-block"><?php echo $language['language_title'] ?></p>
+							<?php endif ?>
+						<?php endforeach ?>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<img style="width: 25px;display:none" src="<?php echo img('images/loader01.gif') ?>" class="save-loader"/>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo lang('close') ?></button>
+					<button class="btn btn-primary"><?php echo lang('save-changes') ?></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

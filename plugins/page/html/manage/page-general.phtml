@@ -1,0 +1,46 @@
+<?php $call_types = array(
+    '1' => 'Read more',
+    '2' => 'Shop now',
+    '3' => 'View now',
+    '4' => 'Visit now',
+    '5' => 'Book now',
+    '6' => 'Learn more',
+    '7' => 'Play now',
+    '8' => 'Bet now',
+    '9' => 'Donate',
+    '10' => 'Apply now',
+    '11' => 'Quote here',
+    '12' => 'Order now',
+    '13' => 'Book Tickets',
+    '14' => 'Enroll mow',
+    '15' => 'Find a card',
+    '16' => 'Get a quote',
+    '17' => 'Get tickets',
+    '18' => 'Locate a dealer',
+    '19' => 'Order online',
+    '20' => 'Pre-order now',
+    '21' => 'Schedule now',
+    '22' => 'Sign up now',
+    '23' => 'Subscribe',
+    '24' => 'Register now'
+) ?>
+ <div class="row form-group">
+     <div class="col-sm-8" style="font-weight: bold">
+         <p class="title"> Page URL </p>
+         <input value="<?php echo $page['page_url'] ?>" name="val[page_url]" placeholder="Page Url" type="text" class="form-control"/>
+     </div>
+ </div>
+ <div class="row form-group">
+     <div class="col-sm-6" style="font-weight: bold">
+         <p class="title"> Action call </p>
+         <select id="call_action_type" name="val[target_type]" class="form-control">
+             <?php foreach ($call_types as $i => $call_type): ?>
+             <option value="<?php echo $i?>" <?php if ($page['target_type'] == $i): echo "selected"; endif;?>><?php echo $call_type?></option>
+             <?php endforeach; ?>
+         </select>
+     </div>
+     <div class="col-sm-6">
+         <p class="title"> URL Target Call </p>
+         <input value="<?php echo $page['target_call'] ?>" name="val[target_call]" placeholder="URL Target Call" type="text" class="form-control"/>
+     </div>
+ </div>

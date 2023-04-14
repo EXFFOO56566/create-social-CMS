@@ -1,0 +1,14 @@
+<?php $statistics = statistic_get_site(); ?>
+<div id="statistic-site-widget" class="box statistic-widget">
+	<div class="title"><?php echo lang('statistic::site-statistic') ?></div>
+	<ul class="menu">
+		<?php foreach($statistics as $statistic): ?>
+			<li>
+				<a href="<?php echo $statistic['link'] ?>" ajax="true"><span class="left"><i class="<?php echo $statistic['icon'] ?>"></i> <?php echo ucwords($statistic['title']) ?></span><span class="right"><?php echo $statistic['count'] ?></span></a>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+	<div class="height-toggle">
+		<i class="indicator ion-android-arrow-dropdown"></i>
+	</div>
+</div>

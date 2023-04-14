@@ -1,0 +1,84 @@
+<div class="wrapper">
+	<div class="wrapper-title"><?php echo lang('music::playlists-manager') ?></div>
+	<div class="wrapper-content">
+		<form action="" method="get" class="form-inline" style="margin: 20px 0">
+			<?php CSRFProtection::embed() ?>
+			<select class="c-select" name="limit">
+				<option value="10">10 Per Page</option>
+				<option value="20">20 Per Page</option>
+				<option value="50">50 Per Page</option>
+				<option value="100">100 Per Page</option>
+				<option value="150">150 Per Page</option>
+				<option value="200">200 Per Page</option>
+			</select>
+			<input type="hidden" class="music-type-input" value="<?php echo input('type', 'browse') ?>"/>
+			<input name="term" value="<?php echo input('term') ?>" type="text" class="form-control"
+			       placeholder="<?php echo lang('music::search-playlists') ?>"/>
+			<button class="btn btn-info"><?php echo lang('go') ?></button>
+		</form>
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-music-batch-action') ?>?action=delete_list"
+					   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th style="width:5%">ID</th>
+						<th style="width:25%"><?php echo lang('title') ?></th>
+						<th style="width:20%"><?php echo lang('owner') ?></th>
+						<th style="width:10%"><?php echo lang('featured') ?></th>
+						<th style="width:10%"><?php echo lang('music::play-count') ?></th>
+						<th style="widows: 20;%"><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($playlists->results() as $playlist): ?>
+						<tr>
+							<th>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $playlist['id'] ?>"></div>
+							</th>
+							<td><?php echo $playlist['id'] ?></td>
+							<td>
+								<a href="<?php echo get_playlist_url($playlist) ?>"><?php echo $playlist['title'] ?></a>
+							</td>
+							<td>
+								<?php $owner = get_playlist_owner($playlist) ?>
+								<a href="<?php echo $owner['link'] ?>"><?php echo $owner['name'] ?></a>
+							</td>
+							<td>
+								<?php echo ($playlist['featured']) ? lang('yes') : lang('no') ?>
+							</td>
+							<td><?php echo $playlist['play_count'] ?></td>
+
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-edit"
+										   href='<?php echo url_to_pager('admin-playlist-manage-pager').'?action=edit&id='.$playlist['id'] ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-android-delete"
+										   href="<?php echo url_to_pager('admin-playlist-manage-pager').'?action=delete&id='.$playlist['id'] ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php echo $playlists->links() ?>
+	</div>
+</div>

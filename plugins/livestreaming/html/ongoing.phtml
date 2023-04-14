@@ -1,0 +1,56 @@
+<?php $livestreams = get_livestreams('ongoing', 'all', null, null, 3, 'all');?>
+<?php if($livestreams->total):?>
+    <?php 
+	foreach($livestreams->results() as $livestream):
+		$user = find_user($livestream['user_id']);
+		$username = $user["first_name"]." ".$user["last_name"];
+		$likes = count_likes("livestream", $livestream['id']);
+		$comments = count_comments("livestream", $livestream['id']);
+		//$ended = livestream_ended($slug) ? 'true' : 'false';
+	?>
+<?php
+if(!isset($_GET['from_frame'])): ?>
+        <div class="media media-lg user">
+            <div class="media-left"><a onclick="loadLivestreamFrame(<?php echo ($livestream['id']); ?>, false )" href="#!"><div class="media-object"style="background-image: url(<?php echo $livestream['preview_path'] ? url_img($livestream['preview_path'], 75) : img('livestreaming::images/preview.png', 75) ?>); background-position: center; background-size: cover;"></div></a></div>
+            <div class="media-body">
+                <a onclick="loadLivestreamFrame(<?php echo ($livestream['id']); ?>, false )" href="#!"><h6 class="media-heading" style="font-weight: normal"><?php echo $username." is livestreaming: ".($livestream['title']) ? $livestream['title'] : lang('livestream::untitled-livestream')?></h6></a>
+                <p class="help-block"><?php echo str_limit($livestream['description'], 70)?></p>
+            </div>
+        </div>
+<?php else: ?>
+                    <li>
+                      <a>
+                        <span class="image">
+                          <img src="<?php echo $livestream['preview_path'] ? url_img($livestream['preview_path'], 75) : img('livestreaming::images/preview.png', 75) ?>" alt="img">
+                        </span>
+                        <span>
+                          <span><?php echo $username; ?><sup class="time">3 mins ago</sup></span>
+                          
+                        </span>
+                        <span class="message">
+                          <?php _lang("livestreaming::is-live-on") ?> <em><?php echo ($livestream['title']) ? $livestream['title'] : lang('livestream::untitled-livestream')?></em>
+                        </span>
+                      </a>
+                    </li>
+					<li><span class="msg_list-footer">
+						<span class="pull-left"> <?php echo $livestream['view_count']; ?> <i class="ion-ios-eye"></i> <a onClick="tjoinStream('<?php echo $livestream['id'] ?>', '<?php echo ($livestream['broadcast_token']) ?>')" style="cursor:pointer"> JOIN</a></span>
+						<span id="comment_like_count" class="like-count pull-right"><?php echo $comments; ?> <i class="ion-chatbubbles"></i> <?php echo $likes; ?> <i class="ion-thumbsup"></i></span>
+					</li>
+    <?php 
+	endif;
+	endforeach?>
+<?php else:
+if(!isset($_GET['from_frame'])):
+?>
+        <div class="media media-lg user">
+            <div class="media-body">
+			<?php echo _lang('livestreaming::none-streaming'); ?>
+            </div>
+        </div>
+<?php else: ?>
+		<li><a>
+			<?php echo _lang('livestreaming::none-streaming'); ?>
+		</a></li>
+<?php 
+endif;
+endif; ?>

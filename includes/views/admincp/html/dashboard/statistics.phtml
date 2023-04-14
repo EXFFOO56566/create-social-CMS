@@ -1,0 +1,351 @@
+<div class="wrapper">
+	<div class="wrapper-title" style="position: relative">
+		<?php echo lang('admin-dashboard') ?>
+		<span><?php echo lang('admin-dashboard-desc') ?></span>
+		<span style="position: absolute;top: 20px;right: 20px;font-weight: bold;font-size: 30px;color: green"><?php echo lang('current-version') ?> - <?php echo $app->version ?></span>
+	</div>
+	<div class="wrapper-content">
+		<?php $version = get_our_latest_version(); ?>
+		<?php if($version && version_compare($version, app()->version) == 1 && $version != 'trial'): ?>
+			<div class="alert alert-danger">A new version is now available
+				<strong>(Version : <?php echo $version ?>)</strong>. Kindly login to our dashboard to download the latest version
+			</div>
+		<?php endif ?>
+		<div class="row">
+			<div class="col-lg-7">
+				<div id="demo-panel-network" class="block" style="background-color: white;">
+					<div class="pad-all">
+						<div class="box">
+							<?php $year = input('year', date('Y')); ?>
+							<div class="title">
+								<?php echo $year ?> - <?php echo lang('statistics') ?>
+								<span class="pull-right action">
+	                            <select id="admincp-statistics-input" onchange="reload_statistics(this)" data-link="<?php echo url_to_pager('admin-statistic') ?>" data-year="<?php echo $year ?>" class="c-select">
+	                                <?php for($i = 2013; $i <= date('Y'); $i++): ?>
+		                                <option <?php echo ($year == $i) ? 'selected' : null ?> value="<?php echo $i ?>"><?php echo $i ?></option>
+	                                <?php endfor ?>
+	                            </select>
+	                        </span>
+							</div>
+							<div class="box-content">
+								<div id="charts-stats">
+									<img style="width: 30px;margin: 10% auto;display: block" src="<?php echo img('images/loading.gif') ?>"/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<p class="text-semibold text-uppercase text-main"><?php echo lang('quick-links'); ?></p>
+						<div class="row">
+							<?php foreach(get_menus('admincp-quick-link') as $menu): ?>
+								<div class="col-md-4">
+									<a href="<?php echo $menu->link ?>">
+										<p><?php echo $menu->title ?></p>
+									</a>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-5">
+				<div class="row">
+					<?php $sn = 0;
+					foreach($statistics as $stat): ?>
+						<?php $sn++;
+						$colors = array('cabaret', 'seance', 'wisteria', 'royal-blue', 'spray', 'madison', 'chambray', 'malibu', 'steel-blue', 'jelly-bean', 'downy', 'saffron', 'crusta', 'lynch', 'edward');
+						$key = array_rand($colors, 1);
+						$color = $colors[$key];
+						if($stat['title'] == 'Posts' or $stat['title'] == 'Members' or $stat['title'] == 'Online Members' or $stat['title'] == 'Verification Requests'): ?>
+							<div class="col-sm-6 col-lg-6">
+								<a style="text-decoration: none;" href="<?php echo $stat['link'] ?>">
+									<div class="block panel-colorful stats1 <?php echo $color ?>">
+										<div class="content clearfix pad-all">
+											<p class="white text-semibold">
+												<i
+														class="white demo-pli-data-storage icon-fw"></i> <?php echo $stat['title'] ?>
+											</p>
+
+											<p class="mar-no" style="float: left; ">
+												<span class="pull-left text-2x mar-no text-semibold white"><?php echo $stat['count'] ?></span>
+											</p>
+
+											<div class="right pull-right" style="float: right; ">
+												<div>
+													<i class="<?php echo $stat['icon'] ?> icon-3x white"></i>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</a>
+							</div>
+						<?php endif; ?>
+					<?php endforeach ?>
+				</div>
+                <div class="panel" style="background-color: white;">
+                    <div class="panel-body">
+                        <span class="text-semibold text-uppercase text-main"><?php echo lang('support-quick-links'); ?></span>
+                        <div class="row">
+                            <?php foreach(get_menus('support-quick-link') as $menu): ?>
+                                <div class="col-sm-4">
+                                    <a target="_blank" href="<?php echo $menu->link ?>">
+                                        <span class="text-sm text-muted mar-no"><?php echo $menu->title ?> <?php if ($menu->id =="change-log") echo "[".$version."]"?></span>
+                                    </a>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                    </div>
+                </div>
+				<div class="panel" style="background-color: white;">
+					<div class="panel-body text-center row clearfix">
+						<div class="col-sm-4 pad-top">
+							<div class="text-lg">
+								<p class="text-5x text-thin text-main"><?php echo count_plugins(); ?></p>
+							</div>
+							<p class="text-sm text-bold">PLUGINS</p>
+						</div>
+						<div class="col-sm-8">
+							<a href="<?php echo url_to_pager("manage-plugins") ?>" class="btn btn-pink mar-ver">Manage Plugins</a>
+							<div class="bord-top pad-top mar-no row" style="padding: 5px !important;">
+								<div class="row">
+									<div class="col-md-6 ">
+										<span class="text-lg text-semibold text-main"><?php echo active_plugins(); ?></span>
+										<p class="text-sm text-muted mar-no">Active Plugins</p>
+									</div>
+									<div class="col-md-6 ">
+										<span class="text-lg text-semibold text-main"><?php $cnt = count_plugins() - active_plugins();
+											echo $cnt; ?></span>
+										<p class="text-sm text-muted mar-no">Inactive Plugins</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<?php foreach($statistics as $stat): ?>
+				<?php
+				$colors = array('cabaret', 'seance', 'wisteria', 'royal-blue', 'spray', 'madison', 'chambray', 'malibu', 'steel-blue', 'jelly-bean', 'downy', 'saffron', 'crusta', 'lynch', 'edward');
+				$key = array_rand($colors, 1);
+				$color = $colors[$key];
+				$os = array("Posts", "Members", "Online Members", "Verification Requests");
+				if(in_array($stat['title'], $os)):
+				else: ?>
+					<div class="col-md-3 ">
+						<a style="text-decoration: none;" href="<?php echo $stat['link'] ?>">
+							<div class="block <?php echo $color ?> panel-colorful media middle pad-all">
+								<div class="media-left">
+									<div class="pad-hor">
+										<i class="white <?php echo $stat['icon'] ?> icon-3x"></i>
+									</div>
+								</div>
+								<div class="media-body">
+									<p class="text-2x mar-no white text-semibold"><?php echo $stat['count'] ?></p>
+									<p class="mar-no white"><?php echo $stat['title'] ?></p>
+								</div>
+							</div>
+						</a>
+					</div>
+				<?php endif; endforeach ?>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-lg-4">
+				<div class="panel panel-trans">
+					<div class="panel-heading">
+						<h3 class="box-title">Reports</h3>
+					</div>
+					<?php $reports = get_reports(); ?>
+					<div class="table-responsive">
+						<table class="table table-striped list-table">
+							<thead>
+							<tr>
+								<th><?php echo lang('message') ?></th>
+								<th><?php echo lang('report::reported-by-who') ?></th>
+								<th><?php echo lang('actions') ?></th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php foreach($reports->results() as $report): ?>
+								<?php $user = find_user($report['user_id']) ?>
+								<tr>
+									<td><?php echo $report['message'] ?></td>
+									<td>
+										<a href="<?php echo url($user['username']) ?>" class="view-profile" ajax="true">
+											<i class="ion-android-person"> </i> <?php echo $user['first_name']." ".$user['last_name']; ?>
+										</a>
+									</td>
+									<td>
+										<div class="dropdown actions">
+											<a href="#" data-toggle="dropdown">
+												<i class="ion-android-settings"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a class="ion-edit" onclick="return window.open('<?php echo $report['link'] ?>')" nofollow='nofollow' href='javascript::void(0)'></a> |
+												<a class="admin-confirm ion-android-delete" href="<?php echo url_to_pager('admincp-reports-delete') ?>?id=<?php echo $report['report_id'] ?>"></a>
+											</div>
+										</div>
+									</td>
+								</tr>
+							<?php endforeach ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-lg-4">
+				<div class="box">
+					<h3 class="box-title">Verification Requests</h3>
+					<?php $requests = get_verification_requests(); ?>
+					<div class="table-responsive">
+						<table class="table table-striped list-table">
+							<thead>
+							<tr>
+								<th style="width: 25%"><?php echo lang('entity') ?></th>
+								<th style="width: 15%"><?php echo lang('type') ?></th>
+								<th style="width: 15%"><?php echo lang('time') ?></th>
+								<?php fire_hook('more.verified.extend.head', null, array()); ?>
+								<th style="width: 24%; text-align:center;"><?php echo lang('actions') ?></th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php foreach($requests->results() as $request): ?>
+								<tr>
+									<td>
+										<?php if($request['type'] == 'user'): $user = find_user($request['type_id']) ?>
+											<a href="<?php echo profile_url(null, $user) ?>">
+												<img src="<?php echo get_avatar(75, $user) ?>" width="30" height="30"/>
+												<h6><?php echo get_user_name($user) ?></h6>
+											</a>
+										<?php else: $page = find_page($request['type_id']) ?>
+											<a href="<?php echo page_url(null, $page) ?>">
+												<img src="<?php echo get_page_logo(75, $page) ?>" width="30" height="30"/>
+												<h6><?php echo $page['page_title'] ?></h6>
+											</a>
+										<?php endif ?>
+									</td>
+									<td><?php echo ucwords($request['type']) ?></td>
+									<td><?php echo date('d F Y g:i', $request['time']) ?></td>
+									<?php fire_hook('more.verified.extend.body', $request, array()); ?>
+									<td>
+										<div class="dropdown actions">
+											<a href="#" data-toggle="dropdown">
+												<i class="ion-android-settings"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" data-toggle="modal" data-target="#myModal-<?php echo $request['type'] ?>-<?php echo $request['type_id'] ?>" class="offer-img ion-eye text-primary" title="<?php echo lang('view') ?>"></a>
+												<a href="<?php echo url('admincp/verify/action?type=ignore&id='.$request['id']) ?>" class="<?php echo $request['approved'] ? 'ion-android-delete text-danger' : 'ion-ios-close text-info' ?>" title="<?php echo $request['approved'] ? lang('revoke') : lang('ignore') ?>"></a>
+												<?php if(!$request['approved']): ?>
+													<a href="<?php echo url('admincp/verify/action?type=approve&id='.$request['id']) ?>" data-uid="<?php echo $request['type_id']; ?>" class="ion-ios-checkmark text-success <?php echo ($request['type'] == 'user') ? 'approve-entitiy' : ''; ?>" title="<?php echo lang('approve') ?>"></a>
+												<?php endif ?>
+											</div>
+										</div>
+									</td>
+								</tr>
+							<?php endforeach ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-lg-4">
+				<?php $blogs = @file_get_contents('http://crea8social.com/blogs/api');
+				if($blogs) {
+					$blogs = json_decode($blogs, true);
+				}
+				?>
+				<?php if($blogs): ?>
+					<div class="box">
+						<div class="title">Latest News</div>
+						<div class="box-content" style="height: 300px;overflow: auto">
+							<?php foreach($blogs as $blog): ?>
+								<div class="media" style="margin-bottom: 5px">
+									<div class="media-body">
+										<a href="http://crea8social.com/prowebsite/<?php echo 'blog/'.$blog['slug'] ?>" style="font-weight: lighter ">
+											<h5><?php echo $blog['title'] ?></h5>
+										</a>
+										<p>
+											<?php echo str_limit($blog['content'], 100) ?>
+										</p>
+									</div>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
+				<?php endif ?>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel">
+					<div class="panel-heading">
+						<h3 class="panel-title">Latest Members</h3>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-striped list-table">
+								<thead>
+								<tr>
+									<th><?php echo lang('avatar') ?></th>
+									<th><?php echo lang('name') ?></th>
+									<th><?php echo lang('username') ?></th>
+									<th><?php echo lang('country') ?></th>
+									<th><?php echo lang('ip-address') ?></th>
+									<th><?php echo lang('email-address') ?></th>
+									<th><?php echo lang('last-seen') ?></th>
+									<th><?php echo lang('role') ?></th>
+									<th><?php echo lang('actions') ?></th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $filter = array('feature' => 'both');
+								$users = people_get_users($filter, '5'); ?>
+								<?php foreach($users->results() as $user): ?>
+									<tr>
+										<td>
+											<a href="<?php echo profile_url(null, $user) ?>"><img src="<?php echo get_avatar(75, $user) ?>" style="width: 30px;height: 30px" class="thumb"/></a>
+										</td>
+										<td>
+											<a href="<?php echo profile_url(null, $user) ?>" class="title"><?php echo get_user_name($user) ?></a>
+										</td>
+										<td>
+											<a href="<?php echo profile_url(null, $user) ?>"><?php echo $user['username'] ?></a>
+										</td>
+										<td><?php echo ucwords($user['country']) ?></td>
+										<td><?php echo $user['ip_address'] ?></td>
+										<td><?php echo $user['email_address'] ?></td>
+										<td><?php echo date('l jS \of F Y h:i:s A', $user['online_time']) ?></td>
+										<td>
+											<?php $userRole = ($user['role']) ? $user['role'] : 2; ?>
+											<?php foreach(list_user_roles() as $role): ?>
+												<?php if($role['role_id'] == $userRole): ?>
+													<?php echo $role['role_title'] ?>
+													<?php break ?>
+												<?php endif ?>
+											<?php endforeach ?>
+										</td>
+										<td>
+											<div class="dropdown actions">
+												<a href="#" data-toggle="dropdown">
+													<i class="ion-android-settings"></i>
+												</a>
+												<div class="dropdown-menu dropdown-menu-right">
+													<?php echo fire_hook('admin.user.manager.members.actions.buttons.extend', null, array('', $user['id'])); ?>
+													<a href="<?php echo url_to_pager('admin-user-action') ?>?type=edit&id=<?php echo $user['id'] ?>" class="ion-edit"></a>
+													<a href="<?php echo url_to_pager('admin-user-action') ?>?type=delete&id=<?php echo $user['id'] ?>" class="admin-confirm ion-android-delete"></a>
+												</div>
+											</div>
+										</td>
+									</tr>
+								<?php endforeach ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

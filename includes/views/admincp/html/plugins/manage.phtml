@@ -1,0 +1,112 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('manage-plugins') ?>
+	</div>
+	<div class="wrapper-content">
+
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="plugins">
+				<div class="col-sm-12">
+					<!--                    <a href="--><?php //echo url_to_pager('admin-plugin-action-batch') ?><!--?action=activate"-->
+					<!--                       class="action-link list-table-select-action"-->
+					<!--                       data-group="plugins">--><?php //echo lang('activate') ?><!--</a>-->
+					<a href="<?php echo url_to_pager('admin-plugin-action-batch') ?>?action=deactivate"
+					   class="action-link list-table-select-action"
+					   data-group="plugins"><?php echo lang('deactivate') ?></a>
+					<a href="<?php echo url_to_pager('admin-plugin-action-batch') ?>?action=update"
+					   class="action-link list-table-select-action"
+					   data-group="plugins"><?php echo lang('update') ?></a>
+					<a href="<?php echo url_to_pager('admin-plugin-action-batch') ?>?action=delete"
+					   class="action-link list-table-select-action"
+					   data-group="plugins"><?php echo lang('delete') ?></a>
+					<?php // fire_hook('admin.user.list.actions'); ?>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="plugins" data-id="0"></div>
+						</th>
+						<th></th>
+						<th><?php echo lang('name') ?></th>
+						<th><?php echo lang('version') ?></th>
+						<th><?php echo lang('author') ?></th>
+						<th><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($plugins as $plugin => $info): ?>
+						<?php if(!(isset($info['core']) && $info['core'])): ?>
+							<tr id="plugin-<?php echo $plugin ?>">
+								<td>
+									<div class="list-table-select" data-group="plugins" data-id="<?php echo $plugin; ?>"></div>
+								</td>
+								<?php $colors = array('cabaret', 'seance', 'wisteria', 'royal-blue', 'spray', 'madison', 'chambray', 'malibu', 'steel-blue', 'jelly-bean', 'downy', 'saffron', 'crusta', 'lynch', 'edward');
+								$key = array_rand($colors, 1);
+								$color = $colors[$key]; ?>
+								<td>
+									<div align="center" class="align-item-center <?php echo $color; ?>" style="border-radius: 50%; width: 50px;
+        height: 50px;">
+										<h1 class="white"><?php $lt = substr($info['title'], 0, 1);
+											echo strtoupper($lt); ?></h1>
+									</div>
+								</td>
+								<td>
+									<h5><?php echo $info['title'] ?></h5>
+									<p><?php echo $info['description'] ?></p>
+								</td>
+								<td><?php echo $info['version'] ?></td>
+								<td><?php echo $info['author'] ?></td>
+								<td style="position: relative">
+									<?php if(plugin_exists($plugin)): ?>
+										<div style="position: absolute; top: 0px; right: 0px; padding: 4px 16px; background-color: #81CFE0; color: #FFFFFF;"><?php echo lang('active') ?></div>
+									<?php endif; ?>
+									<div class="dropdown actions">
+										<a href="#" data-toggle="dropdown">
+											<i class="ion-android-settings"></i>
+										</a>
+										<div class="dropdown-menu dropdown-menu-right">
+											<?php if(plugin_exists($plugin)): ?>
+												<a title="<?php echo lang('deactivate') ?>" href="<?php echo url_to_pager("manage-plugins") ?>?action=deactivate&id=<?php echo $plugin ?>" class="ion-ios-close text-info"></a>
+											<?php else: ?>
+												<a title="<?php echo lang('activate') ?>" href="<?php echo url_to_pager("manage-plugins") ?>?action=activate&id=<?php echo $plugin ?>" class="ion-ios-checkmark text-success plugin-activate"></a>
+											<?php endif; ?>
+											<a title="<?php echo lang('update') ?>" href="<?php echo url_to_pager("manage-plugins") ?>?action=update&id=<?php echo $plugin ?>" class="ion-android-arrow-dropup-circle text-primary"></a>
+											<a title="<?php echo lang('delete') ?>" href="<?php echo url_to_pager("manage-plugins") ?>?action=delete&id=<?php echo $plugin ?>" class="admin-confirm ion-android-delete text-danger"></a>
+										</div>
+									</div>
+								</td>
+							</tr>
+						<?php endif; ?>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row pagination">
+			<div class="col-sm-12">
+				<?php // echo $users->links(); ?>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="plugin-activate-modal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<p class="modal-title" style="font-weight: bold"><?php echo lang('activation') ?></p>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div>
+					<input type="hidden" class="form-control" name="id"/>
+					<input type="text" class="form-control" name="activation_code" value="" placeholder="<?php echo lang('enter-license-key') ?>" required/>
+					<a id="plugin-license-activate" href="<?php echo url_to_pager('manage-plugins') ?>?action=activate" class="btn btn-sm btn-success" style="position: relative; top: -33px; left: calc(100% - 70px);"><?php echo lang('activate') ?></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

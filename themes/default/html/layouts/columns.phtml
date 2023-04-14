@@ -1,0 +1,44 @@
+<?php $content = isset($pageDetails['page_type']) && $pageDetails['page_type'] == 'auto' ? html_entity_decode($content, ENT_QUOTES) : $content; ?>
+<div class=" columns-container <?php echo Pager::getColumnTypeName($type) ?>">
+	<div class="top top-default  <?php echo (in_array($type, array(5, 6, 7, 8))) ? 'container' : null ?>">
+		<?php fire_hook('layout.column.top.before') ?>
+		<?php if(in_array($type, array(5, 6, 7, 8, 13, 14, 15, 16))): ?>
+			<?php echo view('layouts/column/load', array('position' => 'top', 'content' => $content, 'type' => $type, 'page' => $page)) ?>
+		<?php endif ?>
+		<?php fire_hook('layout.column.top.after') ?>
+	</div>
+	<div class="container">
+		<div class="middle-container row clearfix">
+			<div class="left-col col-md-4">
+				<div class="left-col-content">
+					<?php fire_hook('layout.column.left.before') ?>
+					<?php if(in_array($type, array(3, 4, 7, 8, 11, 12, 15, 16))): ?>
+						<?php echo view('layouts/column/load', array('position' => 'left', 'content' => $content, 'type' => $type, 'page' => $page)) ?>
+					<?php endif ?>
+					<?php fire_hook('layout.column.left.after') ?>
+				</div>
+			</div>
+			<div class="middle-col col-md-4">
+				<?php fire_hook('layout.column.middle.before') ?>
+				<?php echo view('layouts/column/load', array('position' => 'middle', 'content' => $content, 'type' => $type, 'page' => $page)) ?>
+				<?php fire_hook('layout.column.middle.after') ?>
+			</div>
+			<div class="right-col col-md-4" id="right-widgets">
+				<div class="right-col-content">
+					<?php fire_hook('layout.column.right.before') ?>
+					<?php if(in_array($type, array(2, 4, 6, 8, 10, 12, 14, 16))): ?>
+						<?php echo view('layouts/column/load', array('position' => 'right', 'content' => $content, 'type' => $type, 'page' => $page)) ?>
+					<?php endif ?>
+					<?php fire_hook('layout.column.right.after') ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bottom container">
+		<?php fire_hook('layout.column.bottom.before') ?>
+		<?php if(in_array($type, array(9, 10, 11, 12))): ?>
+			<?php echo view('layouts/column/load', array('position' => 'bottom', 'content' => $content, 'type' => $type, 'page' => $page)) ?>
+		<?php endif ?>
+		<?php fire_hook('layout.column.bottom.after') ?>
+	</div>
+</div>

@@ -1,0 +1,32 @@
+<div class="box">
+	<div class="title"><?php echo lang('livestreaming::ongoing-livestream') ?></div>
+	<div class="box-content" id="livestream-widget-o"></div>
+</div>
+<script>
+    let ongoing_req = null;
+    let ongoing_req_active = false;
+
+    function loadOngoing(e) {
+        //(e || window.event).preventDefault();
+        var con = document.getElementById('livestream-widget-o');
+        if (ongoing_req_active) ongoing_req.abort();
+        ongoing_req_active = true;
+        ongoing_req = new XMLHttpRequest();
+
+        ongoing_req.onreadystatechange = function (e) {
+            if (ongoing_req.readyState == 4 && ongoing_req.status == 200) {
+                con.innerHTML = ongoing_req.responseText;
+            }
+            ongoing_req_active = false;
+        }
+
+        ongoing_req.open("GET", "<?php echo url("livestreams/ongoing"); ?>", true);
+        ongoing_req.setRequestHeader('Content-type', 'text/html');
+        ongoing_req.send();
+        setTimeout(loadOngoing, 10000);
+    }
+
+    if (typeof document.getElementById('livestream-widget-o') !== "undefined") {
+        loadOngoing();
+    }
+</script>

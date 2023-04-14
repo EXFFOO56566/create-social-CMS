@@ -1,0 +1,155 @@
+.follow-button,
+.follow-button:active,
+.follow-button:visited,
+.ready-friend,
+.ready-friend:active,
+.ready-friend:visited {
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    text-transform: capitalize;
+}
+
+.followed {
+
+}
+
+.followed:hover,
+.followed:focus,
+.followed:active {
+    background: #CF433E;
+    border-color: #CF433E;
+    color: #ffffff;
+}
+
+.friend-button {
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    text-transform: capitalize;
+}
+
+.ready-friend {
+
+}
+
+.ready-friend:hover,
+.ready-friend:focus,
+.ready-friend:active {
+    background: #CF433E;
+    border-color: #CF433E;
+    color: #ffffff;
+}
+
+.friend-request-dropdown-result-container {
+
+}
+
+.friend-request-dropdown-result-container .user {
+    padding: 10px;
+    background: #F9FAFB;
+    margin: 0;
+}
+
+.friend-request-dropdown-result-container .user:hover {
+    background: #E5E9EF;
+}
+
+#people-suggestion-box .user {
+    border-bottom: solid 1px #F1F3F6;
+    padding-bottom: 4px;
+}
+
+.feed-new-friends {
+    margin: 0 10px;
+    border: solid 1px #ECECEC;
+}
+
+.feed-new-friends .media {
+    padding: 10px;
+    border-bottom: solid 1px #F1F1F1;
+    margin: 0;
+}
+
+.feed-new-friends .media:last-child {
+    border-bottom: none;
+}
+
+/* Relationship status
+ */
+#relationship {
+    width: 100%;
+    height: 100%;
+}
+
+.relationSelector {
+    height: 22px;
+    margin-right: 5px;
+    margin-top: 0;
+    vertical-align: middle;
+}
+
+#relationship .foreground {
+    background-color: rgba(255, 255, 255, .5);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    text-align: center;
+    display: none;
+}
+
+#relationship .indicator,
+#relationship .message {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    text-align: center;
+    display: none;
+}
+
+#relationship .message .alert {
+    width: 200px;
+    display: none;
+}
+
+#relation-avatar {
+    margin-left: 11px;
+    width: 40px;
+    margin-bottom: 7px;
+    float: left;
+    margin-right: 8px;
+}
+
+.relation-delete {
+    display: inline-block;
+    text-align: right;
+    width: 39%;
+    padding-right: 10px;
+    vertical-align: top;
+}
+.relation-edit-icon{
+    display: inline-block;
+    text-align: right;
+    width: 100%;
+    padding-right: 10px;
+    vertical-align: top;
+    margin-top: -20px;
+}
+
+.relation-more {
+    display: inline-block;
+    width: 60%;
+}
+
+.request-relation-image {
+    width: 50px;
+}
+
+.profile-about-menu {
+    list-style: none;
+}
+
+#relationship-families {
+    list-style: circle;
+}

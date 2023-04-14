@@ -1,0 +1,32 @@
+<div class="wrapper">
+	<div class="wrapper-title"><?php echo lang('event::add-category') ?>  </div>
+	<div class="wrapper-content">
+		<form method="post" action="" enctype="multipart/form-data" class="wrapper-form">
+			<?php CSRFProtection::embed() ?>
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<div class="form-group row">
+				<label class="col-sm-5 form-control-label"><?php echo lang('event::category-title') ?></label>
+				<div class="col-sm-7">
+					<?php foreach(get_all_languages() as $language): ?>
+						<input class="form-control" type="text" name="val[title][<?php echo $language['language_id'] ?>]" placeholder="<?php echo lang('game::category-title') ?>"/>
+						<br>
+						<p class="help-block"><?php echo $language['language_title'] ?></p>
+					<?php endforeach ?>
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-5"><?php echo lang("event::category-icon") ?>
+					<p style="color:green">
+						<?php echo lang("event::icon-description") ?>
+					</p>
+				</div>
+				<div class="col-sm-7">
+					<input type="file" name="image" class="form-control">
+				</div>
+			</div>
+			<button class="btn btn-info"><?php echo lang('event::add-category') ?></button>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,11 @@
+<div class="box">
+	<div class="title"><?php echo lang('menu') ?></div>
+	<ul class="menu">
+		<?php foreach(get_menus('page-manage') as $menu): ?>
+			<li class="clearfix">
+				<a ajax="true" href="<?php echo $menu->link ?>" class="pull-left"><?php echo $menu->title ?></a>
+				<i class="ion-ios-arrow-right pull-right"></i>
+			</li>
+		<?php endforeach ?>
+	</ul>
+</div>

@@ -1,0 +1,43 @@
+<div class="box">
+    <div class="title"><?php echo lang('socialmore::social-connections') ?></div>
+    <div class="box-content">
+        <form id="" class="" method="post" action="">
+            <div class="row form-group">
+                <div class="col-sm-6" style="font-weight: bold">
+                    <p class="title"> Facebook </p>
+                    <input value="<?php echo get_social_more('facebook','','users',get_userid())?>" name="val[facebook]" style="border-radius: 10px;" placeholder="<?php  echo lang('facebook-link')?>" type="link" class="form-control"/>
+                </div>
+                <div class="col-sm-6">
+                    <p class="title"> Twitter </p>
+                    <input value="<?php echo get_social_more('twitter','','users',get_userid())?>" name="val[twitter]" style="border-radius: 10px;" placeholder="<?php  echo lang('twitter-link')?>" type="link" class="form-control"/>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-6" style="font-weight: bold">
+                    <p class="title"> Google+ </p>
+                    <input value="<?php echo get_social_more('google','','users',get_userid())?>" name="val[google]" style="border-radius: 10px;" placeholder="<?php  echo lang('gplus-link')?>" type="link" class="form-control"/>
+                </div>
+                <div class="col-sm-6">
+                    <p class="title"> Vkontakte </p>
+                    <input value="<?php echo get_social_more('vkontakte','','users',get_userid())?>" name="val[vkontakte]" style="border-radius: 10px;" placeholder="<?php  echo lang('vk-link')?>" type="link" class="form-control"/>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-6" style="font-weight: bold">
+                    <p class="title"> LinkedIn </p>
+                    <input value="<?php echo get_social_more('linkedin','','users',get_userid())?>" name="val[linkedin]" style="border-radius: 10px;" placeholder="<?php  echo lang('linkedin-link')?>" type="link" class="form-control"/>
+                </div>
+                <div class="col-sm-6">
+                    <p class="title"> Youtube </p>
+                    <input value="<?php echo get_social_more('youtube','','users',get_userid())?>" name="val[youtube]" style="border-radius: 10px;" placeholder="<?php  echo lang('youtube-link')?>" type="link" class="form-control"/>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-9"></div>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn-primary btn"><i class="font-awesome-ismall fa fa-check-square-o"></i> <span style="font-weight: bold;"><?php echo strtoupper(lang("save")) ?></span></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

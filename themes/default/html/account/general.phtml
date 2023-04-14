@@ -1,0 +1,238 @@
+<div class="box">
+	<div class="title"><?php echo lang('general-settings') ?></div>
+	<div class="box-content">
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<form action="" class="ajax-form" method="post" enctype="multipart/form-data">
+			<?php CSRFProtection::embed() ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('first-name') ?>:</label>
+				</div>
+				<div class="right">
+					<input class="form-control" type="text" name="val[first_name]" value="<?php echo get_user_data("first_name") ?>"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('last-name') ?>:</label>
+				</div>
+				<div class="right">
+					<input class="form-control" type="text" name="val[last_name]" value="<?php echo get_user_data("last_name") ?>"/>
+				</div>
+			</div>
+			<?php fire_hook('user.type.signup', 1); ?>
+			<?php fire_hook('users.category.signup', null, array(true)); ?>
+			<?php if(config('request-verification', true)): ?>
+				<div class="field">
+					<div class="left"></div>
+					<div class="right">
+						<?php if(get_user_data('verified')): ?>
+							<button type="button" class="btn btn-success btn-block disabled">
+								<i class="ion-checkmark-circled"></i> <?php echo lang('verified') ?>
+							</button>
+						<?php else: ?>
+							<?php if(verify_requested('user', get_userid())): ?>
+								<button type="button" class="btn btn-danger btn-block disabled">
+									<i class="ion-checkmark-circled"></i> <?php echo lang('verify-requested') ?>
+								</button>
+							<?php else: ?>
+								<a href="#" data-toggle="modal" data-target="#myModal40" class="btn btn-secondary btn-block"><i class="ion-checkmark-circled"></i> <?php echo lang('request-verification') ?>
+								</a>
+							<?php endif ?>
+						<?php endif ?>
+					</div>
+				</div>
+			<?php endif ?>
+			<?php if(config('allow-change-email', true)): ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('email-address') ?>:</label>
+					</div>
+					<div class="right">
+						<input class="form-control" type="text" name="val[email_address]" value="<?php echo get_user_data("email_address") ?>"/>
+					</div>
+				</div>
+			<?php endif ?>
+			<?php if(config('allow-change-username', true)): ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('username') ?>:</label>
+					</div>
+					<div class="right">
+						<input class="form-control" type="text" name="val[username]" value="<?php echo get_user_data("username") ?>"/>
+						<?php if(config('loose-verify-badge-username', true) and get_user_data('verified') == 1) : ?>
+							<p class="help-block"><?php echo lang('loose-verified-warning') ?></p>
+						<?php endif ?>
+					</div>
+				</div>
+			<?php endif ?>
+			<?php echo fire_hook('user.additional.field', null, array()) ?>
+			<?php if(config('enable-gender', true)): ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('gender') ?></label>
+				</div>
+				<div class="right">
+					<label class="c-input c-radio">
+						<input <?php echo (get_user_data('gender') == "male") ? "checked" : null ?> id="radio1" value="male" name="val[gender]" type="radio">
+						<span class="c-indicator"></span>
+						<?php echo lang('male') ?>
+					</label>
+					<label class="c-input c-radio">
+						<input <?php echo (get_user_data('gender') == "female") ? "checked" : null ?> id="radio2" value="female" name="val[gender]" type="radio">
+						<span class="c-indicator"></span>
+						<?php echo lang('female') ?>
+					</label>
+					<?php fire_hook('account.gender') ?>
+				</div>
+			</div>
+			<?php endif; ?>
+            <?php fire_hook('enable.gender.exception'); ?>
+			<div class="dropdown-divider"></div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('bio') ?></label>
+				</div>
+				<div class="right">
+					<textarea name="val[bio]" class="form-control"><?php echo get_user_data('bio') ?></textarea>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('city') ?></label>
+				</div>
+				<div class="right">
+					<input type="text" class="form-control" value="<?php echo get_user_data('city') ?>" name="val[city]"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('state') ?></label>
+				</div>
+				<div class="right">
+					<input type="text" class="form-control" value="<?php echo get_user_data('state') ?>" name="val[state]"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('country') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[country]" data-width="300px">
+						<?php load_functions('country') ?>
+						<?php $countries = get_countries() ?>
+						<?php $country_name = get_user_data('country') ?>
+						<input type="hidden" name="val[country]" value="<?php echo $country_name ?>" class="magic-select-value"/>
+						<div class="magic-select-toggle">
+							<?php echo in_array($country_name, $countries) ? ucwords($country_name) : lang('select-country') ?>
+						</div>
+						<div class="magic-select-content slimscroll" data-height="200px">
+							<?php foreach($countries as $country => $name): ?>
+								<div class="magic-select-option" data-value="<?php echo $name ?>">
+									<?php echo ucwords($name) ?>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="dropdown-divider"></div>
+			<?php echo view('birthdate/form', array('day' => get_user_data('birth_day'), 'month' => get_user_data('birth_month'), 'year' => get_user_data('birth_year'))) ?>
+			<div class="dropdown-divider"></div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('avatar') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-input-image-preview" data-name="image" data-image="<?php echo get_avatar(75) ?>">
+						<span class="dimension"></span>
+					</div>
+				</div>
+			</div>
+			<div class="divider"></div>
+			<?php echo fire_hook('account.general.form.fields.extend'); ?>
+			<?php echo fire_hook('account.general.form.buttons.extend', null, array('')); ?>
+			<div class="submit">
+				<button type="submit" class="btn btn-info action-button"><?php echo lang('save-settings') ?></button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="modal fade" id="myModal40" role="dialog">
+    <div class="modal-dialog modal-lg1">
+        <div class="modal-content">
+			<div class="modal-header">
+				<div class="info-title">
+					<h4><?php echo lang('account-verification') ?></h4>
+				</div>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="info widget-shadow info-box">
+					<div class="info-body">
+						<form action="<?php echo url('user/verify/request') ?>" class="adm" method="post" enctype="multipart/form-data">
+							<?php echo CSRFProtection::embed() ?>
+							<input type="hidden" name="val[type]" value="user"/>
+							<input type="hidden" name="val[type_id]" value="<?php echo get_userid() ?>"/>
+							<div class="row form-group">
+								<?php $verification_question = get_verification_questions('user'); ?>
+								<?php foreach($verification_question as $vquestion): ?>
+									<?php if($vquestion['entity'] == 'user'): ?>
+										<?php if(($vquestion ['input_type']) == 'text'): ?>
+                                        <div class="field">
+                                            <div class="top"><label class="control-label"><?php echo $vquestion ['question']; ?>:</label></div>
+												<div class="bottom">
+													<input type="text" name="val[<?php echo $vquestion['id'] ?>]">
+												</div>
+                                        </div>
+										<?php elseif(($vquestion ['input_type']) == 'boolean'): ?>
+                                        <div class="field">
+                                            <div class="top"><label class="control-label"><?php echo $vquestion ['question']; ?>:</label></div>
+												<div class="bottom">
+													<select class="form-control" name="val[<?php echo $vquestion['id'] ?>]">
+														<option value="Yes">Yes</option>
+														<option value="No">No</option>
+													</select>
+												</div>
+                                        </div>
+										<?php elseif(($vquestion ['input_type']) == 'file'): ?>
+                                        <div class="field">
+                                            <div class="top"><label class="control-label"><?php echo $vquestion ['question']; ?>:</label></div>
+												<div class="bottom">
+													<input type="file" name="file<?php echo $vquestion['id'] ?>">
+												</div>
+                                        </div>
+										<?php elseif(($vquestion ['input_type']) == 'longtext'): ?>
+                                        <div class="field">
+                                            <div class="top"><label class="control-label"><?php echo $vquestion ['question']; ?>:</label></div>
+												<div class="bottom">
+													<textarea class="form-control"></textarea>
+												</div>
+                                        </div>
+										<?php endif ?>
+									<?php endif ?>
+								<?php endforeach ?>
+                            </div>
+							<div class="clear"></div>
+							<table class="button_table">
+								<tr>
+									<td align="center">
+										<a href="">
+											<button type="submit" name="submit" class="btn btn-sm btn-success"><?php echo lang('submit') ?></button>
+										</a>
+									</td>
+								</tr>
+							</table>
+						</form>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

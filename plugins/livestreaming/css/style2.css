@@ -1,0 +1,296 @@
+
+.htmlElement {
+    content: " ";
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.95);
+}
+
+audio, video {
+    -moz-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+
+    -o-transition: all 1s ease;
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+    vertical-align: top;
+    width: 100%;
+    height:: 100%;
+}
+
+#videos-container {
+    width: 70% !important;
+    background: #000000;
+    height: 100%;
+    float: left;
+    overflow: auto !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+}
+
+.livestream-video-container {
+    margin: auto auto;
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    max-height: -moz-calc(100vh - 92px);
+    max-height: -webkit-calc(100vh - 92px);
+    max-height: -o-calc(100vh - 92px);
+    max-height: calc(100vh - 92px);
+    width: 65%;
+}
+
+.control-container {
+    height: 111px;
+    width: 100%;
+    padding: 30px 20px 0 0;
+    background: white;
+    border-radius: 0 0 7px 7px;
+}
+
+.clear {
+    display: table;
+    clear: both;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+
+p {
+    padding: 1em;
+}
+
+#livestream-overlay .form {
+}
+
+#livestream-overlay .ongoing {
+    display: none;
+}
+
+#livestream-overlay .extra {
+    display: none;
+}
+
+#livestream-overlay .loader {
+    display: none;
+}
+
+.ext-container {
+    width: 34%;
+}
+
+.timer {
+    position: fixed;
+    top: 43px;
+    left: 10px;
+    width: 84px;
+    height: 30px;
+    color: #fff;
+    padding: 5px;
+    background: -webkit-linear-gradient(top, #008dfd 0, #0370ea 100%);
+    background: -moz-linear-gradient(top, #008dfd 0, #0370ea 100%);
+    border-radius: 0;
+    display: none;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.v-viewer {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: auto;
+    height: 30px;
+    color: #008dfd;
+    padding: 5px;
+    border: solid 1px #008dfd;
+    border-radius: 0;
+    display: none;
+    text-align: center;
+    font-weight: bolder;
+}
+
+#close-x {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    border-radius: 0;
+    display: block;
+    border: none;
+    background: -webkit-linear-gradient(top, #ff5600 0, #f85600 100%);
+    background: -moz-linear-gradient(top, #ff5600 0, #f85600 100%);
+    text-align: center;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+#close-x:hover {
+    color: #003;
+}
+
+#livestreamViewer .viewer-container {
+    background: #ffffff;
+    width: 90%;
+    height: 90%;
+    position: relative;
+}
+
+#livestreamViewer .viewer-container .close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#Viewer .viewer-container .modal-content {
+    border: none;
+    padding: 0;
+    height: 100%;
+}
+
+#livestreamViewer .viewer-container .modal-content .viewer-left {
+    width: 70% !important;
+    background: #000000;
+    height: 100%;
+    float: left;
+
+    overflow: auto !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+}
+
+.livestream-viewer-container {
+    background: #000000 !important;
+    padding: 20px;
+    position: relative;
+
+}
+
+#livestreamViewer .viewer-container .modal-content .viewer-left img,
+.livestream-viewer-container video {
+    margin: auto auto;
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    max-height: -moz-calc(100vh - 92px);
+    max-height: -webkit-calc(100vh - 92px);
+    max-height: -o-calc(100vh - 92px);
+    max-height: calc(100vh - 92px);
+
+}
+
+.livestream-viewer-container video {
+    position: relative;
+}
+
+#livestreamViewer .viewer-container .modal-content .viewer-left .navigate,
+.livestream-viewer-container .navigate {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 5%;
+    z-index: 99;
+    color: #ffffff;
+}
+
+#livestreamViewer .viewer-container .modal-content .viewer-left .navigate a,
+.livestream-viewer-container .navigate a {
+    font-size: 80px;
+    height: 100%;
+    display: block;
+    color: #ffffff;
+}
+
+#livestreamViewer .viewer-container .modal-content .viewer-left .navigate a i,
+.livestream-viewer-container .navigate a i {
+    position: relative;
+    top: 40%;
+    text-shadow: 2px 2px 4px black;
+}
+
+#livestreamViewer .viewer-container .modal-content .viewer-left .nav-left,
+.livestream-viewer-container .nav-left {
+    left: 2%;
+}
+
+#livestreamViewer .viewer-container .modal-content .viewer-left .nav-right,
+.livestream-viewer-container .nav-right {
+    right: 2%;
+}
+
+#livestreamViewer .viewer-container .modal-content .viewer-right {
+    float: left;
+    padding: 10px;
+    width: 100% !important;
+    height: 100%;
+    overflow: hidden;
+    display: block;
+
+}
+
+.livestream-viewer-footer {
+    margin-top: 5px;
+}
+
+.livestream-action-dropdown {
+    position: absolute;
+    top: 0;
+    right: 40px;
+}
+
+@media (max-width: 1200px) {
+    #livestreamViewer .viewer-container {
+        width: 100%;
+        margin: 0;
+    }
+
+    #livestreamViewer .viewer-container,
+    #livestreamViewer .viewer-container .modal-content {
+        height: 100%;
+    }
+}
+
+@media (max-width: 800px) {
+    #livestreamViewer {
+        margin: 0;
+        top: 0;
+        padding: 0;
+
+    }
+
+    #livestreamViewer .viewer-container .modal-content .viewer-left,
+    #livestreamViewer .viewer-container .modal-content .viewer-right {
+        width: 100% !important;
+
+    }
+
+    #livestreamViewer .viewer-container .modal-content .viewer-right {
+
+        position: relative;
+        display: none !important;
+    }
+
+    #livestreamViewer .viewer-container .close {
+        color: #ffffff;
+        z-index: 999;
+    }
+}

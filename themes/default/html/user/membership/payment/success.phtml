@@ -1,0 +1,22 @@
+<div class="box">
+	<div class="box-content">
+		<div class="alert alert-success">
+			<?php echo lang('membership-payment-success') ?>
+			<br>
+			<a class="btn btn-success" href="<?php echo url_to_pager('feed') ?>" ajax="true"><?php echo lang('membership-home') ?></a>
+		</div>
+
+        <?php
+            $url = url('feed');
+            if (user_need_welcome_page()) {
+                $url = url('user/welcome');
+            }
+        ?>
+        <script>
+            setTimeout(function(){
+                window.location.href='<?php echo $url?>'
+            },500);
+        </script>
+	</div>
+</div>
+

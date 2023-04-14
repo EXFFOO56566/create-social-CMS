@@ -1,0 +1,68 @@
+<div class="portable-login">
+	<form action="<?php echo url_to_pager('login') ?>" method="post">
+		<?php CSRFProtection::embed() ?>
+		<div class="form-group">
+			<input class="form-control" value="<?php echo input('val.username') ?>" type="text" name="val[username]" placeholder="<?php echo lang('username') ?>" autocomplete="off" />
+		</div>
+		<div class="form-group">
+			<input class="form-control" value="<?php echo input('val.password') ?>" type="password" name="val[password]" placeholder="<?php echo lang('password') ?>" autocomplete="off" />
+		</div>
+        <?php echo fire_hook('login.form.extend', null, array('is_portable' => true)) ?>
+        <div class="row">
+            <div class="col-md-8" style="padding-bottom: 10px;">
+                <a  href="<?php echo url_to_pager('forgot-password') ?>" class="already-member" style="margin: 0 80px 3px 3px;"><?php echo lang('forgot-password') ?></a>
+            </div>
+        </div>
+        <div class="row navigation-form-group">
+            <div class="col-sm-6">
+                <div class="navigation-button">
+                    <button class="btn btn-primary text-uppercase" style="display:inline-block;"> <?php echo lang('Sign in')?></button>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group already-member"> <?php echo lang('Need an account?')?>,
+                    <a id="register-form-link" href="javascript:void(0);" class="fox-sign-btn"><?php echo lang('Sign up Now')?></a>
+                </div>
+            </div>
+        </div>
+	</form>
+    <div class="third-auth-or navigation-form-group"> <span> OR </span></div>
+    <?php if(config('enable-facebook', false) || config('enable-twitter', false) || config('enable-googleplus', false) || config('enable-vk', false)): ?>
+        <div id="social-links-container">
+            <div class="sign-with-container">
+
+                <ul id="home-social-links">
+                    <?php if(config('enable-facebook', false)): ?>
+                        <li>
+                            <a class="facebook" href="<?php echo url_to_pager('facebook-auth') ?>">
+                                <i class="icon ion-social-facebook"></i>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php if(config('enable-twitter', false)): ?>
+                        <li>
+                            <a class="twitter" href="<?php echo url_to_pager('twitter-auth') ?>">
+                                <i class="icon ion-social-twitter"></i>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php if(config('enable-googleplus', false)): ?>
+                        <li>
+                            <a class="googleplus" href="<?php echo url_to_pager('googleplus-auth') ?>">
+                                <i class="ion-social-googleplus-outline"></i>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php if(config('enable-vk', false)): ?>
+                        <li>
+                            <a class="vk" href="<?php echo url_to_pager('vk-auth') ?>">
+                                <i class="ion-android-arrow-forward"></i>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php echo fire_hook('extend.third.party.auth', null, array()); ?>
+                </ul>
+            </div>
+        </div>
+    <?php endif ?>
+</div>

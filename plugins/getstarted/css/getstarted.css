@@ -1,0 +1,30 @@
+.getstarted-content {
+    padding: 20px 40px;
+}
+
+.getstarted-footer {
+    border-top: solid 1px #d3d3d3;
+    padding: 20px 40px;
+}
+
+#getstarted-image-input .dropbox {
+    width: 120px !important;
+    height: 120px !important;
+    opacity: 0;
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+}
+
+#getstarted-image-input .progress {
+    display: none !important;
+}
+
+#getstarted-image-input.avatar-preview-box {
+    width: 120px !important;
+    min-height: 120px !important;
+    background-size: cover;
+    background-position: center;
+    background-image: url(../images/droptargets.png);
+    border: dashed 2px #CCCCCC !important;
+}

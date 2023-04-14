@@ -1,0 +1,31 @@
+<?php
+    $menus = get_menus('admin-menu');
+    $custom_field_menus = array();
+    foreach($menus as $menu) {
+        if ($menu->title == "Settings") {
+            foreach ($menu->getMenus() as $subMenu) {
+                if ($subMenu->id == "admin-custom-field") {
+                    $custom_field_menus = $subMenu->getMenus();
+                }
+            }
+        }
+    }
+    $cat = "";
+    $type = input('type');
+    if (segment(2)) $cat = "categories";
+?>
+<div class="col-sm-3 settings-left">
+    <div>
+        <div class="title">
+            <a href="<?php echo url('admincp/settings') ?>" class="nav-back">
+                <i class="ion-arrow-left-c"></i>
+            </a>
+        </div>
+        <ul class="setting-menu">
+            <?php foreach ($custom_field_menus as $key => $custom_field_menu): ?>
+            <?php $icon = $custom_field_menu->icon?$custom_field_menu->icon:'ion-android-settings'?>
+                <li class="<?php if (($custom_field_menu->id == $type."-".$cat) || (($custom_field_menu->id == $type."-fields") && !segment(2))) echo "active"?>"><a class="" href="<?php echo $custom_field_menu->link?>"><i class="<?php echo $icon ?>"></i><?php echo $custom_field_menu->title ?> </a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>

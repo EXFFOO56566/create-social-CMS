@@ -1,0 +1,26 @@
+<div id="notification-<?php echo $notification['notification_id'] ?>" class="notification media media-md  <?php echo ($notification['mark_read'] == 0) ? 'notification-unread' : null ?>">
+	<div class="media-left">
+		<div class="media-object">
+			<a href="#" data-id="<?php echo $photo['id'] ?>" data-image="<?php echo url_img($photo['path'], 920) ?>" class="photo-viewer">
+				<img src="<?php echo url_img($photo['path'], 920) ?>"/>
+			</a>
+		</div>
+	</div>
+	<div class="media-body">
+		<a href="#" data-id="<?php echo $photo['id'] ?>" data-image="<?php echo url_img($photo['path'], 920) ?>" class="photo-viewer">
+			<h6 class="media-heading"><?php echo lang('facetag::tagged-you-in-photo', array('name' => get_user_name($notification))); ?></h6>
+		</a>
+		<span style="display: block" class="timeago" title="<?php echo date('c', $notification['time']) ?>"><?php echo date('c', $notification['time']) ?></span>
+		<div class="actions">
+			<a
+					class="mark-button"
+					data-status="<?php echo $notification['mark_read'] ?>"
+					data-read="<?php echo lang('notification::read') ?>"
+					data-mark="<?php echo lang('notification::mark-as-read') ?>"
+					title="<?php echo ($notification['mark_read'] == 1) ? lang('notification::read') : lang('notification::mark-as-read') ?> "
+					onclick="return process_notification_mark('<?php echo $notification['notification_id'] ?>')"
+					href="#!"><i class="ion-checkmark-circled"></i></a>
+			<a onclick="return delete_notification('<?php echo $notification['notification_id'] ?>')" href="#!"><i class="ion-close"></i></a>
+		</div>
+	</div>
+</div>

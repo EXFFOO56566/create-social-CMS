@@ -1,0 +1,17 @@
+<?php $like = get_type_like($type, $type_id) ?>
+<?php $code = $like['like_type']; ?>
+<?php $image = get_react_image($code); ?>
+<?php $array = array('1' => 'like', '4' => 'love', '5' => 'haha', '6' => 'yay', '7' => 'wow', '8' => 'sad', '9' => 'angry'); ?>
+<?php if($code): ?>
+	<div style="margin-top: 10px">
+        <?php
+        $reactors_count = count_reactors($type, $type_id);
+        if ($reactors_count != 0) echo $reactors_count;
+        ?>
+		 <img style="height: 21px;" src="<?php echo $image; ?>"/>
+		<span class="hidden-md-down"><?php echo lang('like::'.$array[$code]) ?></span>
+	</div>
+<?php else: ?>
+	<i class="fa fa-thumbs-o-up font-awesome-i"></i>
+	<span class="hidden-md-down"><?php echo lang('like::like') ?></span></
+<?php endif; ?>

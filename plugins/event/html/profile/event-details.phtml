@@ -1,0 +1,14 @@
+<div class=" event-about-discussion-container">
+	<div class="event-detailed-description more-detailed-description">
+            <span class="event-details-span">
+                <?php echo lang('event::event-details') ?>
+            </span>
+		<div style="clear: both;"></div>
+	</div>
+	<div class="_2qgs">
+            <span class="_4n-j _3cht fsl" data-testid="event-permalink-details">
+                <?php echo $event['event_desc'] ?>
+            </span>
+        <?php fire_hook('more.event.details', $event) ?>
+	</div>
+</div>

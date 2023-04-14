@@ -1,0 +1,73 @@
+<div id="topo" class="<?php echo isMobile() ? 'mobile ' : ''; ?>auto">
+	<div id="slides">
+		<div class="slide slide-1" style="z-index: 1;"></div>
+		<div class="slide slide-2"></div>
+		<div class="slide slide-3"></div>
+		<div id="topo-content"></div>
+	</div>
+</div>
+<div class="container">
+	<div class="home-seach-box">
+		<script>
+            function home_search(t) {
+                val = $(t).find('input').val();
+                url = baseUrl + 'search?type=event&term=' + val;
+                window.location.href = url
+
+                return false;
+            }
+		</script>
+		<h2 class="title"><?php _lang('Find your next experience') ?></h2>
+		<form action="" onsubmit="return home_search(this)" method="get">
+			<input name="term" type="text" placeholder="<?php _lang('event::search-events') ?>"/>
+			<button type="submit" class="btn btn-info "><?php _lang('search') ?></button>
+		</form>
+	</div>
+</div>
+<div class="container">
+	<div class="home-section">
+		<div class="title"><?php _lang('Join the our event community today') ?></div>
+		<a href="<?php echo url('login') ?>" class="btn btn-lg btn-info"><?php _lang('login') ?></a>
+		<a href="<?php echo url('signup') ?>" class="btn btn-lg btn-info"><?php _lang('signup-for-account') ?></a>
+	</div>
+</div>
+<div style="background: #F8F8FA">
+	<div class="container">
+		<div class="home-section">
+			<div class="title"><?php _lang('event::upcoming-events') ?></div>
+			<div class="row">
+				<?php
+				$type = input('type', 'upcoming');
+				$parameter = trim(input('param'));
+
+				$events = get_events($type, input('term'), 9, false, input('category'), 'user', '', $parameter);
+				?>
+				<?php foreach($events->results() as $event): ?>
+					<div class="col-md-4">
+						<div class="each-home-event">
+							<div class="logo" style="background-image: url(<?php echo get_event_logo($event) ?>)"></div>
+							<div class="info">
+								<span class="date"><?php echo date('D, F d, Y H:i a', $event['start_time']) ?></span>
+								<a href="<?php echo event_url(null, $event) ?>">
+									<h3 class="each-title">  <?php echo ucwords($event['event_title']) ?> </h3>
+								</a>
+							</div>
+						</div>
+					</div>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="home-section">
+		<div class="title"><?php _lang('event::browse-by-category') ?></div>
+		<div class="row">
+			<?php foreach(get_event_categories() as $category): ?>
+				<div class="col-md-3">
+					<a href=" <?php echo url('events?f=1&type=upcoming&term=&category='.$category['id']) ?>" class="home-category"><?php echo lang($category['title']) ?></a>
+				</div>
+			<?php endforeach ?>
+		</div>
+	</div>
+</div>

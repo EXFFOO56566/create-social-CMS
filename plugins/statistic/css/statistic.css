@@ -1,0 +1,66 @@
+#statistic-site-widget .menu {
+    height: 243px;
+    overflow: hidden;
+}
+
+#statistic-site-widget .menu {
+    transition: height .5s;
+    -webkit-transition: height .5s;
+    -moz-transition: height .5s;
+    transition-timing-function: ease-out;
+    -webkit-transition-timing-function: ease-out;
+}
+
+#statistic-site-widget .height-toggle {
+    text-align: center;
+    cursor: pointer;
+}
+
+#statistic-site-widget .height-toggle:hover {
+    background: rgba(0, 0, 0, .02);
+}
+
+#statistic-site-widget .height-toggle .indicator {
+    display: inline-block;
+    font-size: 18px;
+    transition: transform .1s;
+    -webkit-transition: transform .1s;
+    -moz-transition: transform .1s;
+    transition-timing-function: ease-out;
+    -webkit-transition-timing-function: ease-out;
+}
+
+.statistic-widget span.left {
+    font-weight: lighter;
+}
+
+.statistic-widget span.left i {
+    font-size: 28px;
+    display: inline-block;
+    padding: 0px 8px;
+    width: 40px;
+    vertical-align: -5px;
+}
+
+#statistic-site-widget.statistic-widget span.right {
+    float: right;
+    font-weight: lighter;
+    color: #247BBA;
+    padding: 10px 0px;
+    display: inline-block;
+    border: solid 1px rgba(0, 0, 255, .1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+#statistic-site-widget.statistic-widget li:hover {
+    background-color: rgba(128, 128, 128, .1);
+}
+
+#statistic-user-widget.statistic-widget span.right {
+    float: right;
+    font-weight: bold;
+    color: #247BBA;
+}

@@ -1,0 +1,44 @@
+<?php if(user_has_permission('can-use-currency-converter')): ?>
+	<?php $Currency = getCurrency(); ?>
+	<div id="currency-conversion" class="box">
+		<div class="title"><?php echo lang('currencyconversion::Currency Conversion') ?></div>
+		<div class="box-content">
+			<div class="row">
+				<div class="col-sm-3"><?php echo lang('currencyconversion::amount') ?></div>
+				<div class="col-sm-9">
+					<input id="currency-conversion-amount" class="form-control" type="number" placeholder="Amount" min="0" step="0.5" value="1"/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3"><?php echo lang('currencyconversion::from') ?></div>
+				<div class="col-sm-9">
+					<select name="currency" id="currency-conversion-from-currency" class="form-control">
+						<?php foreach($Currency as $currency => $value): ?>
+							<option value="<?php echo $value['ISO'] ?>"><?php echo $value['name'] ?></option>
+						<?php endforeach ?>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3"><?php echo lang('currencyconversion::to') ?></div>
+				<div class="col-sm-9">
+					<select name="currency-conversion-to-currency" id="currency-conversion-to-currency" class="form-control">
+						<?php foreach($Currency as $currency => $value): ?>
+							<option value="<?php echo $value['ISO'] ?>"><?php echo $value['name'] ?></option>
+						<?php endforeach ?>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div id="currency-conversion-currency-result">&nbsp;</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<button onclick="convertCurrency(document.getElementById('currency-conversion-amount').value, document.getElementById('currency-conversion-from-currency').value, document.getElementById('currency-conversion-to-currency').value)" class="btn btn-block btn-secondary"><?php echo lang('currencyconversion::Convert') ?></button>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif ?>

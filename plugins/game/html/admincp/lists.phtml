@@ -1,0 +1,81 @@
+<div class="wrapper">
+	<div class="wrapper-title"><?php echo lang('game::manage-games') ?></div>
+	<div class="wrapper-content">
+		<div class="row">
+			<div class="col-sm-7">
+				<form action="<?php echo url_to_pager('admin-game-lists') ?>?type=search" method="get">
+					<?php CSRFProtection::embed() ?>
+					<input type="text" name="term" value="<?php echo input('term') ?>" class="form-control"/>
+					<button class="btn btn-info btn-sm"><?php echo lang('game::find-games') ?></button>
+				</form>
+			</div>
+			<div class="col-sm-5">
+				<form action="<?php echo url_to_pager('admin-game-lists') ?>?type=search" method="get">
+					<?php CSRFProtection::embed() ?>
+					<select class="c-select" name="cat">
+						<?php foreach(get_game_categories() as $category): ?>
+							<option <?php (input('cat') == $category['id']) ? 'select' : null ?> value="<?php echo $category['id'] ?>"><?php echo lang($category['title']) ?></option>
+						<?php endforeach ?>
+					</select>
+					<button class="btn btn-info btn-sm"><?php echo lang('go') ?></button>
+				</form>
+			</div>
+		</div>
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-games-batch-action') ?>?action=delete_game"
+					   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+					<?php fire_hook('admin.user.list.actions'); ?>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th style="width: 10%"><?php echo lang('game::game-logo') ?></th>
+						<th style="width: 30%"><?php echo lang('game::game-title') ?></th>
+						<th style="width: 40%"><?php echo lang('game::players') ?></th>
+						<th style="width: 20%"><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($games->results() as $game): ?>
+						<tr>
+							<th>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $game['game_id']; ?>"></div>
+							</th>
+							<td>
+								<img src="<?php echo get_game_logo(75, $game) ?>" style="width: 40px"/>
+							</td>
+							<td>
+								<a href="<?php echo game_url(null, $game) ?>"><?php echo $game['game_title'] ?></a>
+							</td>
+							<td><?php echo $game['players_count'] ?></td>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-edit"
+										   href='<?php echo game_url(null, $game) ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-android-delete"
+										   href="<?php echo url('game/delete/'.$game['game_id']) ?>?admin=true"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

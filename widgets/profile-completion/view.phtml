@@ -1,0 +1,25 @@
+<style>
+    .progress{
+        background-color: <?php echo config('profile-completion-bar-color',' #0d6996') ?>;
+    }
+    .progress-bar{
+        background-color: <?php echo config('profile-completion-progress-bar-color',' #007bff') ?>;
+    }
+</style>
+<div class="box ">
+	<?php if(isset($app->profileUser) and ($app->profileUser['completion'] < 100) and (config('enable-profile-completion', false))): ?>
+		<div class="title"><?php echo lang('profile-completeness') ?></div>
+		<div class="box-content" style="padding-top: 0">
+            <?php $user = $app->profileUser ?>
+            <div style="padding: 10px"><?php echo $user['completion']."% ".lang('profile-completeness') ?></div>
+            <div style="padding: 10px">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $user['completion'] ?>%">
+                        <span class="sr-only"><?php echo $user['completion']."% ".lang('complete') ?></span>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 10px"><a class="btn btn-primary" href="<?php echo url('account')?>"><?php echo lang('update-profile')?></a></div>
+		</div>
+	<?php endif ?>
+</div>

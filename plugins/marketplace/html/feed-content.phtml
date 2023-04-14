@@ -1,0 +1,47 @@
+<div class="box">
+    <div class="box-content">
+        <div class="marketplace-listings row active-with-click">
+            <?php $colors = array('Red', 'Red', 'Pink', 'Purple', 'Deep-Purple', 'Indigo', 'Blue', 'Light-Blue', 'Cyan', 'Teal', 'Green', 'Light-Green', 'Lime', 'Yellow', 'Amber', 'Orange', 'Deep-Orange', 'Brown', 'Grey', 'Blue-Grey') ?>
+            <?php $listing_image = $listing['image'] ? url_img($listing['image'], 200) : img('marketplace::images/no_image.jpg', 75) ?>
+            <?php $description = trim($listing['description']) == '' ? '<em>'.lang('marketplace::no-description').'</em>' : $listing['description'] ?>
+            <?php $price = is_numeric($listing['price']) ? config('currency', '$').$listing['price'] : $listing['price']; ?>
+            <?php $price = trim($listing['price']) == '' ? '<span class="free">'.lang('marketplace::free').'</span>' : $price; ?>
+            <div class="col-md-12">
+                <article class="material-card <?php echo $colors[(int) ((substr(str_pad($listing['id'], 2, '0',STR_PAD_LEFT), 0, 1) % 2 == 0 ? '' : '1').substr(str_pad($listing['id'], 2, '0',STR_PAD_LEFT), -1))] ?>">
+                    <?php if($listing['featured'] == 1): ?>
+                        <div class="marketplace-featured-badge"><?php echo lang('marketplace::featured') ?></div>
+                    <?php endif ?>
+                    <h2>
+                        <?php if($listing['approved'] == 1 && $listing['active'] == 1): ?>
+                            <span><a href="<?php echo url_to_pager('marketplace-listing', array('slug' => $listing['slug'])) ?>" ajax="true"><?php echo $listing['title'] ?></a></span>
+                        <?php else: ?>
+                            <span><?php echo $listing['title'] ?></span>
+                        <?php endif ?>
+                        <strong><i class="fa fa-fw fa-star"></i><?php echo $price ?></strong>
+                    </h2>
+                    <div class="mc-content">
+                        <?php if($listing['approved'] == 1 && $listing['active'] == 1): ?>
+                            <a class="img-container" href="<?php echo url_to_pager('marketplace-listing', array('slug' => $listing['slug'])) ?>" ajax="true">
+                                <img class="img-responsive" src="<?php echo $listing_image ?>">
+                            </a>
+                        <?php else: ?>
+                            <div class="img-container">
+                                <img class="img-responsive" src="<?php echo url_img($listing_image, 200) ?>">
+                            </div>
+                        <?php endif ?>
+                        <div class="mc-description"><?php echo str_limit($description, 50) ?></div>
+                    </div>
+                    <a class="mc-btn-action"><i class="fa fa-bars"></i></a>
+                    <div class="mc-footer">
+                        <h4><?php echo lang($listing['category_title']) ?></h4>
+                        <a target="_blank" href="<?php echo url($listing['username']) ?>" class="ion-person"></a>
+                        <?php if(filter_var($listing['link'], FILTER_VALIDATE_URL)): ?>
+                            <a target="_blank" href="<?php echo $listing['link'] ?>" class="ion-link"></a>
+                        <?php endif ?>
+                        <?php echo plugin_loaded('sharer') ? view('sharer::share_link', array('link' => url_to_pager('marketplace-listing', array('slug' => $listing['slug'])))) : '' ?>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>

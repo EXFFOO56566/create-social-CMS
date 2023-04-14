@@ -1,0 +1,54 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('ads::ads-service') ?>
+		<a class="btn btn-outline-secondary" href="<?php echo url_to_pager('admin-ads-service-add') ?>" style="float: right; margin-left: 8px;"><?php echo lang('ads::add-service') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="services">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-ads-service-batch-action') ?>?action=delete" class="action-link list-table-select-action" data-group="services"><?php echo lang('delete') ?></a>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="services" data-id="0"></div>
+						</th>
+						<th style="width: 10%">ID</th>
+						<th style="width: 30%"><?php echo lang('ads::service-title') ?></th>
+						<th style="width: 40%"><?php echo lang('ads::service-positions') ?></th>
+						<th style="width: 20%"><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody data-url="<?php echo url_to_pager('admin-ads-service-edit').'?action=order' ?>"
+					       class="admincp-sortable" style="position: relative">
+					<?php foreach($services as $service): ?>
+						<tr class="item" id="<?php echo $service['id'] ?>">
+							<th>
+								<div class="list-table-select" data-group="services" data-id="<?php echo $service['id'] ?>"></div>
+							</th>
+							<td><?php echo $service['id'] ?></td>
+							<td><?php echo lang($service['title']) ?></td>
+							<td><?php echo ads_service_positions($service['positions']) ?></td>
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a class="ion-edit" href='<?php echo url_to_pager('admin-ads-service-edit').'?id='.$service['id'] ?>'></a>
+										<a class="admin-confirm ion-android-delete" href="<?php echo url_to_pager('admin-ads-service-delete').'?id='.$service['id'] ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,17 @@
+<?php $listings = marketplace_get_listings(null, null, $settings['limit']); ?>
+<?php if(count($listings->results()) > 0): ?>
+	<div class="box marketplace-listings-widget">
+		<div class="title"><?php echo lang('marketplace::latest-listings') ?>
+			<a ajax="true" href="<?php echo url_to_pager('marketplace') ?>" class="more-link pull-right"><i class="ion-ios-arrow-forward"></i></a>
+		</div>
+		<div class="box-content clearfix">
+			<div class="slider-side-widget">
+				<?php foreach($listings->results() as $listing): ?>
+					<a href="<?php echo url_to_pager('marketplace-listing', array('slug' => $listing['slug'])) ?>" ajax="true" class="listing " style="background-image: url(<?php echo $listing['image'] ? url_img($listing['image'], 200) : img('marketplace::images/no_image.jpg') ?>)">
+						<h6 class="name"><?php echo $listing['title'] ?></h6>
+					</a>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
+<?php endif ?>

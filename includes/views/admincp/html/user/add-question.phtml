@@ -1,0 +1,56 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('add-verification-question') ?>
+	</div>
+	<div class="wrapper-content">
+		<form action="" class="adm" method="post">
+			<?php echo CSRFProtection::embed() ?>
+			<div class="row" style="margin-bottom: 30px">
+				<div class="col-sm-5">
+					<h6>Entity Type</h6>
+					<p class="form-description"><?php echo lang('select-if-user-or-page') ?> </p>
+				</div>
+				<div class="col-sm-5">
+					<div class="input-field col s10">
+						<select class="c-select" id="pusher-driver" name="val[entity]">
+							<option value="user">User</option>
+							<option value="page">Page</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-bottom: 30px">
+				<div class="col-sm-5">
+					<h6><?php echo lang('verification-question') ?></h6>
+					<p class="form-description"><?php echo lang('enter-the-verification-question') ?></p>
+				</div>
+				<div class="col-sm-5">
+					<div class="input-field col s10">
+						<input class="form-control" type="text" value="" name="val[question]" placeholder="<?php echo lang('enter-question') ?>">
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-bottom: 30px">
+				<div class="col-sm-5">
+					<h6>Input Type</h6>
+					<p class="form-description"><?php echo lang('select-the-input-type') ?> </p>
+				</div>
+				<div class="col-sm-5">
+					<div class="input-field col s10">
+						<select class="c-select" id="pusher-driver" name="val[input_type]">
+							<option value="text">Text</option>
+							<option value="longtext">LongText</option>
+                            <option value="file">File</option>
+							<option value="boolean">Boolean</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-5"></div>
+				<div class="col-sm-7">
+					<button class="btn btn-info"><?php echo lang('submit') ?></button>
+				</div>
+			</div>
+		</form>
+	</div>

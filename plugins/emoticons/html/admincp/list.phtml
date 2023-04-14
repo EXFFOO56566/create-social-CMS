@@ -1,0 +1,48 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('emoticons::manage-emoticons') ?>
+		<a href="<?php echo url_to_pager('admincp-emoticons-add') ?>"><?php echo lang('emoticons::add-emoticons') ?></a>
+	</div>
+
+	<div class="wrapper-content">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a href="<?php echo url_to_pager('admincp-emoticons') ?>" class="nav-link <?php echo ($type == 'emoticons') ? 'active' : null ?>"><?php echo lang('emoticons::emoticons') ?></a>
+			</li>
+			<li class="nav-item">
+				<a href="<?php echo url_to_pager('admincp-emoticons') ?>?type=stickers" class="nav-link <?php echo ($type == 'stickers') ? 'active' : null ?>"><?php echo lang('emoticons::stickers') ?></a>
+			</li>
+
+		</ul>
+
+		<table class="table table-bordered" style="margin-top: 20px">
+			<thead>
+			<tr>
+				<th style="width:10%">ID</th>
+				<th style="width: 30%"><?php echo lang('title') ?></th>
+				<th style="width: 10%"><?php echo lang('symbol') ?></th>
+				<th style="width: 10%"><?php echo lang('dimensions') ?></th>
+				<th style="width: 10%"><?php echo lang('icon') ?></th>
+				<th style="width: 30%"><?php echo lang('actions') ?></th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php foreach($lists as $e): ?>
+				<tr>
+					<td><?php echo $e['id'] ?></td>
+					<td><?php echo $e['name'] ?></td>
+					<td><?php echo $e['symbol'] ?></td>
+					<td><?php echo $e['width'] ?> * <?php echo $e['height'] ?></td>
+					<td>
+						<img src="<?php echo url_img($e['path']) ?>"/>
+					</td>
+					<td>
+						<a class="admin-confirm btn btn-sm btn-danger" href="<?php echo url_to_pager('admincp-emoticons-manage') ?>?id=<?php echo $e['id'] ?>&type=remove"><?php echo lang('remove') ?></a> |
+						<a class="btn btn-sm btn-success" href="<?php echo url_to_pager('admincp-emoticons-manage') ?>?id=<?php echo $e['id'] ?>&type=edit"><?php echo lang('edit') ?></a>
+					</td>
+				</tr>
+			<?php endforeach ?>
+			</tbody>
+		</table>
+	</div>
+</div>

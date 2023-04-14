@@ -1,0 +1,249 @@
+<div class="box">
+	<div class="title"><?php echo lang('notification-settings') ?></div>
+	<div class="box-content" style="padding:30px 10%">
+		<form action="" method="post" class="ajax-form">
+			<?php CSRFProtection::embed() ?>
+			<div class="field">
+				<div class="left" style="min-width: 200px;">
+					<label class="control-label"><?php echo lang('notification::someone-started-following-you') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[notify-following-you]" data-width="60px">
+						<input type="hidden" name="val[notify-following-you]" value="<?php echo get_privacy('notify-following-you', 1) ?>" class="magic-select-value"/>
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-following-you', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left" style="min-width: 200px;">
+					<label class="control-label"><?php echo lang('notification::you-are-mentioned') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[notify-site-mention-you]" data-width="60px">
+						<input type="hidden" name="val[notify-site-mention-you]" value="<?php echo get_privacy('notify-site-mention-you', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-site-mention-you', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left" style="min-width: 200px;">
+					<label class="control-label"><?php echo lang('notification::you-are-tagged') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[notify-site-tag-you]" data-width="60px">
+						<input type="hidden" name="val[notify-site-tag-you]" value="<?php echo get_privacy('notify-site-tag-you', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-site-tag-you', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left" style="min-width: 200px;">
+					<label class="control-label"><?php echo lang('notification::comment-on-your-post') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[notify-site-comment]" data-width="60px">
+						<input type="hidden" name="val[notify-site-comment]" value="<?php echo get_privacy('notify-site-comment', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-site-comment', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left" style="min-width: 200px;">
+					<label class="control-label"><?php echo lang('notification::reply-your-comment') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[notify-site-reply-comment]" data-width="60px">
+						<input type="hidden" name="val[notify-site-reply-comment]" value="<?php echo get_privacy('notify-site-reply-comment', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-site-reply-comment', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left" style="min-width: 200px;">
+					<label class="control-label"><?php echo lang('notification::like-your-item') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[notify-site-like]" data-width="60px">
+						<input type="hidden" name="val[notify-site-like]" value="<?php echo get_privacy('notify-site-like', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-site-like', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left" style="min-width: 200px;">
+					<label class="control-label"><?php echo lang('notification::share-your-item') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[notify-site-share-item]" data-width="60px">
+						<input type="hidden" name="val[notify-site-share-item]" value="<?php echo get_privacy('notify-site-share-item', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-site-share-item', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php if(config('enable-dislike', 1) and config('dislike-notification', 0)): ?>
+				<div class="field">
+					<div class="left" style="min-width: 200px;">
+						<label class="control-label"><?php echo lang('notification::dislike-your-item') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-select" data-name="val[notify-site-dislike-item]" data-width="60px">
+							<input type="hidden" name="val[notify-site-dislike-item]" value="<?php echo get_privacy('notify-site-dislike-item', 1) ?>" class="magic-select-value" />
+							<div class="magic-select-toggle">
+								<?php echo get_privacy('notify-site-dislike-item', 1) == 1 ? lang('yes') : lang('no') ?>
+							</div>
+							<div class="magic-select-content">
+								<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+								<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endif ?>
+			<div class="divider"></div>
+			<div class="field">
+				<div class="left" style="min-width: 200px;">
+					<label class="control-label"><?php echo lang('notification::enable-notification-sound') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[enable-notification-sound]" data-width="60px">
+						<input type="hidden" name="val[enable-notification-sound]" value="<?php echo get_privacy('enable-notification-sound', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('enable-notification-sound', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="divider"></div>
+			<?php echo theme_extend('site-notifications-settings') ?>
+			<!--<h6><i class="mdi-content-mail"></i> <?php echo lang('email-notifications') ?></h6>
+            <p class="help-block"><?php echo lang('notification::send-email-notification-when') ?>:</p>
+            <div class="field">
+                <div class="left" style="min-width: 200px;"><label class="control-label"><?php echo lang('notification::someone-started-following-you') ?></label></div>
+                <div class="right">
+					<div class="magic-select" data-name="val[notify-email-following-you]" data-width="60px">
+						<input type="hidden" name="val[notify-email-following-you]" value="<?php echo get_privacy('notify-email-following-you', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-email-following-you', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="left" style="min-width: 200px;"><label class="control-label"><?php echo lang('notification::you-are-mentioned') ?></label></div>
+                <div class="right">
+					<div class="magic-select" data-name="val[notify-email-mention-you]" data-width="60px">
+						<input type="hidden" name="val[notify-email-mention-you]" value="<?php echo get_privacy('notify-email-mention-you', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-email-mention-you', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="left" style="min-width: 200px;"><label class="control-label"><?php echo lang('notification::you-are-tagged') ?></label></div>
+                <div class="right">
+					<div class="magic-select" data-name="val[notify-email-tag-you]" data-width="60px">
+						<input type="hidden" name="val[notify-email-tag-you]" value="<?php echo get_privacy('notify-email-tag-you', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-email-tag-you', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="left" style="min-width: 200px;"><label class="control-label"><?php echo lang('notification::comment-on-your-post') ?></label></div>
+                <div class="right">
+					<div class="magic-select" data-name="val[notify-email-comment]" data-width="60px">
+						<input type="hidden" name="val[notify-email-comment]" value="<?php echo get_privacy('notify-email-comment', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-email-comment', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="left" style="min-width: 200px;"><label class="control-label"><?php echo lang('notification::reply-your-comment') ?></label></div>
+                <div class="right">
+					<div class="magic-select" data-name="val[notify-email-reply-comment]" data-width="60px">
+						<input type="hidden" name="val[notify-email-reply-comment]" value="<?php echo get_privacy('notify-email-reply-comment', 1) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('notify-email-reply-comment', 1) == 1 ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <?php echo theme_extend('email-notifications-settings') ?>
+            -->
+			<div class="submit">
+				<button class="btn btn-info action-button"><?php echo lang('save-settings') ?></button>
+			</div>
+		</form>
+	</div>
+</div>

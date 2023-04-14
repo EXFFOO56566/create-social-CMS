@@ -1,0 +1,11 @@
+<?php foreach($memories as $memory): ?>
+	<?php $feed = memory_get_feed($memory['id']) ?>
+	<?php $feed_title = 'Memory' ?>
+	<?php if($feed['user_id'] == get_userid() || $feed['privacy'] < 3): ?>
+		<div class="feed-memory feed-wrapper clearfix">
+			<div class="col-sm-12 right no-padding">
+				<?php echo view('memory::feed', array('feed' => $feed, 'memory' => $memory)); ?>
+			</div>
+		</div>
+	<?php endif; ?>
+<?php endforeach; ?>

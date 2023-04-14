@@ -1,0 +1,98 @@
+<div class="wrapper">
+	<div class="wrapper-title"><?php echo lang('restore::restore-title') ?></div>
+	<div class="wrapper-content">
+		<?php $success_message = input('msg'); ?>
+
+		<?php if($success_message == 'backup-success'): ?>
+
+			<div class="alert alert-success alert-dismissible fade in" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<strong>Backup Completed!</strong> You have successfully backup your site and database.
+			</div>
+			<!------------------------------------------------------------------------------------------------------->
+		<?php elseif($success_message == 'restore-success'): ?>
+
+			<div class="alert alert-success alert-dismissible fade in" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<strong>Restore Completed!</strong> You have successfully restore your site and database.
+			</div>
+		<?php endif ?>
+
+		<form action="" method="get" class="form-inline" style="margin: 20px 0">
+			<?php CSRFProtection::embed() ?>
+		</form>
+		<div class="wrapper-content">
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th style="width:5%"><?php echo lang('restore::id') ?></th>
+						<th style="width:15%"><?php echo lang('restore::backup-title') ?></th>
+						<th style="width:15%"><?php echo lang('restore::backup-path') ?></th>
+						<th style="width:20%"><?php echo lang('restore::backup-date') ?></th>
+						<th style="width:20%"><?php echo lang('restore::restore-date') ?></th>
+						<th style="width:25;%"><?php echo lang('restore::event-action') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php
+					$sql = "SELECT * FROM restore_types ";
+					$query = db()->query($sql);
+					$results = fetch_all($query);
+					$btn_incr = 0;
+					$backup_button[0] = url_to_pager('backup-files', array('append' => '/?id=1'));
+					$restore_button[0] = url_to_pager('restore-files', array('append' => '/?id=1'));
+					$backup_button[1] = url_to_pager('backup-files', array('append' => '/?id=2'));
+					$restore_button[1] = url_to_pager('restore-files', array('append' => '/?id=2'));
+					$backup_button[2] = url_to_pager('backup-files', array('append' => '/?id=3'));
+					$restore_button[2] = url_to_pager('restore-files', array('append' => '/?id=3'));
+					$backup_button[3] = url_to_pager('backup-files', array('append' => '/?id=4'));
+					$restore_button[3] = url_to_pager('restore-files', array('append' => '/?id=4'));
+					$backup_button[4] = url_to_pager('backup-files', array('append' => '/?id=5'));
+					$restore_button[4] = url_to_pager('restore-files', array('append' => '/?id=5'));
+					$backup_button[5] = url_to_pager('backup-files', array('append' => '/?id=6'));
+					$restore_button[5] = url_to_pager('restore-files', array('append' => '/?id=6'));
+					?>
+					<?php foreach($results as $result => $column): ?>
+						<tr>
+							<th>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $column['id']; ?>"></div>
+							</th>
+							<td><?php echo $column['id']; ?></td>
+							<td><?php echo $column['backup_title']; ?></td>
+							<td><?php echo $column['backup_host']; ?></td>
+							<td><?php echo $column['last_backup_date']; ?></td>
+							<td><?php echo $column['last_restore_date']; ?></td>
+
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-ios-cloud-upload"
+										   href='<?php echo $backup_button[$btn_incr] ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-ios-cloud-download"
+										   href="<?php echo $restore_button[$btn_incr] ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<?php $btn_incr++; ?>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,51 @@
+<div class="box">
+	<div class="title"><?php echo lang('about') ?><?php echo get_user_name(app()->profileUser) ?></div>
+	<div class="box-content">
+		<div class="row">
+			<div class="col-md-4">
+				<ul class="profile-about-menu">
+					<?php foreach(get_menus('user-profile-about') as $menu): ?>
+						<li>
+							<a class="<?php echo ($menu->isActive()) ? 'active' : null ?>" href="<?php echo $menu->link ?>"><?php echo $menu->title ?></a>
+						</li>
+					<?php endforeach ?>
+				</ul>
+			</div>
+			<div class="col-md-8">
+
+				<?php echo $content ?>
+			</div>
+		</div>
+	</div>
+	<div class="box center-col" style="width: 95%;">
+		<div class="title">
+			<i class="ion-images"></i> <?php echo lang('photo::photos') ?>
+
+		</div>
+		<div id="photos-list" class="photos-list box-content clearfix" style="padding: 10px" data-type="user-all" data-id="<?php echo $app->profileUser['id'] ?>" data-offset="0">
+			<?php foreach(get_photos($app->profileUser['id'], 'user-all', 8) as $photo): ?>
+				<?php echo view('photo::display-photo', array('id' => $photo['id'], 'image' => $photo['path'])) ?>
+			<?php endforeach ?>
+		</div>
+	</div>
+	<div class="box center-col profile-friends" style="width: 95%;">
+		<div class="title">FRIENDS</div>
+		<?php $users = list_connections(get_friends($app->profileUser['id']), 6);
+		if($users): ?>
+			<div class="box-content two-line-media clearfix">
+				<?php foreach($users->results() as $user): ?>
+					<?php echo view('user/display', array('user' => $user)) ?>
+				<?php endforeach ?>
+			</div>
+			<div class="box-content">
+				<?php echo $users->links(true) ?>
+			</div>
+		<?php else: ?>
+			<div class="box-content">
+				<div class="alert alert-info"><?php echo lang('no-members-to-display') ?></div>
+			</div>
+		<?php endif ?>
+	</div>
+</div>
+
+

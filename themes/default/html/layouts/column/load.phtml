@@ -1,0 +1,7 @@
+<?php if(Pager::sitePageExists($page) || in_array($page, array('header', 'footer'))): ?>
+	<?php foreach(Widget::getWidgetPages($page, $position) as $widget): ?>
+		<?php echo Widget::load($widget, $content) ?>
+	<?php endforeach ?>
+<?php else: ?>
+	<?php echo $content ?>
+<?php endif ?>

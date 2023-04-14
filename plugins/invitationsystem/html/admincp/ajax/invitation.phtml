@@ -1,0 +1,71 @@
+<?php $inviter_name = $inviter ? get_user_name($inviter) : '<em>'.lang('invitationsystem::not-invited').'</em>' ?>
+<div class="box">
+	<div class="title"><?php echo get_user_name($user) ?></div>
+	<div class="desc" style="padding: 8px">
+		<strong> <?php echo lang('invitationsystem::invited-by').':</strong> '.$inviter_name ?>
+	</div>
+	<div id="invitationsystem-invitation-invited-list" class="box-content">
+		<?php foreach($inviteds->results() as $invited): ?>
+			<?php $invited = find_user($invited['invited_id']) ?>
+			<div class="row">
+				<div class="col-sm-2">
+					<a ajax="true" href="<?php echo profile_url(null, $invited) ?>"><img src="<?php echo get_avatar(75, $invited) ?>"/></a>
+				</div>
+				<div class="col-sm-10">
+					<a href="<?php echo profile_url(null, $invited) ?>"><?php echo get_user_name($invited) ?></a>
+					<ul class="info">
+						<?php if($invited['country']): ?>
+							<li>
+								<i class="ion-ios-location"></i> <?php echo ucwords($invited['country']) ?>
+							</li>
+						<?php endif ?>
+					</ul>
+				</div>
+			</div>
+		<?php endforeach ?>
+	</div>
+	<div class="box-content">
+		<?php if($total_records): ?>
+			<?php if($total_pages > 1 && $user_id): ?>
+				<div class="pagination">
+					<?php if($page > 1): ?>
+						<a href="#" onclick="invitationSystem.paginateInviteds(<?php echo $user_id ?>, 1);"><i class="ion-ios-skipbackward"></i></a>
+						<a href="#" onclick="invitationSystem.paginateInviteds(<?php echo $user_id ?>, <?php echo($page - 1) ?>);"><i class="ion-arrow-left-b"></i></a>
+					<?php endif ?>
+					<?php if(($page < 6) && ($total_pages > 11)): ?>
+						<?php for($i = 1; $i <= 11; $i++): ?>
+							<?php echo preg_replace('/ '.$page.' /', ' <strong>'.$page.'</strong>', '<a href="#" onclick="invitationSystem.paginateInviteds('.$user_id.', '.$i.')"> '.$i.' </a>'); ?>
+						<?php endfor ?>
+					<?php elseif($page < 6): ?>
+						<?php for($i = 1; $i <= $total_pages; $i++): ?>
+							<?php echo preg_replace('/ '.$page.' /', ' <strong>'.$page.'</strong>', '<a href="#" onclick="invitationSystem.paginateInviteds('.$user_id.', '.$i.')"> '.$i.' </a>'); ?>
+						<?php endfor ?>
+					<?php elseif(($page >= 6) && ($page <= $total_pages - 5)): ?>
+						<?php for($i = ($page - 5); $i <= ($page + 5); $i++): ?>
+							<?php echo preg_replace('/ '.$page.' /', ' <strong>'.$page.'</strong>', '<a href="#" onclick="invitationSystem.paginateInviteds('.$user_id.', '.$i.')"> '.$i.' </a>'); ?>
+						<?php endfor ?>
+					<?php else: ?>
+						<?php for($i = ($page - 5); $i <= $total_pages; $i++): ?>
+							<?php echo preg_replace('/ '.$page.' /', ' <strong>'.$page.'</strong>', '<a href="#" onclick="invitationSystem.paginateInviteds('.$user_id.', '.$i.')"> '.$i.' </a>'); ?>
+						<?php endfor ?>
+					<?php endif ?>
+					<?php if($page < $total_pages): ?>
+						<a href="#" onclick="invitationSystem.paginateInviteds(<?php echo $user_id ?>, <?php echo($page + 1) ?>);"><i class="ion-arrow-right-b"></i></a>
+						<a href="#" onclick="invitationSystem.paginateInviteds(<?php echo $user_id ?>, <?php echo $total_pages ?>);"><i class="ion-ios-skipforward"></i></a>
+					<?php endif ?>
+				</div>
+			<?php endif ?>
+		<?php else: ?>
+			<div class="alert alert-info"><?php echo lang('invitationsystem::no-invited-user') ?></div>
+		<?php endif ?>
+	</div>
+	<div class="foreground">
+		<div class="indicator">
+			<img src="<?php echo img('images/loading.gif') ?>"/>
+		</div>
+		<div class="message">
+			<div class="alert alert-success"></div>
+			<div class="alert alert-danger"></div>
+		</div>
+	</div>
+</div>

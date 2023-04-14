@@ -1,0 +1,65 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('blog::add-new-blog') ?>
+
+	</div>
+	<div class="wrapper-content">
+
+		<form class="wrapper-form" action="" enctype="multipart/form-data" method="post">
+			<?php CSRFProtection::embed() ?>
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<fieldset class="form-group row">
+				<label class="control-label col-sm-4"><?php echo lang('blog::category') ?></label>
+				<select name="val[category]" class="c-select">
+                    <option <?php echo (input('category', 'all') == 'all') ? 'selected' : null ?> value="all"><?php echo lang('music::all-categories') ?></option>
+                    <?php foreach(get_blog_categories() as $category): ?>
+                        <?php $subCategories = get_blog_parent_categories($category['id']) ?>
+                        <?php if($subCategories): ?>
+                            <optgroup label="<?php echo lang($category['title']) ?>">
+                                <?php foreach($subCategories as $cat): ?>
+                                    <option <?php echo (input('category', 'all') == $cat['id']) ? 'selected' : null ?> value="<?php echo $cat['id'] ?>"><?php echo lang($cat['title']) ?></option>
+                                <?php endforeach ?>
+                            </optgroup>
+                        <?php else: ?>
+                            <option <?php echo (input('category', 'all') == $category['id']) ? 'selected' : null ?> value="<?php echo $category['id'] ?>"><?php echo lang($category['title']) ?></option>
+                        <?php endif ?>
+                    <?php endforeach ?>
+				</select>
+			</fieldset>
+			<fieldset>
+				<label class="control-label"><?php echo lang('blog::blog-title') ?></label>
+				<input value="<?php echo input('val.title') ?>" type="text" class="form-control" name="val[title]"/>
+			</fieldset>
+
+
+			<fieldset>
+				<label class="control-label"><?php echo lang('blog::blog-content') ?></label>
+				<textarea name="val[content]" class="ckeditor"><?php echo input('val.content') ?></textarea>
+			</fieldset>
+
+			<fieldset>
+				<label class="control-label"><?php echo lang('blog::tags') ?></label>
+				<input type="text" name="val[tags]" class="form-control" placeholder="<?php echo input('val.tags') ?>">
+			</fieldset>
+
+			<fieldset>
+				<label class="control-label"><?php echo lang('blog::preview-image') ?></label>
+				<input type="file" name="image" class="form-control"/>
+			</fieldset>
+
+			<fieldset class="control-group">
+				<label class="control-label"><?php echo lang('status') ?></label>
+				<select class="form-control" name="val[status]">
+					<option value="1"><?php echo lang('blog::published') ?></option>
+					<option value="0"><?php echo lang('blog::draft') ?></option>
+				</select>
+			</fieldset>
+
+
+			<button class="btn btn-info" style="margin-top: 20px"><?php echo lang("blog::add") ?></button>
+		</form>
+
+	</div>
+</div>

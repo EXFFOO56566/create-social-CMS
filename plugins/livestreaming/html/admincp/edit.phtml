@@ -1,0 +1,60 @@
+<div class="wrapper">
+    <div class="wrapper-title"><?php _lang('livestreaming::livestreams-manager')?></div>
+    <div class="wrapper-content">
+        <form class="wrapper-form" method="post" action="">
+			<?php CSRFProtection::embed() ?>
+            <input type="hidden" value="<?php echo $url?>" name="back_url"/>
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php _lang('livestreaming::category')?></label>
+                <div class="col-sm-9">
+                    <select id="livestream-category-list" name="val[category]" class="c-select" >
+                        <option <?php echo ($livestream['category_id'] == 'all') ? 'selected'  : null?>  value="all"><?php _lang('livestreaming::all-categories')?></option>
+                        <?php foreach(get_livestream_categories() as $category):?>
+                            <?php $subCategories = get_livestream_parent_categories($category['id'])?>
+                            <?php if($subCategories):?>
+                                <optgroup label="<?php _lang($category['title'])?>">
+                                    <?php foreach($subCategories as $cat):?>
+                                        <option <?php echo ($livestream['category_id'] == $cat['id']) ? 'selected'  : null?> value="<?php echo $cat['id']?>"><?php _lang($cat['title'])?></option>
+                                    <?php endforeach?>
+                                </optgroup>
+                            <?php else:?>
+                                <option <?php echo ($livestream['category_id'] == $category['id']) ? 'selected'  : null?> value="<?php echo $category['id']?>"><?php _lang($category['title'])?></option>
+                            <?php endif?>
+                        <?php endforeach?>
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php _lang('livestreaming::title')?></label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" value="<?php echo $livestream['title']?>" name="val[title]"/>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php _lang('livestreaming::description')?></label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" name="val[description]"><?php echo $livestream['description']?></textarea>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 form-control-label"><?php _lang('livestreaming::featured')?></label>
+                <div class="col-sm-9">
+                    <select class="c-select" name="val[featured]">
+                        <option <?php echo ($livestream['featured'] == 1) ? 'selected': null?> value="1"><?php _lang('yes')?></option>
+                        <option  <?php echo ($livestream['featured'] == 0) ? 'selected': null?> value="0"><?php _lang('no')?></option>
+                    </select>
+
+                </div>
+            </div>
+
+
+            <button class="btn btn-info"><?php _lang('livestreaming::save-livestream')?></button>
+        </form>
+    </div>
+</div>

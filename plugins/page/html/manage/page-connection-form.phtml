@@ -1,0 +1,50 @@
+ <div class="row">
+     <div class="col-md-4 left-column">
+         <?php echo view('page::manage/menu') ?>
+     </div>
+     <div class="col-md-8 right-column">
+         <div class="box">
+             <div class="title"><?php echo lang('socialmore::social-connections') ?></div>
+             <div class="box-content">
+                 <form id="" class="" method="post" action="">
+                     <div class="row form-group">
+                         <div class="col-sm-6" style="font-weight: bold">
+                             <p class="title"> Facebook </p>
+                             <input value="<?php echo get_social_more('facebook','','pages',$page['page_id'])?>" name="val[facebook]" style="border-radius: 10px;" placeholder="Facebook" type="link" class="form-control"/>
+                         </div>
+                         <div class="col-sm-6">
+                             <p class="title"> Twitter </p>
+                             <input value="<?php echo get_social_more('twitter','','pages',$page['page_id'])?>" name="val[twitter]" style="border-radius: 10px;" placeholder="Twitter" type="link" class="form-control"/>
+                         </div>
+                     </div>
+                     <div class="row form-group">
+                         <div class="col-sm-6" style="font-weight: bold">
+                             <p class="title"> Google+ </p>
+                             <input value="<?php echo get_social_more('google','','pages',$page['page_id'])?>" name="val[google]" style="border-radius: 10px;" placeholder="Google+" type="link" class="form-control"/>
+                         </div>
+                         <div class="col-sm-6">
+                             <p class="title"> Vkontakte </p>
+                             <input value="<?php echo get_social_more('vkontakte','','pages',$page['page_id'])?>" name="val[vkontakte]" style="border-radius: 10px;" placeholder="Vkontakte" type="link" class="form-control"/>
+                         </div>
+                     </div>
+                     <div class="row form-group">
+                         <div class="col-sm-6" style="font-weight: bold">
+                             <p class="title"> LinkedIn </p>
+                             <input value="<?php echo get_social_more('linkedin','','pages',$page['page_id'])?>" name="val[linkedin]" style="border-radius: 10px;" placeholder="LinkedIn" type="link" class="form-control"/>
+                         </div>
+                         <div class="col-sm-6">
+                             <p class="title"> Youtube </p>
+                             <input value="<?php echo get_social_more('youtube','','pages',$page['page_id'])?>" name="val[youtube]" style="border-radius: 10px;" placeholder="YouTube" type="link" class="form-control"/>
+                         </div>
+                     </div>
+                     <div class="row form-group">
+                         <div class="col-sm-9"></div>
+                         <div class="col-sm-3">
+                             <button type="submit" class="btn-primary btn"><i class="font-awesome-ismall fa fa-check-square-o"></i> <span style="font-weight: bold;"><?php echo strtoupper(lang("save")) ?></span></button>
+                         </div>
+                     </div>
+                 </form>
+            </div>
+        </div>
+     </div>
+ </div>

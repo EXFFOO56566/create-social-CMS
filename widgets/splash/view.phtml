@@ -1,0 +1,96 @@
+<div class="row" id="home-container">
+	<div class=" right-header">
+		<div class="float-right ">
+			<div class=" dropdown">
+				<a class="language-toggle dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<?php foreach(get_all_languages() as $lang): ?>
+						<?php if($lang['language_id'] == $app->lang): ?>
+							<img class="flag-img" src="<?php echo url(get_lang_flag($lang['language_id'])) ?>">
+							<?php echo $lang['language_title'] ?>
+						<?php endif ?>
+					<?php endforeach ?>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<?php foreach(get_all_languages() as $lang): ?>
+						<a class="dropdown-item" href="<?php echo url_to_pager("change-language", array('lang' => $lang['language_id'])) ?>">
+							<?php echo $lang['language_title'] ?>
+							<span class="pull-right">
+								<img class="flag-img" src="<?php echo url(get_lang_flag($lang['language_id'])) ?>" />
+							</span>
+						</a>
+					<?php endforeach ?>
+				</div>
+				<a href="" onclick="return show_home_content(true)" style="display: none " class="login-content-toggle btn btn-primary btn-lg action-buttons"><?php echo lang('login') ?></a>
+				<?php if(config('user-signup', true)): ?>
+					<a href="" onclick="return show_home_content(false)" class="signup-content-toggle btn btn-primary btn-lg action-buttons"><?php echo lang('signup') ?></a>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-7 left">
+		<div id="topo" class="<?php echo isMobile() ? 'mobile ' : ''; ?>auto">
+			<div id="slides">
+				<div class="slide slide-1" style="z-index: 1;"></div>
+				<div class="slide slide-2"></div>
+				<div class="slide slide-3"></div>
+				<div id="topo-content">
+					<div class="info-content">
+						<?php $logo = config('site-logo'); $logo_url = !$logo ? img('images/logo.png') : url_img($logo); ?>
+						<img class="logo" src="<?php echo $logo_url ?>"/>
+						<?php fire_hook('splash.welcome.title.after'); ?>
+						<div class="welcome-note">
+							<ul>
+								<li class="clearfix item-1">
+									<div class="left-icon">
+										<i class="mbri-search"></i>
+									</div>
+									<div class="right-content"><?php echo lang('welcome-note-connect') ?></div>
+								</li>
+								<li class="clearfix item-2">
+									<div class="left-icon">
+										<i class="mbri-users"></i>
+									</div>
+									<div class="right-content"> <?php echo lang('welcome-note-discover') ?></div>
+								</li>
+								<li class="clearfix item-3">
+									<div class="left-icon">
+										<i class="mbri-quote-left"></i>
+									</div>
+									<div class="right-content"><?php echo lang('welcome-note-keep') ?></div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5 right">
+		<div class="login-content">
+			<?php if($show_latest_members): ?>
+				<div class="newest-members">
+					<?php foreach(get_top_members('latest', 10) as $user): ?>
+						<a href="<?php echo profile_url(null, $user) ?>" style="background-image: url(<?php echo get_avatar(200, $user) ?>)" class="member"></a>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+			<div class="content">
+				<div class="action-title">
+					<span><?php echo lang('or-login-account') ?></span>
+				</div>
+				<?php echo view('login/portable-login'); ?>
+			</div>
+		</div>
+		<?php if(config('user-signup', true)): ?>
+			<div class="signup-content">
+				<div class="action-title">
+					<span><?php echo lang('or-signup-email') ?></span>
+				</div>
+				<?php echo view('signup/portable-signup', array('show_all_signup_fields' => $show_all_signup_fields)); ?>
+			</div>
+		<?php endif; ?>
+		<div style="text-align: center">
+			<?php Widget::render('footer') ?>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,10 @@
+<?php $groups = get_groups('yours')->results(); ?>
+<?php if($groups): ?>
+	<div class="magic-select-label"><?php echo lang('group::groups-you-manage') ?></div>
+	<?php foreach($groups as $group): ?>
+		<div class="magic-select-option" data-value="group-<?php echo $group['group_id'] ?>">
+			<img src="<?php echo get_group_logo(75, $group) ?>" class="thumb"/>
+			<?php echo $group['group_title']; ?>
+		</div>
+	<?php endforeach ?>
+<?php endif; ?>

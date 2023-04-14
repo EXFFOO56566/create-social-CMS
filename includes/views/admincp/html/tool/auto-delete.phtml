@@ -1,0 +1,36 @@
+<div class="wrapper">
+    <div class="wrapper-title">
+        <?php echo lang('auto-delete-data') ?>
+    </div>
+    <div class="wrapper-content">
+        <form action="" method="post" class="wrapper-form">
+            <div class="row form-group">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <label class="col-md-12 alert alert-warning"><?php echo lang("auto-delete-data-warning") ?></label>
+                    <select id="auto-delete-select" class="form-control" name="val[auto-delete]">
+                        <option value="1"><?php echo lang('delete-data-option-one')?></option>
+                        <option value="2"><?php echo lang('delete-data-option-two')?></option>
+                        <option value="3"><?php echo lang('delete-data-option-three')?></option>
+                        <option value="4"><?php echo lang('delete-data-option-four')?></option>
+                        <option value="5"><?php echo lang('delete-data-option-five')?></option>
+                        <option value="6"><?php echo lang('delete-data-option-six')?></option>
+                        <option value="7"><?php echo lang('delete-data-option-seven')?></option>
+                    </select>
+                    <p></p>
+                    <div class="alert alert-info">
+                        <?php echo lang('auto-delete-process-desc')?>
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <button class="btn btn-danger" id="auto-delete-btn"><?php echo lang('auto-delete-btn')?></button>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </form>
+    </div>
+</div>

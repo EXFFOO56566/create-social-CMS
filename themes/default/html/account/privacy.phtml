@@ -1,0 +1,97 @@
+<div class="box">
+	<div class="title"><?php echo lang('privacy-settings') ?></div>
+	<div class="box-content" style="padding:30px 10%">
+		<form action="" method="post" class="ajax-form">
+			<?php CSRFProtection::embed() ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('who-can-see-profile') ?></label>
+				</div>
+				<div class="right">
+					<?php fire_hook('privacy.select', 'relationship', array(get_privacy('who_can_view_profile', config('default-profile-privacy', 1)), 'val[who_can_view_profile]')); ?>
+					<p class="help-block"><?php echo lang('who-can-see-profile-desc') ?></p>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('who-can-post-profile') ?></label>
+				</div>
+				<div class="right">
+					<?php fire_hook('privacy.select', 'relationship', array(get_privacy('who_can_post_profile', 1), 'val[who_can_post_profile]')); ?>
+					<p class="help-block"><?php echo lang('who-can-post-profile-desc') ?></p>
+				</div>
+			</div>
+			<div class="divider"></div>
+            <!--
+			<?php if(config('relationship-method', 3) > 1): ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('turn-on-friend-requests') ?></label>
+					</div>
+					<div class="right" style="margin: 0">
+						<input type="hidden" name="" value="off"/>
+						<div class="magic-select" data-name="val[turn_on_friend_requests]" data-width="60px">
+							<input type="hidden" name="val[turn_on_friend_requests]" value="<?php echo get_privacy('turn_on_friend_requests', '1') ?>" class="magic-select-value" />
+							<div class="magic-select-toggle">
+								<?php echo get_privacy('turn_on_friend_requests', '1') == '1' ? lang('yes') : lang('no') ?>
+							</div>
+							<div class="magic-select-content">
+								<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+								<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endif ?>
+			-->
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('who-can-see-birthdate') ?></label>
+				</div>
+				<div class="right">
+					<?php fire_hook('privacy.select', 'relationship', array(get_privacy('who_can_see_birth', config('default-birthdate-privacy', 1)), 'val[who_can_see_birth]')); ?>
+					<p class="help-block"><?php echo lang('who-can-see-birthdate-desc') ?></p>
+				</div>
+			</div>
+            <div class="field">
+                <div class="left">
+                    <label class="control-label"><?php echo lang('who-can-see-private-album') ?></label>
+                </div>
+                <div class="right">
+                    <div class="message-to-container">
+                        <span id="message-to-lists">
+                            <?php fire_hook("private.album.users") ?>
+                            <input type="text" data-target="#message-user-suggestion" class="user-tag-input form-control" data-friend-only="true" placeholder="<?php echo lang('chat::type-a-friend-name') ?>"/>
+                            <div style="width: 300px" class="user-suggestion-list box" id="message-user-suggestion"></div>
+                        </span>
+                    </div>
+                    <p class="help-block"><?php echo lang('who-can-see-private-album-set') ?></p>
+                </div>
+            </div>
+
+			<?php echo theme_extend('privacy-settings') ?>
+			<div class="divider"></div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('email-notifications') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[email-notification]" data-width="60px">
+						<input type="hidden" name="val[email-notification]" value="<?php echo get_privacy('email-notification', config('email-notification', 1)) ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php echo get_privacy('email-notification', config('email-notification', 1)) == '1' ? lang('yes') : lang('no') ?>
+						</div>
+						<div class="magic-select-content">
+							<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+							<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <?php fire_hook('privacy.extend') ?>
+			<div class="submit">
+				<button class="btn btn-info"><?php echo lang('save') ?></button>
+			</div>
+		</form>
+	</div>
+</div>

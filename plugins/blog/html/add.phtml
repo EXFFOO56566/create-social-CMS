@@ -1,0 +1,127 @@
+<div class="md-container">
+	<div class="box">
+		<div class="title"><?php echo lang('blog::new-blog') ?></div>
+		<div>
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<form action="" method="post" enctype="multipart/form-data" class="ajax-form">
+				<?php CSRFProtection::embed() ?>
+				<?php if($message): ?>
+					<div class="alert alert-danger"><?php echo $message ?></div>
+				<?php endif ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('blog::category') ?></label>
+					</div>
+					<div class="right">
+                        <div class="magic-select" data-name="val[category]" data-width="200px">
+                            <?php $categories = get_blog_categories(); ?>
+                            <div class="magic-select-toggle">
+                                <?php echo lang('select-category') ?>
+                            </div>
+                            <div class="magic-select-content">
+                                <?php foreach($categories as $category): ?>
+                                    <?php $sub_categories = get_blog_parent_categories($category['id']) ?>
+                                    <?php if($sub_categories): ?>
+                                        <div class="magic-select-label"><?php echo lang($category['title']) ?></div>
+                                        <?php foreach($sub_categories as $cat): ?>
+                                            <div class="magic-select-option" data-value="<?php echo $cat['id'] ?>">
+                                                <?php echo lang($cat['title']) ?>
+                                            </div>
+                                        <?php endforeach ?>
+                                    <?php else: ?>
+                                        <div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+                                            <?php echo lang($category['title']) ?>
+                                        </div>
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                            </div>
+                        </div>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('blog::blog-title') ?></label>
+					</div>
+					<div class="right">
+						<input value="<?php echo input('val.title') ?>" type="text" class="form-control" name="val[title]" placeholder="<?php echo lang('blog::blog-title') ?>"/>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('blog::blog-content') ?></label>
+					</div>
+					<div class="right">
+						<textarea name="val[content]" class="ckeditor" placeholder="<?php echo lang('blog::blog-content') ?>"><?php echo input('val.content') ?></textarea>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('blog::tags') ?></label>
+					</div>
+					<div class="right">
+						<input type="text" name="val[tags]" class="form-control" value="<?php echo input('val.tags') ?>" placeholder="<?php echo lang('blog::tags') ?>">
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('blog::preview-image') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-input-image-preview" data-name="image">
+							<span class="dimension"></span>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('status') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-select" data-name="val[status]" data-width="200px">
+							<div class="magic-select-toggle">
+								<?php echo lang('blog::published') ?>
+							</div>
+							<div class="magic-select-content">
+								<div class="magic-select-option" data-value="1"><?php echo lang('blog::published') ?></div>
+								<div class="magic-select-option" data-value="0"><?php echo lang('blog::draft') ?></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('publisher') ?></label>
+					</div>
+					<div class="right">
+						<div class="magic-select" data-name="val[entity]" data-width="300px">
+							<div class="magic-select-toggle">
+								<img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+								<?php echo get_user_name(); ?>
+							</div>
+							<div class="magic-select-content slimscroll" data-height="200px">
+								<div class="magic-select-option" data-value="user-<?php echo get_userid() ?>">
+									<img src="<?php echo get_avatar(75) ?>" class="thumb"/>
+									<?php echo get_user_name(); ?>
+								</div>
+								<?php fire_hook('entity.select.list') ?>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<div class="left">
+						<label class="control-label"><?php echo lang('privacy') ?></label>
+					</div>
+					<div class="right">
+						<?php fire_hook('privacy.select'); ?>
+					</div>
+				</div>
+				<div class="submit">
+					<button class="btn btn-info"><?php echo lang("blog::add") ?></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

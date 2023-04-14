@@ -1,0 +1,82 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('livestreaming::livestream-servers') ?>
+	</div>
+	<div class="wrapper-content">
+		<form class="wrapper-form" method="post" action="">
+			<?php CSRFProtection::embed() ?>
+			<?php if($message): ?>
+				<div class="alert alert-danger"><?php echo $message ?></div>
+			<?php endif ?>
+			<div class="form-group row" id="server-type-container">
+				<label class="col-sm-3 form-control-label"><?php echo lang('livestreaming::server-type') ?></label>
+				<div class="col-sm-9">
+					<select class="c-select" name="val[type]" id="server-type" onchange="serverType()">
+						<option value=""><?php echo lang('livestreaming::none') ?></option>
+						<option value="PHP XHR SSE Server"><?php echo lang('livestreaming::php-xhr') ?></option>
+						<option value="www.firebase.com"><?php echo lang('livestreaming::firebase') ?></option>
+						<option value="Websocket Server"><?php echo lang('livestreaming::Websocket') ?></option>
+						<option value="NODE.js Socket.IO Server"><?php echo lang('livestreaming::node-js-socket-io') ?></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row" id="server-name">
+				<label class="col-sm-3 form-control-label"><?php echo lang('livestreaming::server-name') ?></label>
+				<div class="col-sm-9">
+					<input type="text" name="val[title]" class="form-control" placeholder="<?php echo lang('livestreaming::server-name') ?>" />
+				</div>
+			</div>
+			<div class="form-group row" id="server-address">
+				<label class="col-sm-3 form-control-label"><?php echo lang('livestreaming::server-address') ?></label>
+				<div class="col-sm-9">
+					<input type="text" name="val[address]" class="form-control" placeholder="<?php echo lang('livestreaming::server-address') ?>" />
+				</div>
+			</div>
+			<div class="form-group row" id="server-port">
+				<label class="col-sm-3 form-control-label"><?php echo lang('livestreaming::server-port') ?></label>
+				<div class="col-sm-9">
+					<input type="text" name="val[port]" class="form-control" placeholder="<?php echo lang('livestreaming::server-port') ?>" />
+				</div>
+			</div>
+			<button class="btn btn-info"><?php echo lang('add-server') ?></button>
+		</form>
+	</div>
+</div>
+<script>
+	var elems = document.getElementsByClassName('form-group');
+	var i;
+
+	for(i = 2; i < elems.length; i++) {
+		elems[i].style.display = "none";
+	}
+
+	function serverType() {
+
+		var selection = document.getElementById('server-type').value;
+
+		switch(selection) {
+			case 'PHP XHR SSE Server':
+				document.getElementById('server-address').style.display = 'block';
+				document.getElementById('server-port').style.display = 'none';
+			break;
+			case 'www.firebase.com':
+				document.getElementById('server-address').style.display = 'block';
+				document.getElementById('server-port').style.display = 'none';
+			break;
+			case 'PHP Websocket Server':
+				document.getElementById('server-address').style.display = 'block';
+				document.getElementById('server-port').style.display = 'block';
+			break;
+			case 'NODE.js Websocket Server':
+				document.getElementById('server-address').style.display = 'block';
+				document.getElementById('server-port').style.display = 'block';
+			break;
+			case 'NODE.js Socket.IO Server':
+				document.getElementById('server-address').style.display = 'block';
+				document.getElementById('server-port').style.display = 'block';
+			break;
+			case '':
+			break;
+		}
+	}
+</script>

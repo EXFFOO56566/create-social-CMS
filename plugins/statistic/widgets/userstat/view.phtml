@@ -1,0 +1,26 @@
+<?php $ip_info = statistic_get_ip_info(); ?>
+<?php if($ip_info && $ip_info->status != 'fail'): ?>
+	<div id="statistic-user-widget" class="box statistic-widget">
+		<div class="title"><?php echo lang('statistic::user-statistic') ?></div>
+		<ul class="menu">
+			<li>
+				<span class="left"><?php echo lang('country') ?></span><span class="right"><?php echo $ip_info->country ?></span>
+			</li>
+			<li>
+				<span class="left"><?php echo lang('region') ?></span><span class="right"><?php echo $ip_info->regionName ?></span>
+			</li>
+			<li>
+				<span class="left"><?php echo lang('city') ?></span><span class="right"><?php echo $ip_info->city ?></span>
+			</li>
+			<li>
+				<span class="left"><?php echo lang('ip-address') ?></span><span class="right"><?php echo $ip_info->query ?></span>
+			</li>
+			<li>
+				<span class="left"><?php echo lang('platform-os') ?></span><span class="right"><?php echo statistic_get_OS() ?></span>
+			</li>
+			<li>
+				<span class="left"><?php echo lang('browser') ?></span><span class="right"><?php echo statistic_get_browser() ?></span>
+			</li>
+		</ul>
+	</div>
+<?php endif; ?>

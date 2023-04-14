@@ -1,0 +1,15 @@
+<?php $family = get_family_member($id); $relation_detail = find_user($family['with_id']) ?>
+<?php $relationship = get_family_relationship($family['relation_type']);
+      $relationship = $relationship?$relationship['relationship']:'Undefined';?>
+	<div class="edit-relation-details">
+		<div class="left relation-more">
+			<img id="relation-avatar" src="<?php echo get_avatar(75, $relation_detail) ?>">
+			<div class="bold"> <?php echo $relation_detail['first_name']." ".$relation_detail['last_name'] ?> </div>
+			<?php $status = $family['status']; ?>
+			<div> <?php echo lang($relationship) ?><?php if($status == 0): echo lang('relation::request-pending'); elseif($status == 2): echo lang('relation::request-decline'); endif; ?></div>
+        </div>
+		<div class="right relation-delete">
+            <a href="#" onclick="return relationship_edit(this)" id="edit-relation-click" data-r ="<?php echo $family['relation_type'] ?>" data-id="<?php echo $relation_detail['id'] ?>"><i class="ion-edit"></i><?php echo "  ".lang('edit') ?></a>
+            <a href="<?php echo url_to_pager('delete-request') ?>?id<?php echo $family['id'] ?>&userid=<?php echo $family['user_id'] ?>"> <?php echo lang('relation::delete-relation') ?></a>
+		</div>
+    </div>

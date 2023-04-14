@@ -1,0 +1,110 @@
+<div class="portable-signup">
+	<form class="signup-form foxers" action="<?php echo url_to_pager('signup') ?>" method="post">
+		<?php CSRFProtection::embed() ?>
+        <div id="reg-tab-1">
+            <div class="form-group">
+                <input id="first_name" class="form-control first_name" value="<?php echo input('val.first_name') ?>" type="text" name="val[first_name]" placeholder='<?php echo lang('first-name') ?>' autocomplete="off" />
+            </div>
+            <div class="form-group">
+                <input id="last_name" class="last_name form-control" value="<?php echo input('val.last_name') ?>" type="text" name="val[last_name]" placeholder="<?php echo lang('last-name') ?>" autocomplete="off" />
+            </div>
+            <div class="form-group">
+                <input id="username" class="username form-control" value="<?php echo input('val.username') ?>" type="text" name="val[username]" placeholder="<?php echo lang('username') ?>" autocomplete="off" />
+            </div>
+            <div class="form-group">
+                <input id="email" class="email form-control" value="<?php echo input('val.email_address') ?>" type="text" name="val[email_address]" placeholder="<?php echo lang('email-address') ?>" autocomplete="off" />
+            </div>
+        </div>
+        <div id="reg-tab-2">
+            <div class="form-group">
+                <input class="form-control" value="<?php echo input('val.password') ?>" type="password" name="val[password]" placeholder="<?php echo lang('password') ?>" autocomplete="off" />
+            </div>
+            <div class="form-group">
+                <input class="form-control" value="<?php echo input('val.cpassword') ?>" type="password" name="val[cpassword]" placeholder="<?php echo lang('confirm-password') ?>" autocomplete="off" />
+            </div>
+            <div class="form-group">
+                <select required class=" form-control" name="val[gender]">
+                    <option> <?php echo lang('gender')?></option>
+                    <option <?php echo (input("val.gender") == "male") ? "selected" : null ?> value="male"><?php _lang('male') ?></option>
+                    <option <?php echo (input("val.gender") == "female") ? "selected" : null ?> value="female"><?php _lang('female') ?></option>
+                </select>
+            </div>
+	        <div class="birthday-fields">
+		        <?php echo view('birthdate/form', array('day' => input('val.birth_day'), 'month' => input('val.birth_month'), 'year' => input('val.birth_year'))) ?>
+	        </div>
+            <?php echo fire_hook('signup.form.extend', null, array('is_portable' => true)) ?>
+	        <div class="signup-tc"><input id="signup-tos" type="checkbox" name="val[tos]" value="1" /><label for="signup-tos"><?php echo lang('signup-tos') ?></label></div>
+            <?php if(get_setting("enable-captcha")): ?>
+                <?php if(get_setting("enable-captcha") == '1'): ?>
+                    <div class="row captcha">
+                        <div class="col-md-6">
+                            <input class="form-control" type="text" placeholder="<?php echo lang('enter-text-below') ?>" name="captcha" id="captcha-input" />
+                        </div>
+                        <div class="col s6">
+                            <img id="captcha-image" src="<?php echo url("captcha.php") ?>" />
+                            <a onclick="document.getElementById('captcha-image').src='<?php echo url('captcha.php') ?>?'+Math.random();    document.getElementById('captcha-input').focus();    "><i class="ion-ios-reload"></i></a><br />
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="g-recaptcha" data-sitekey="<?php echo config('recaptcha-key'); ?>"></div>
+                    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=en"></script>
+                <?php endif ?>
+            <?php endif ?>
+            <div class="form-group">
+                <button class="btn btn-success" style="margin-top:20px;display: inline-block"><?php echo lang('Continue') ?></button>
+            </div>
+        </div>
+        <div class="row navigation-form-group">
+            <div class="col-sm-6">
+                <div class="navigation-button">
+                    <a href="#" id="signup-previous" class="btn btn-primary" style="display:none;"> <?php echo lang('Previous')?></a>
+                    <a href="#" id="signup-continue" class="btn btn-success text-uppercase" style="display:inline-block;"> <?php echo lang('Sign Up')?></a>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group already-member"> I’m already member,
+                    <a id="login-form-link" href="javascript:void(0);" class="fox-sign-btn">Sign in now</a>
+                </div>
+            </div>
+        </div>
+    </form>
+	<?php if(config('enable-facebook', false) || config('enable-twitter', false) || config('enable-googleplus', false) || config('enable-vk', false)): ?>
+	    <div class="third-auth-or navigation-form-group"> <span> OR </span></div>
+        <div id="social-links-container">
+            <div class="sign-with-container">
+
+                <ul id="home-social-links">
+                    <?php if(config('enable-facebook', false)): ?>
+                        <li>
+                            <a class="facebook" href="<?php echo url_to_pager('facebook-auth') ?>">
+                                <i class="icon ion-social-facebook"></i>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php if(config('enable-twitter', false)): ?>
+                        <li>
+                            <a class="twitter" href="<?php echo url_to_pager('twitter-auth') ?>">
+                                <i class="icon ion-social-twitter"></i>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php if(config('enable-googleplus', false)): ?>
+                        <li>
+                            <a class="googleplus" href="<?php echo url_to_pager('googleplus-auth') ?>">
+                                <i class="ion-social-googleplus-outline"></i>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php if(config('enable-vk', false)): ?>
+                        <li>
+                            <a class="vk" href="<?php echo url_to_pager('vk-auth') ?>">
+                                <i class="ion-android-arrow-forward"></i>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                    <?php echo fire_hook('extend.third.party.auth', null, array()); ?>
+                </ul>
+            </div>
+        </div>
+    <?php endif ?>
+</div>

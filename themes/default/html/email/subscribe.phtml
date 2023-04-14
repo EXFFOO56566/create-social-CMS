@@ -1,0 +1,17 @@
+<div class="field">
+	<div class="left" style="min-width: 200px;">
+		<label class="control-label"><?php echo lang('subscribe-mailing-list') ?></label>
+	</div>
+	<div class="right">
+		<div class="magic-select" data-name="val[mailing_list_subscription_status]" data-width="60px">
+			<input type="hidden" name="val[mailing_list_subscription_status]" value="<?php echo $mailing_list_subscription['status'] ?>" class="magic-select-value" />
+			<div class="magic-select-toggle">
+				<?php echo $mailing_list_subscription['status'] ? lang('yes') : lang('no') ?>
+			</div>
+			<div class="magic-select-content">
+				<div class="magic-select-option" data-value="1"><?php echo lang('yes') ?></div>
+				<div class="magic-select-option" data-value="0"><?php echo lang('no') ?></div>
+			</div>
+		</div>
+	</div>
+</div>

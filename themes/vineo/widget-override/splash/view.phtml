@@ -1,0 +1,121 @@
+<div id="topo" class="<?php echo isMobile() ? 'mobile ' : ''; ?>auto">
+    <div id="slides">
+        <div class="slide slide-1" style="z-index: 1;"></div>
+        <div class="slide slide-2"></div>
+        <div class="slide slide-3"></div>
+        <div id="topo-content">
+            <h1>
+                <?php _lang('video::where-videos-come-first')?>
+            </h1>
+
+            <a href="<?php echo url('login')?>" class="btn btn-success btn-lg"><?php _lang('video::find-videos')?></a>
+            <a href="<?php echo url('signup')?>" class="btn btn-info btn-lg"><?php _lang('video::join-today')?></a>
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
+    <div class="home-section">
+        <div class="title"><?php _lang('video::video-theme-text')?></div>
+    </div>
+</div>
+
+<div class="section-1">
+    <div class="cover"></div>
+    <div class="container" >
+        <div class="row">
+            <div class="col-md-5">
+                <?php
+                $term = input('term');
+                $type = input('type', 'browse');
+                $filter = input('filter', 'all');
+                $videos = get_videos($type, null, $term, null, null, $filter);
+                $video = null;
+                foreach($videos->results() as $v){
+                    $video = $v;
+                    break;
+                }
+                ?>
+                <?php if($video):?>
+                    <?php if($video['source'] == 'upload'): ?>
+                        <?php if($video['status'] == 0): ?>
+                            <div class="video-in-processing">
+                                <?php _lang('video::video-in-processing') ?>
+                            </div>
+                        <?php else: ?>
+                            <iframe class="" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" style="border: none;padding: 0 !important;margin:0 10px;border-radius: 3px;overflow: hidden;width: 96%;" src="<?php echo url_to_pager("play-video").'?link='.$video['file_path'] ?>&height=430" width="94%" height="450"></iframe>
+                        <?php endif ?>
+                    <?php else: ?>
+                        <div class="external-video"><?php echo set_iframe_link_param($video['code'], array('rel' => 0)) ?></div>
+                    <?php endif ?>
+                <?php endif?>
+
+            </div>
+            <div class="col-md-7">
+                <div class="home-sectio">
+                    <div class="title"><?php _lang('video::host-video-possible')?></div>
+                    <div class="desc"><?php _lang('video::host-video-possible-desc')?></div>
+                    <a href="<?php echo url('signup')?>" class="btn btn-lg btn-info"><?php _lang('signup-for-account')?></a>
+                    <a href="<?php echo url('login')?>" class="btn btn-lg btn-danger"><?php _lang('login')?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div style="background: #F8F8FA">
+<div class="container" >
+    <div class="home-section">
+        <div class="title"><?php _lang('video::latest-videos')?></div>
+
+        <div class="row">
+            <?php
+            $term = input('term');
+            $type = input('type', 'browse');
+            $filter = input('filter', 'all');
+            $videos = get_videos($type, null, $term, null, null, $filter);
+            ?>
+            <?php foreach($videos->results() as $video):?>
+                <div class="col-md-4">
+
+                    <div class="each-home-video">
+                        <div class="logo" style="background-image: url(<?php echo ($video['photo_path']) ? url_img($video['photo_path']) : img('video::images/preview.png') ?>)">
+                            <?php if($video['featured']): ?>
+                                <span class="featured-tag"><?php _lang('featured') ?></span>
+                            <?php endif ?>
+                        </div>
+                        <div class="info">
+
+
+                            <span class="title"><a ajax="true" href="<?php echo get_video_url($video) ?>"><?php echo ($video['title']) ? $video['title'] : lang('video::untitled-video') ?></a> </span>
+
+
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach?>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+<div class="container" >
+    <div class="home-section">
+        <div class="title"><?php _lang('event::browse-by-category')?></div>
+
+        <div class="row">
+
+            <?php foreach(get_video_categories() as $category):?>
+                <div class="col-md-3">
+                    <a href=" <?php echo url('videos?f=1&type=browse&term=&category='.$category['id'])?>" class="home-category"><?php echo lang($category['title'])?></a>
+
+                </div>
+            <?php endforeach?>
+        </div>
+    </div>
+</div>
+

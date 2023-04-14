@@ -1,0 +1,333 @@
+/* aknazri's itzel: being creative is not a chance, it is a way of life */
+*,
+*:after,
+*:before {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.button--text-thick {
+    font-weight: 600;
+}
+
+.button {
+    float: left;
+    min-width: 150px;
+    max-width: 450px;
+    display: block;
+    margin: 1em;
+    border: none;
+    background: -webkit-linear-gradient(top, #008dfd 0, #0370ea 100%);
+    background: -moz-linear-gradient(top, #008dfd 0, #0370ea 100%);
+    color: #eaeaea;
+    vertical-align: middle;
+    position: relative;
+    z-index: 1;
+    -webkit-backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button > span {
+    vertical-align: middle;
+}
+
+.button--itzel {
+    border: none;
+    padding: 0px;
+    overflow: hidden;
+    width: 300px;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.button--itzel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid;
+    border-radius: inherit;
+    -webkit-clip-path: polygon(0% 0%, 0% 100%, 35% 100%, 35% 60%, 65% 60%, 65% 100%, 100% 100%, 100% 0%);
+    clip-path: url(../index.html#clipBox);
+    transform: translate3d(0, 100%, 0) translate3d(0, -2px, 0);
+    transform-origin: 50% 100%;
+}
+
+.button--itzel.button--border-thin::before {
+    border: 1px solid;
+    transform: translate3d(0, 100%, 0) translate3d(0, -1px, 0);
+}
+
+.button--itzel.button--border-thick::before {
+    border: 3px solid;
+    transform: translate3d(0, 100%, 0) translate3d(0, -3px, 0);
+}
+
+.button--itzel::before,
+.button--itzel .button__icon {
+    transition: transform 0.3s;
+    transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+}
+
+.button--itzel .button__icon {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    padding: 20px;
+    font-size: 20px;
+    transform: translate3d(-50%, 0, 0);
+}
+
+.button--itzel > span {
+    display: block;
+    padding: 20px;
+    transition: transform 0.3s, opacity 0.3s;
+    transition-delay: 0.3s;
+}
+
+.button--itzel:hover::before {
+    transform: translate3d(0, 0, 0);
+}
+
+.button--itzel:hover .button__icon {
+    transition-delay: 0.1s;
+    transform: translate3d(-50%, -100%, 0);
+}
+
+.button--itzel:hover > span {
+    cursor: pointer;
+    opacity: 0;
+    transform: translate3d(0, -50%, 0);
+    transition-delay: 0s;
+}
+
+.htmlElement {
+    content: " ";
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.85);
+}
+
+audio, video {
+    -moz-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+
+    -o-transition: all 1s ease;
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+    vertical-align: top;
+    width: 100%;
+}
+
+input {
+    border: 1px solid #d9d9d9;
+    border-radius: 1px;
+    font-size: 2em;
+    margin: .2em;
+    width: 30%;
+}
+
+select {
+    border: 1px solid #d9d9d9;
+    border-radius: 1px;
+    height: 50px;
+    margin-left: 1em;
+    margin-right: -12px;
+    padding: 1.1em;
+    vertical-align: 6px;
+    width: 18%;
+}
+
+.v-viewer {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: auto;
+    height: 30px;
+    color: #ff5600;
+    padding: 5px;
+    border: solid 1px #ff5600;
+    border-radius: 0;
+    display: block;
+    text-align: center;
+    font-weight: bolder;
+}
+
+#close-x {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    border-radius: 0;
+    display: block;
+    border: none;
+    background: -webkit-linear-gradient(top, #ff5600 0, #f85600 100%);
+    background: -moz-linear-gradient(top, #ff5600 0, #f85600 100%);
+    text-align: center;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+#close-x:hover {
+    color: #003;
+}
+
+.control-container {
+    height: 150px;
+    position: fixed;
+    bottom: 20px;
+    padding: 25px;
+    left: 49%;
+    transform: translateX(-50%);
+}
+
+#videos-container {
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+video {
+    width: 100%;
+    height: 100%;
+}
+
+p {
+    padding: 1em;
+}
+
+li {
+    border-bottom: 1px solid rgb(189, 189, 189);
+    border-left: 1px solid rgb(189, 189, 189);
+    padding: .5em;
+}
+
+/* cool things never ends */
+.video-hide-field {
+    display: none;
+}
+
+.video-in-processing {
+    background: #F5F5F5;
+    font-size: 15px;
+    padding: 150px 0;
+    text-align: center;
+}
+
+.video-filter-pane {
+    background: #ECECEC;
+    padding: 10px;
+    margin: 10px 0;
+    position: relative;
+}
+
+.video-filter-pane .video-layout-type {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.video-filter-pane .video-layout-type a {
+    font-size: 35px;
+    margin-left: 5px;
+}
+
+.external-video iframe {
+    width: 100% !important;
+    height: 400px;
+}
+
+.feed-video-player-container {
+    margin: 10px;
+    margin-top: 0;
+    background: #F1F1F1;
+}
+
+.feed-video-player-container .video-title {
+    min-height: 40px;
+    background: #DEDEDE;
+    padding: 15px 10px;
+    position: relative;
+}
+
+.feed-livestream-player-container .livestream-title a {
+    color: #3B3E40;
+    font-size: 15px;
+    width: 80%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+}
+
+.feed-livestream-player-container .livestream-title .views {
+    font-size: 15px;
+    color: #000000;
+    display: inline-block;
+}
+
+#livestream-widget div.media-left {
+    display: inline-block;
+}
+
+#livestream-widget div.media-body {
+    width: calc(100% - 85px);
+    overflow: hidden;
+    display: inline-block;
+}
+
+#livestream-widget div.media-body h6.media-heading {
+    font-weight: normal;
+    display: inline-block;
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#livestream-widget div.media-body .help-block {
+    word-break: break-word !important;
+}
+
+.grid-listing-container .right {
+    line-height: 22px;
+}
+
+.grid-listing-container .feed-time /*,
+.grid-listing-container .livestream-social-share-link*/
+{
+    display: none !important;
+}
+
+.grid-listing-container .right > a,
+.grid-listing-container .right > .item-info,
+.grid-listing-container .right > .item-desc {
+    white-space: nowrap !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+/*.media-lg .media-object img {
+    width: auto;
+    height: 100%;
+    position: relative;
+    right: 50%;
+}*/

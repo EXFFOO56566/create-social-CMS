@@ -1,0 +1,50 @@
+<?php if(config('feed-like-type', 'regular') == 'regular'): ?>
+	<li>
+		<a onclick="return like_item('<?php echo $type ?>', '<?php echo $typeId ?>')" data-status="<?php echo (has_liked($type, $typeId)) ? '1' : 0 ?>" class=" like-button-<?php echo $type ?>-<?php echo $typeId ?> like-button <?php echo (has_liked($type, $typeId)) ? 'liked' : null ?>" href="">
+			<i class="fa fa-thumbs-o-up font-awesome-i"></i>
+			<span class="hidden-md-down"><?php echo lang('like::like') ?></span></a>
+	</li>
+	<?php if(config('enable-dislike', false)): ?>
+		<li>
+			<a id="" onclick="return dislike_item('<?php echo $type ?>', '<?php echo $typeId ?>')" data-status="<?php echo (has_disliked($type, $typeId)) ? '1' : 0 ?>" class="dislike-button-<?php echo $type ?>-<?php echo $typeId ?> like-button <?php echo (has_disliked($type, $typeId)) ? 'disliked' : null ?>" href="">
+				<i class="fa fa-thumbs-o-down font-awesome-i"></i>
+				<span class="hidden-md-down"><?php echo lang('like::dislike') ?></span></a>
+		</li>
+	<?php endif ?>
+<?php else: ?>
+	<li class="feed-react">
+		<div class="react-items react-items-<?php echo $typeId ?>" id="">
+			<ul>
+				<li>
+					<a data-type="<?php echo $type ?>" data-target="<?php echo $typeId ?>" href="" data-code="1" data-toggle="tooltip" title="<?php echo lang('like::like') ?>"><img src="<?php echo img('images/reaction/like.png') ?>"/></a>
+				</li>
+				<li>
+					<a data-type="<?php echo $type ?>" data-target="<?php echo $typeId ?>" href="" data-code="4" data-toggle="tooltip" title="<?php echo lang('like::love') ?>"><img src="<?php echo img('images/reaction/love.png') ?>"/></a>
+				</li>
+				<li>
+					<a data-type="<?php echo $type ?>" data-target="<?php echo $typeId ?>" href="" data-code="5" data-toggle="tooltip" title="<?php echo lang('like::haha') ?>"><img src="<?php echo img('images/reaction/haha.png') ?>"/></a>
+				</li>
+				<li>
+					<a data-type="<?php echo $type ?>" data-target="<?php echo $typeId ?>" href="" data-code="6" data-toggle="tooltip" title="<?php echo lang('like::yay') ?>"><img src="<?php echo img('images/reaction/yay.png') ?>"/></a>
+				</li>
+				<li>
+					<a data-type="<?php echo $type ?>" data-target="<?php echo $typeId ?>" href="" data-code="7" data-toggle="tooltip" title="<?php echo lang('like::wow') ?>"><img src="<?php echo img('images/reaction/wow.png') ?>"/></a>
+				</li>
+				<li>
+					<a data-type="<?php echo $type ?>" data-target="<?php echo $typeId ?>" href="" data-code="8" data-toggle="tooltip" title="<?php echo lang('like::sad') ?>"><img src="<?php echo img('images/reaction/sad.png') ?>"/></a>
+				</li>
+				<li>
+					<a data-type="<?php echo $type ?>" data-target="<?php echo $typeId ?>" href="" data-code="9" data-toggle="tooltip" title="<?php echo lang('like::angry') ?>"><img src="<?php echo img('images/reaction/angry.png') ?>"/></a>
+				</li>
+			</ul>
+		</div>
+		<a id="react-button-<?php echo $type ?>-<?php echo $typeId ?>" data-type="<?php echo $type ?>" data-target="<?php echo $typeId ?>" data-status="<?php echo (has_reacted($type, $typeId)) ? '1' : 0 ?>" class=" react-button-<?php echo $type ?>-<?php echo $typeId ?> react-button <?php echo (has_reacted($type, $typeId)) ? 'liked' : null ?>" href="">
+			<?php $has_reacted = has_reacted($type, $typeId); ?>
+			<?php if($has_reacted): ?>
+				<?php echo view("like::react-img", array('type' => $type, 'type_id' => $typeId)) ?>
+			<?php else: ?>
+			<i class="fa fa-thumbs-o-up font-awesome-i"></i>
+			<span class="hidden-md-down"><?php echo lang('like::like') ?></span></a>
+		<?php endif; ?>
+	</li>
+<?php endif ?>

@@ -1,0 +1,363 @@
+.magic-select {
+    position: relative;
+    display: inline-block;
+}
+
+.magic-select-toggle {
+    border: solid 1px #CED0D4;
+    border-radius: 2px;
+    padding: 4px 20px 4px 8px;
+    background: linear-gradient(to bottom, #FFFFFF 0, #F6F7F9 100%);
+    font-size: 14px;
+    font-weight: bold;
+    color: #4B4E56;
+    cursor: pointer;
+    display: block;
+    line-height: 20px;
+}
+
+.magic-select-toggle:after {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    top: calc(50% - 2px);
+    width: 0;
+    height: 0;
+    margin-left: .255em;
+    vertical-align: .255em;
+    content: "";
+    border-top: .3em solid;
+    border-right: .3em solid transparent;
+    border-bottom: 0;
+    border-left: .3em solid transparent;
+}
+
+.magic-select-toggle:hover,
+.magic-select-toggle:focus {
+
+}
+
+.magic-select-toggle .thumb {
+    margin-left: -2px;
+}
+
+.magic-select .slimScrollDiv {
+    position: absolute !important;
+    width: 100% !important;
+    display: none;
+    z-index: 9;
+}
+
+.magic-select .slimScrollRail {
+    width: 4px !important;
+}
+
+.magic-select .slimScrollBar {
+    width: 4px !important;
+    border-radius: 0px !important;
+}
+
+.magic-select-content {
+    display: none;
+    /*height: auto !important;*/
+    position: absolute;
+    background-color: #FFFFFF;
+    width: 100% !important;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.31);
+    z-index: 1;
+}
+
+.magic-select-content.show {
+    display: block;
+}
+
+.magic-select-label {
+    margin-top: 8px;
+    padding: 0px 4px;
+    font-weight: bold;
+}
+
+.magic-select-option {
+    background-color: #f6f7f9;
+    margin: 2px 0px;
+    padding: 4px;
+    display: block;
+    cursor: pointer;
+}
+
+.magic-select-option:hover {
+    background-color: #DDDDDD
+}
+
+.magic-select-toggle .thumb,
+.magic-select-option .thumb {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    object-position: center;
+    background-size: cover;
+    background-position: center;
+    display: inline-block;
+    margin-right: 4px;
+    border-radius: 4px;
+    vertical-align: text-bottom;
+}
+
+.magic-input-image-preview {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+
+.magic-input-image-preview .reset {
+    position: absolute;
+    top: 0px;
+    right: 4px;
+    text-shadow: 0px 0px 0px #FF0000;
+    display: none;
+    cursor: pointer;
+}
+.range_inputs {
+    position: relative !important;
+    margin-top: 42px !important;
+    width: 100% !important;
+    margin-left: 7px !important;
+}
+.magic-input-image-preview .dimension {
+    position: absolute;
+    bottom: 1px;
+    font-size: 10px;
+    left: 1px;
+    text-shadow: 1px 1px 0px #DCDCDC;
+}
+
+.magic-input-image-preview input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+@media (max-width: 540px) {
+    .magic-select {
+        width: 100% !important;
+    }
+}
+.progress {
+    margin-bottom: 0;
+    background-color: #0d6996;
+}
+.progress-bar {
+    background-color: #007bff;
+}
+.slick-next-tweak{
+    color: #888;
+    position: absolute;
+    top: 30%;
+    left: 83%;
+    font-size: 32px;
+    width: 35px;
+    background-color: #f2f2f2;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 4px;
+    display: none;
+}
+.slick-prev-tweak{
+    z-index: 1;
+    color: #888;
+    position: absolute;
+    top: 30%;
+    right: 83%;
+    font-size: 32px;
+    width: 35px;
+    background-color: #f2f2f2;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 4px;
+    display: none;
+}
+
+.c-input {
+    position: relative;
+    display: inline;
+    padding-left: 1.5rem;
+    color: #555
+}
+
+.c-input > input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0
+}
+
+.c-input > input:checked ~ .c-indicator {
+    color: #fff;
+    background-color: #0074d9
+}
+
+.c-input > input:active ~ .c-indicator {
+    color: #fff;
+    background-color: #84c6ff
+}
+
+.c-input + .c-input {
+    margin-left: 1rem
+}
+
+.c-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    font-size: 65%;
+    line-height: 1rem;
+    color: #eee;
+    user-select: none;
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-background-size: 50% 50%;
+    background-size: 50% 50%
+}
+
+.c-checkbox .c-indicator {
+    border-radius: .25rem
+}
+
+.c-checkbox input:checked ~ .c-indicator {
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgOCA4IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA4IDgiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTYuNCwxTDUuNywxLjdMMi45LDQuNUwyLjEsMy43TDEuNCwzTDAsNC40bDAuNywwLjdsMS41LDEuNWwwLjcsMC43bDAuNy0wLjdsMy41LTMuNWwwLjctMC43TDYuNCwxTDYuNCwxeiINCgkvPg0KPC9zdmc+DQo=)
+}
+
+.c-checkbox input:indeterminate ~ .c-indicator {
+    background-color: #0074d9;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iOHB4IiBoZWlnaHQ9IjhweCIgdmlld0JveD0iMCAwIDggOCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgOCA4IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik0wLDN2Mmg4VjNIMHoiLz4NCjwvc3ZnPg0K)
+}
+
+.c-radio .c-indicator {
+    border-radius: 50%
+}
+
+.c-radio input:checked ~ .c-indicator {
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgOCA4IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA4IDgiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTQsMUMyLjMsMSwxLDIuMywxLDRzMS4zLDMsMywzczMtMS4zLDMtM1M1LjcsMSw0LDF6Ii8+DQo8L3N2Zz4NCg==)
+}
+
+.c-inputs-stacked .c-input {
+    display: inline
+}
+
+.c-inputs-stacked .c-input:after {
+    display: block;
+    margin-bottom: .25rem;
+    content: ""
+}
+
+.c-select, .file {
+    display: inline-block
+}
+
+.c-inputs-stacked .c-input + .c-input {
+    margin-left: 0
+}
+
+.c-select {
+    max-width: 100%;
+    -webkit-appearance: none;
+    padding: .375rem 1.75rem .375rem .75rem;
+    padding-right: .75rem \9;
+    vertical-align: middle;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAUCAMAAACzvE1FAAAADFBMVEUzMzMzMzMzMzMzMzMKAG/3AAAAA3RSTlMAf4C/aSLHAAAAPElEQVR42q3NMQ4AIAgEQTn//2cLdRKppSGzBYwzVXvznNWs8C58CiussPJj8h6NwgorrKRdTvuV9v16Afn0AYFOB7aYAAAAAElFTkSuQmCC) right .75rem center no-repeat #fff;
+    background-image: none \9;
+    -webkit-background-size: 8px 10px;
+    background-size: 8px 10px;
+    border: 1px solid #ccc;
+    -moz-appearance: none;
+    appearance: none
+}
+
+.c-select:focus {
+    border-color: #51a7e8;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .075), 0 0 5px rgba(81, 167, 232, .5);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .075), 0 0 5px rgba(81, 167, 232, .5)
+}
+
+.c-select::-ms-expand {
+    opacity: 0
+}
+
+.c-select-sm {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 12px
+}
+
+.c-select-sm:not([multiple]) {
+    height: 26px;
+    min-height: 26px
+}
+
+.file {
+    position: relative;
+    height: 2.5rem
+}
+
+.file-custom, .file-custom:before {
+    position: absolute;
+    height: 2.5rem;
+    padding: .5rem 1rem;
+    line-height: 1.5;
+    color: #555
+}
+
+.file input {
+    min-width: 14rem;
+    margin: 0;
+    filter: alpha(opacity=0);
+    opacity: 0
+}
+
+.file-custom {
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 5;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #fff;
+    border: .075rem solid #ddd;
+    border-radius: .25rem;
+    -webkit-box-shadow: inset 0 .2rem .4rem rgba(0, 0, 0, .05);
+    box-shadow: inset 0 .2rem .4rem rgba(0, 0, 0, .05)
+}
+
+.file-custom:after {
+    content: "Choose file..."
+}
+
+.file-custom:before {
+    top: -.075rem;
+    right: -.075rem;
+    bottom: -.075rem;
+    z-index: 6;
+    display: block;
+    content: "Browse";
+    background-color: #eee;
+    border: .075rem solid #ddd;
+    border-radius: 0 .25rem .25rem 0
+}
+
+.file input:focus ~ .file-custom {
+    -webkit-box-shadow: 0 0 0 .075rem #fff, 0 0 0 .2rem #0074d9;
+    box-shadow: 0 0 0 .075rem #fff, 0 0 0 .2rem #0074d9
+}

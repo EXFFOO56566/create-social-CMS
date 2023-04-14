@@ -1,0 +1,38 @@
+<div class="box music">
+	<div class="global-filter-container" data-url="<?php echo url_to_pager('music-playlists') ?>">
+		<!--<div class="list-head">
+			<h3 class="heading"><?php echo lang('music::playlists') ?></h3>
+		</div>-->
+		<form id="music-list-search" method="post" onsubmit="return run_global_filter()" action="" class="form-inline list-search">
+			<?php CSRFProtection::embed() ?>
+			<input type="hidden" class="filter-input form-control" data-name="type" value="<?php echo input('type', 'browse') ?>"/>
+			<i class="search-icon ion-ios-search"></i>
+			<input value="<?php echo input('term') ?>" type="text" class="form-control search-box filter-input" data-name="term" placeholder="<?php echo lang('search') ?>"/>
+		</form>
+		<div class="filter-pane">
+			<select id="playlist-filter-select" onchange="return run_global_filter()" data-name="filter" class="c-select filter-input">
+				<option value="all"><?php echo lang('all') ?></option>
+				<option <?php echo (input('filter') == 'top') ? 'selected' : null ?> value="top"><?php echo lang('music::top') ?></option>
+				<option <?php echo (input('filter') == 'featured') ? 'selected' : null ?> value="featured"><?php echo lang('music::featured') ?></option>
+			</select>
+		</div>
+	</div>
+	<div id="playlists-list-container" class="box-content clearfix list-listing-container">
+		<?php foreach($playlists->results() as $playlist): ?>
+			<?php echo view('music::playlist', array('playlist' => $playlist)) ?>
+		<?php endforeach ?>
+	</div>
+
+	<?php if($playlists->total): ?>
+		<div class="box-content">
+			<?php $appends = array(); ?>
+			<?php if(input('term')) $appends['term'] = input('term'); ?>
+			<?php if(input('type')) $appends['type'] = input('type'); ?>
+			<?php echo $playlists->append($appends)->links(true); ?>
+		</div>
+	<?php else: ?>
+		<div class="box-content">
+			<div class="alert alert-info"><?php echo lang('music::no-playlist-found-here') ?></div>
+		</div>
+	<?php endif ?>
+</div>

@@ -1,0 +1,61 @@
+<div id="home-members" class="container">
+	<h4><?php echo lang('top-members-home') ?></h4>
+	<ul class="nav nav-pills menu">
+		<li class="menu-item">
+			<a data-toggle="pill" href="#splash-latest-member-content" class="active">
+				<?php echo lang('latest'); ?>
+				<i class="arrow ion-arrow-down-b"></i>
+			</a>
+		</li>
+		<li class="menu-item">
+			<a data-toggle="pill" href="#splash-active-members-content">
+				<?php echo lang('active'); ?>
+				<i class="arrow ion-arrow-down-b"></i>
+			</a>
+		</li>
+		<li class="menu-item">
+			<a data-toggle="pill" href="#splash-featured-members-content">
+				<?php echo lang('featured'); ?>
+				<i class="arrow ion-arrow-down-b"></i>
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content menu-content">
+		<div id="splash-latest-member-content" class=" slider-side-widget tab-pane fade in active show">
+			<?php foreach(get_top_members('latest', $limit) as $user): ?>
+				<div class="member-container">
+					<a href="<?php echo profile_url(null, $user) ?>" style="background-image: url(<?php echo get_avatar(200, $user) ?>)" class="member"></a>
+					<div class="username"><?php echo get_user_name($user) ?></div>
+					<div class="timeago-container">
+						<?php echo lang('active'); ?>
+						<span class="timeago" title="<?php echo date('c', $user['online_time']) ?>"><?php echo date('c', $user['online_time']) ?></span>
+					</div>
+				</div>
+			<?php endforeach ?>
+		</div>
+		<div id="splash-active-members-content" class="tab-pane">
+			<?php foreach(get_top_members('active', $limit) as $user): ?>
+				<div class="member-container">
+					<a href="<?php echo profile_url(null, $user) ?>" style="background-image: url(<?php echo get_avatar(200, $user) ?>)" class="member"></a>
+					<div class="username"><?php echo get_user_name($user) ?></div>
+					<div class="timeago-container">
+						<?php echo lang('active'); ?>
+						<span class="timeago" title="<?php echo date('c', $user['online_time']) ?>"><?php echo date('c', $user['online_time']) ?></span>
+					</div>
+				</div>
+			<?php endforeach ?>
+		</div>
+		<div id="splash-featured-members-content" class="tab-pane">
+			<?php foreach(get_top_members('featured', $limit) as $user): ?>
+				<div class="member-container">
+					<a href="<?php echo profile_url(null, $user) ?>" style="background-image: url(<?php echo get_avatar(200, $user) ?>)" class="member"></a>
+					<div class="username"><?php echo get_user_name($user) ?></div>
+					<div class="timeago-container">
+						<?php echo lang('active'); ?>
+						<span class="timeago" title="<?php echo date('c', $user['online_time']) ?>"><?php echo date('c', $user['online_time']) ?></span>
+					</div>
+				</div>
+			<?php endforeach ?>
+		</div>
+	</div>
+</div>

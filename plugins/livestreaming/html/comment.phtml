@@ -1,0 +1,23 @@
+<?php
+$comm_string = "";
+foreach($comments as $comment){
+	$comm_string .=  "<li>
+				<div><div class='upper-div' style='width:20%; max-width:32px; margin-right:3px'><img src='{$comment['publisher']['avatar']}' height='30' width='30'/></div>
+				<div class='upper-div' style='width:78%; min-width:230px'><a href=''>{$comment['publisher']['username']}:</a> {$comment['text']}</div></div>
+				<div class='clear'></div>
+				<div class='social'><span class='like'><a href='#'  onClick='submitLivestreamCreds('comment_like', ${comment['comment_id']})'><i class='ion-thumbsup'></i>like</a></span><span id='comment_like_count' class='like-count'>{$comment['like_count']} likes</span></div>
+		   </li>";
+}
+
+$cacheName = "livestream-comment-".get_userid().date('Y-m-d-h');
+if (cache_exists($cacheName))
+    if($comm_string == get_cache($cacheName)) echo 'same';
+    else {
+        set_cacheForever($cacheName, $comm_string);
+        echo $comm_string;
+    }
+else {
+    set_cacheForever($cacheName, $comm_string);
+    echo $comm_string;
+}
+?>

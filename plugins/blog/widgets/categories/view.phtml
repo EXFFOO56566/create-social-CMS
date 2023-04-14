@@ -1,0 +1,14 @@
+<?php $cats = get_blog_categories(); ?>
+<div class="box">
+	<div class="title">
+		<?php echo lang('blog::categories') ?>
+	</div>
+	<ul class="menu">
+		<?php foreach($cats as $cat): ?>
+			<li>
+				<a href="<?php echo url('blogs') ?>?category=<?php echo $cat['id']; ?>"
+				   ajax="true"><?php echo lang($cat['title']) ?></a>
+			</li>
+		<?php endforeach ?>
+	</ul>
+</div>

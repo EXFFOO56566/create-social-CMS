@@ -1,0 +1,76 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('membership-plans') ?>
+	</div>
+	<div class="wrapper-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="list-table-container">
+						<div class="table-responsive">
+							<table class="table table-striped list-table">
+								<thead>
+								<tr>
+									<th>
+										<div class="list-table-select" data-group="users"
+										     data-id="0"></div>
+									</th>
+									<th>Id</th>
+									<th>Coupon Code</th>
+									<th>Discount %</th>
+									<th>No of time to be used</th>
+									<th>Status</th>
+									<th>Actions</th>
+								</tr>
+								<?php foreach($promotion_codes->results() as $promotion_code): ?>
+									<tr>
+										<td>
+											<div class="list-table-select" data-group="users"
+											     data-id="<?php echo $promotion_code['id']; ?>"></div>
+										</td>
+										<th><?php echo $promotion_code['id']; ?></th>
+										<td><?php echo $promotion_code['coupon']; ?></td>
+										<td><?php echo $promotion_code['discount']; ?></td>
+										<td><?php echo $promotion_code['no_of_use']; ?></td>
+										<td><?php $status = $promotion_code['status'];
+											$status = ($status == 1) ? "Active" : "Not Active";
+											echo $status; ?></td>
+										<td>
+											<?php $method = ($status == "Active") ? 'deactivate' : 'activate'; ?>
+											<div class="dropdown actions">
+												<a href="#" data-toggle="dropdown">
+													<i class="ion-android-settings"></i>
+												</a>
+												<div class="dropdown-menu dropdown-menu-right">
+													<a ajax="true"
+													   class="<?php echo $btn = ($status == "Active") ? 'ion-close-round' : 'ion-checkmark-round'; ?>"
+													   href='<?php echo url('admincp/membership/coupon/manage?action=activate&id='.$promotion_code['id'].'&method='.$method) ?>'></a>
+													|
+													<a ajax="true" class="admin-confirm ion-android-delete"
+													   href="<?php echo url('admincp/membership/coupon/delete?action=delete&id='.$promotion_code['id']) ?>"></a>
+												</div>
+											</div>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+								<tr>
+									<th> Pages</th>
+									<td rowspan="5">
+										<div class="box-content">
+											<?php if($promotion_codes->total): ?>
+												<?php if($promotion_codes->total > config('promotion-list-limit', 20)): ?>
+													<?php echo $promotion_codes->links(true) ?>
+												<?php endif ?>
+											<?php else: ?>
+												<div class="alert alert-info"><?php echo lang('no-promotion-code-found') ?></div>
+											<?php endif ?>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

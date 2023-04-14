@@ -1,0 +1,47 @@
+<?php $weather_info = weather_get_weather_info(); ?>
+<?php if($weather_info): ?>
+	<?php $location = $weather_info->query->results->channel->location ?>
+	<?php $wind = $weather_info->query->results->channel->wind ?>
+	<?php $atmosphere = $weather_info->query->results->channel->atmosphere ?>
+	<?php $forecasts = $weather_info->query->results->channel->item->forecast ?>
+	<?php $symbols = array('Sunny' => 'ion-ios-sunny', 'Partly Sunny' => 'ion-ios-partlysunny', 'Mostly Sunny' => 'ion-ios-sunny-outline', 'Cloudy' => 'ion-ios-cloudy', 'Partly Cloudy' => 'ion-ios-cloudy-outline', 'Thunderstorms' => 'ion-ios-thunderstorm', 'Rainy' => 'ion-ios-rainy') ?>
+	<?php $weekdays = array('Mon' => lang('weather::monday'), 'Tue' => lang('weather::tuesday'), 'Wed' => lang('weather::wednesday'), 'Thu' => lang('weather::thursday'), 'Fri' => lang('weather::friday'), 'Sat' => lang('weather::saturday'), 'Sun' => lang('weather::sunday'),) ?>
+	<div class="weather box weather-widget weather-forecast-widget">
+		<div class="title"><?php echo lang('weather::weather-forecast') ?></div>
+		<div class="box-content">
+			<div class="weather-location"><?php echo $location->city.' '.$location->region.', '.$location->country ?></div>
+			<?php $today = $forecasts[0]; ?>
+			<div class="weather-heading"><?php echo lang('weather::today-weather') ?></div>
+			<div class="weather-today-forecast">
+				<?php $symbol = isset($symbols[$today->text]) ? $symbols[$today->text] : '' ?>
+				<div class="weather-forecast-image <?php echo $symbol ?>"></div>
+				<div class="weather-stat">
+					<div><?php echo weather_get_temp($today->high) ?> - <?php echo weather_get_temp($today->low) ?></div>
+					<div><?php echo $today->text ?></div>
+					<div><?php echo lang('weather::humidity').': '.$atmosphere->humidity.'%' ?></div>
+					<div><?php echo lang('weather::wind').': '.$wind->speed.'mph' ?></div>
+				</div>
+			</div>
+			<div class="weather-heading"><?php echo lang('weather::forecast') ?></div>
+			<?php $i = 0; ?>
+			<?php foreach($forecasts as $forecast): ?>
+				<?php $i++; ?>
+				<?php if($i == 1): ?>
+					<?php continue; ?>
+				<?php endif; ?>
+				<div class="weather-forecast">
+					<?php $symbol = isset($symbols[$forecast->text]) ? $symbols[$forecast->text] : '' ?>
+					<div class="weather-forecast-image <?php echo $symbol ?>"></div>
+					<div class="weather-stat">
+						<div><?php echo $weekdays[$forecast->day] ?></div>
+						<div><?php echo weather_get_temp($forecast->high) ?> - <?php echo weather_get_temp($forecast->low) ?></div>
+						<div><?php echo $forecast->text ?></div>
+					</div>
+				</div>
+				<?php if($i == 7): ?>
+					<?php break; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+	</div>
+<?php endif ?>

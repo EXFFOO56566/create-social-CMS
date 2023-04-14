@@ -1,0 +1,29 @@
+<div id="feed-lists" data-type="saved" data-type-id="" data-offset="0">
+	<?php $i = 0;
+	foreach($feeds as $feed):fire_hook('feed.lists.inline', null, array($i));
+		$i++ ?>
+		<?php echo view('feed::feed', array('feed' => $feed)) ?>
+	<?php endforeach ?>
+
+
+</div>
+
+<?php if(count($feeds)): ?>
+	<div class="feed-load-more">
+		<div class="col-sm-12 no-padding">
+			<div class="feed-loading">
+				<div class="feed_loading_post">
+					<div class="feed_loading_post_child2">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php else: ?>
+	<div class="box">
+		<div class="box-content">
+			<div class="alert alert-danger"><?php echo lang('no-saved-post') ?></div>
+		</div>
+	</div>
+<?php endif ?>

@@ -1,0 +1,63 @@
+<div class="md-container">
+	<div class="box">
+		<div class="title"><?php echo lang('page::add-page') ?></div>
+		<?php if($message): ?>
+			<div class="alert alert-danger"><?php echo $message ?></div>
+		<?php endif ?>
+		<form action="" method="post" class="ajax-form">
+			<?php CSRFProtection::embed() ?>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('page::select-category') ?></label>
+				</div>
+				<div class="right">
+					<div class="magic-select" data-name="val[category]" data-width="300px">
+						<div class="magic-select-toggle">
+							<?php echo lang('select-category') ?>
+						</div>
+						<div class="magic-select-content slimscroll" data-height="200px">
+							<?php foreach(get_page_categories() as $category): ?>
+								<div class="magic-select-option" data-value="<?php echo $category['category_id'] ?>">
+									<?php echo lang($category['category_title']); ?>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('page-title') ?></label>
+				</div>
+				<div class="right">
+					<input value="<?php echo input('val.name') ?>" type="text" name="val[name]" class="form-control"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="left">
+					<label class="control-label"><?php echo lang('page::description') ?></label>
+				</div>
+				<div class="right">
+					<textarea name="val[description]" data-height="50px" class="form-control auto-grow-input"><?php echo input('val.description') ?></textarea>
+				</div>
+			</div>
+            <?php fire_hook('page.create.view')?>
+			<?php $customsField = get_form_custom_fields('page'); ?>
+			<?php if(count($customsField) > 0): ?>
+				<div class="field">
+					<div class="left">
+						<label class="control-label">Custom</label>
+					</div>
+					<div class="right">
+						<?php foreach($customsField as $field): ?>
+							<?php echo view("custom-field/display", array('field' => $field, 'offDescription' => true)) ?>
+						<?php endforeach ?>
+					</div>
+				</div>
+			<?php endif ?>
+			<div class="submit">
+				<button class="btn btn-info action-button"><?php echo lang('page::create-page') ?></button>
+			</div>
+		</form>
+	</div>
+</div>

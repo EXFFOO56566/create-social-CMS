@@ -1,0 +1,83 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang("group::groups-manager") ?>
+	</div>
+	<div class="wrapper-content">
+		<form action="" method="get" style="margin: 20px 0">
+			<?php CSRFProtection::embed() ?>
+			<input type="text" class="form-control" name="term" placeholder="<?php echo lang('search') ?>"/>
+			<button class="btn btn-sm btn-secondary" style="margin-top: 10px"><?php echo lang('search') ?></button>
+		</form>
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-group-batch-action') ?>?action=delete"
+					   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+					<?php fire_hook('admin.user.list.actions'); ?>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<td style="width:5%">ID</td>
+						<td style="width:30%"><?php echo lang('group::group-name') ?></td>
+						<td style="width:25%"><?php echo lang('owner') ?></td>
+						<td style="width:15%"><?php echo lang('members') ?></td>
+						<td style="width:25%"><?php echo lang('action') ?></td>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($groups->results() as $group): ?>
+						<tr>
+							<td>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $group['group_id'] ?>"></div>
+							</td>
+							<td><?php echo $group['group_id'] ?></td>
+							<td>
+								<a href="<?php echo group_url(null, $group) ?>"><?php echo $group['group_title'] ?></a>
+							</td>
+							<td>
+								<?php $user = find_user($group['user_id']) ?>
+								<?php if($user): ?>
+									<a href="<?php echo profile_url(null, $user) ?>"><img
+												src="<?php echo get_avatar(75, $user) ?>"
+												style="width:30px;height:30px;border-radius:100px"/> <?php echo get_user_name($user) ?>
+									</a>
+								<?php endif ?>
+							</td>
+							<td>
+								<?php echo count(get_group_members_id($group['group_id'])) ?>
+							</td>
+
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-eye"
+										   href='<?php echo group_url(null, $group) ?>'></a>
+										|
+										<a ajax="true" class="ion-edit"
+										   href='<?php echo url_to_pager('group-admin-edit', array('id' => $group['group_id'])) ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-android-delete"
+										   href="<?php echo url_to_pager('group-delete', array('id' => $group['group_id'])) ?>?admin=true"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php echo $groups->links() ?>
+	</div>
+</div>

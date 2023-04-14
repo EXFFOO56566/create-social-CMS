@@ -1,0 +1,33 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('verification-questions') ?>
+		<a href="<?php echo url_to_pager('admin-add-verify-question') ?>"><?php echo lang('add') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<table class="table table-bordered" style="margin-top: 20px">
+			<thead>
+			<tr>
+				<th>Questions</th>
+				<th>Type</th>
+				<th>Actions</th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php foreach($questions as $question): ?>
+				<tr>
+					<td><?php echo $question['question'] ?></td>
+					<td><?php echo $question['entity'] ?></td>
+					<td>
+						<a href="<?php echo url_to_pager('admin-verification-question-edit').'?id='.$question['id'] ?>" class="btn btn-sm btn-success">
+							<i class="ion-edit"></i></a>
+						<a href="<?php echo url_to_pager('admin-verification-question-delete').'?id='.$question['id'] ?>" class="admin-confirm btn btn-sm btn-danger">
+							<i class="ion-android-delete"></i></a>
+					</td>
+				</tr>
+			<?php endforeach ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+

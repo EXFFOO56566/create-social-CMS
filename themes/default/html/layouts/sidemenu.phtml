@@ -1,0 +1,110 @@
+<?php $images = fire_hook('shortcut.menu.images', array(
+	'ion-android-alarm-clock' => img('images/icons/auction.png'),
+	'ion-android-calendar' => img('images/icons/events.png'),
+	'ion-android-cart' => img('images/icons/marketplace.png'),
+	'ion-android-checkbox' => img('images/icons/poll.png'),
+	'ion-ios-help' => img('images/icons/anonymous.png'),
+	'ion-android-clipboard' => img('images/icons/edit.png'),
+	'ion-chatbubbles' => img('images/icons/faq.png'),
+	'ion-chatbox-working' => img('images/icons/feedback.png'),
+	'ion-android-mail' => img('images/icons/send_message.png'),
+	'ion-android-people' => img('images/icons/people.png'),
+	'ion-android-person-add' => img('images/icons/add_friend.png'),
+	'ion-bag' => img('images/icons/gift.png'),
+	'ion-briefcase' => img('images/icons/handshake.png'),
+	'ion-card' => img('images/icons/flag.png'),
+	'ion-chatboxes' => img('images/icons/acquaintances.png'),
+	'ion-home' => img('images/icons/news_feed.png'),
+	'ion-images' => img('images/icons/picture.png'),
+	'ion-ios-contact-outline' => img('images/icons/person.png'),
+	'ion-ios-game-controller-b-outline' => img('images/icons/games.png'),
+	'ion-ios-people' => img('images/icons/group.png'),
+	'ion-ios-pricetag' => img('images/icons/property.png'),
+	'ion-ios-videocam-outline' => img('images/icons/video.png'),
+	'ion-music-note' => img('images/icons/music.png'),
+	'ion-pound' => img('images/icons/hashtag.png'),
+	'ion-radio-waves' => img('images/icons/stream.png'),
+	'ion-social-bitcoin' => img('images/icons/bitcoin.png'),
+	'ion-email' => img('images/icons/email.png'),
+	'ion-ios-paper' => img('images/icons/live-news-icon.png'),
+	'ion-social-usd' => img('images/icons/advertise.png')
+)); ?>
+
+<div class="menu">
+	<?php if(is_loggedIn()): ?>
+		<div class="menu-item account">
+			<a class="menu-item-link left" href="<?php echo profile_url() ?>" ajax="true" title="<?php echo lang('view-profile') ?>">
+				<span class="thumb"><img src="<?php echo get_avatar(75) ?>"></span>
+				<span class="title"><?php echo str_limit(get_user_name(), 20); ?></span>
+			</a>
+			<a class="menu-item-link right" href="<?php echo url_to_pager('account') ?>" title="View profile" ajax="true">
+				<i class="ion-edit"></i>
+			</a>
+		</div>
+		<hr />
+	<?php endif ?>
+	<?php if(is_loggedIn()): ?>
+		<div id="side-menu-shortcuts">
+			<?php echo view('layouts/shortcuts') ?>
+		</div>
+		<hr />
+	<?php endif; ?>
+	<div class="side-menu-heading"><?php echo lang('explore') ?></div>
+	<?php $main_menu = get_menus('main-menu'); $limit = config('side-main-menu-limit', 10); ?>
+	<?php foreach(array_slice($main_menu, 0, $limit) as $menu_item): ?>
+		<div class="menu-item">
+			<a class="menu-item-link left" <?php echo $menu_item->ajax ? 'ajax="true"' : null ?> <?php echo $menu_item->tab ? 'onclick="return window.open(\''.$menu_item->link.'\')"' : null ?> href="<?php echo $menu_item->tab ? 'javascript:void(0)' : $menu_item->link ?>">
+				<span class="thumb">
+                    <?php if(array_key_exists($menu_item->icon, $images)): ?>
+	                    <img src="<?php echo $images[$menu_item->icon] ?>"/>
+                    <?php elseif(is_file(path($menu_item->icon))): ?>
+	                    <img src="<?php echo url($menu_item->icon) ?>"/>
+                    <?php elseif(filter_var($menu_item->icon, FILTER_VALIDATE_URL)): ?>
+	                    <img src="<?php echo $menu_item->icon ?>"/>
+                    <?php else: ?>
+	                    <i class="<?php echo $menu_item->icon ?>"></i>
+                    <?php endif ?>
+				</span>
+				<span class="title"><?php echo lang($menu_item->title) ?></span>
+			</a>
+		</div>
+	<?php endforeach ?>
+	<?php if(count($main_menu) > $limit): ?>
+		<div id="side-main-menu-more-items" class="menu-more-items">
+			<?php foreach(array_slice($main_menu, $limit) as $menu_item): ?>
+				<div class="menu-item">
+					<a class="menu-item-link left" <?php echo $menu_item->ajax ? 'ajax="true"' : null ?> <?php echo $menu_item->tab ? 'onclick="return window.open(\''.$menu_item->link.'\')"' : null ?> href="<?php echo $menu_item->tab ? 'javascript:void(0)' : $menu_item->link ?>">
+						<span class="thumb">
+		                    <?php if(array_key_exists($menu_item->icon, $images)): ?>
+			                    <img src="<?php echo $images[$menu_item->icon] ?>"/>
+		                    <?php elseif(is_file(path($menu_item->icon))): ?>
+			                    <img src="<?php echo url($menu_item->icon) ?>"/>
+		                    <?php elseif(filter_var($menu_item->icon, FILTER_VALIDATE_URL)): ?>
+			                    <img src="<?php echo $menu_item->icon ?>"/>
+		                    <?php else: ?>
+			                    <i class="<?php echo $menu_item->icon ?>"></i>
+		                    <?php endif ?>
+						</span>
+						<span class="title"><?php echo lang($menu_item->title) ?></span>
+					</a>
+				</div>
+			<?php endforeach ?>
+		</div>
+		<div class="main-menu-more menu-more">
+			<a morelabel=" <?php echo lang('see-more') ?>..." lesslabel=" <?php echo lang('see-less') ?>" class="main-menu-more-button ion-arrow-down-b" onclick="return show_more_content('#side-main-menu-more-items', this)" href="#"> <?php echo lang('show-more') ?></a>
+		</div>
+	<?php endif; ?>
+	<div class="side-menu-heading"><?php echo lang('create') ?></div>
+	<?php $create_links = fire_hook('menu.side.links.create', array(
+			url_to_pager('ads-create') => lang('ads::ad'),
+			url_to_pager('page-create') => lang('page'),
+			url_to_pager('group-create') => lang('group'),
+			url_to_pager('event-create') => lang('event')
+	)) ?>
+	<div class="side-menu-create-links">
+		<?php foreach($create_links as $link => $title): ?>
+			<?php echo $link != array_keys($create_links)[0] ? '·' : '' ?>
+			<a href="<?php echo $link ?>"><?php echo $title ?></a>
+		<?php endforeach ?>
+	</div>
+</div>

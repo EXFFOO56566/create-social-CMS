@@ -1,0 +1,204 @@
+<?php echo view('layouts/menu') ?>
+<div class="container">
+	<div data-width="950" class="profile-container" id="group-profile-container" data-id="<?php echo get_group_details('group_id') ?>">
+		<div id="profile-cover" class="box">
+			<div class="profile-cover-indicator">
+				<img src="<?php echo img('images/loading.gif') ?>"/>
+			</div>
+			<a href="javascript::void(0)" id="profile-cover-viewer" data-id="<?php echo ($app->profileGroup['group_cover']) ? get_media_id($app->profileGroup['group_cover']) : null ?>" data-image="<?php echo get_group_cover(app()->profileGroup) ?>" class="<?php echo ($app->profileGroup['group_cover']) ? 'photo-viewer' : null ?>">
+				<div class="profile-cover-wrapper">
+					<img src="<?php echo get_group_cover(app()->profileGroup, false) ?>"/>
+				</div>
+			</a>
+			<?php if(is_group_admin($app->profileGroup) or is_group_moderator($app->profileGroup)): ?>
+				<div class="profile-resize-cover-wrapper">
+					<div class="drag-info"><?php echo lang('drag-to-position-cover') ?></div>
+					<img src="<?php echo get_group_cover(app()->profileGroup) ?>" />
+				</div>
+				<form id="profile-cover-change-form" enctype="multipart/form-data" method="post">
+					<?php CSRFProtection::embed() ?>
+					<span class="file-input"><input accept="image/*" multiple onchange="return upload_group_profile_cover()" type="file" id="user-profile-cover-input" name="image"/> </span>
+					<div class="dropdown">
+						<button class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown">
+							<i class="ion-camera"></i> <?php echo lang('change-cover') ?>
+						</button>
+						<ul style="width: 240px" class="dropdown-menu dropdown-menu-right" id="profile-cover-dropdown-menu">
+							<li>
+								<a class="dropdown-item" onclick="return file_chooser('#user-profile-cover-input')" href=""><?php echo lang('upload-photo') ?>...</a>
+							</li>
+							<li class="hide-in-mobile">
+								<a class="dropdown-item" onclick="return reposition_user_profile_cover()" href=""><?php echo lang('reposition') ?>...</a>
+							</li>
+							<li>
+								<a class="dropdown-item" onclick="return remove_group_profile_cover('<?php echo img("images/cover.jpg") ?>')" href=""><?php echo lang('remove') ?>...</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+				<div class="profile-cover-reposition-button">
+					<input type="hidden" id="profile-cover-resized-top" value="0"/>
+					<a onclick="return cancel_profile_cover_position()" class="btn-danger-outline btn btn-sm" href="#!"><?php echo lang('cancel') ?></a>
+					<a onclick="return save_group_profile_cover()" class="btn btn-success btn-upper btn-sm" href=""><?php echo lang('save') ?></a>
+				</div>
+			<?php endif ?>
+			<div class="user-avatar box">
+				<?php if(is_group_admin($app->profileGroup)): ?>
+					<form data-id="<?php echo $app->profileGroup['group_id'] ?>" id="group-profile-image-form" action="" method="post" enctype="multipart/form-data">
+						<?php CSRFProtection::embed() ?>
+						<span class="file-input"><input accept="image/*" multiple onchange="upload_group_logo()" type="file" id="group-avatar-input" name="logo"/></span>
+						<a class="profile-image-selector" id="profile-image-selector" href="" <?php echo config('profile-avatar-crop', true) ? 'onclick="return false"' : 'onclick="return file_chooser(\'#group-avatar-input\')"' ?>><i class="ion-ios-camera"></i><span></span></a>
+					</form>
+				<?php endif ?>
+				<div class="profile-image-indicator">
+					<img src="<?php echo img("images/loading.gif") ?>"/>
+					<span class="percent-indicator">0%</span>
+				</div>
+				<a id="profile-image-viewer" style="display: block" href="javascript::void(0)" data-id="<?php echo ($app->profileGroup['group_logo']) ? get_media_id($app->profileGroup['group_logo']) : null ?>" data-image="<?php echo get_group_logo(920, app()->profileGroup) ?>" class="<?php echo ($app->profileGroup['group_logo']) ? 'photo-viewer' : null ?>">
+					<img id="profile-image" class="profile-image" src="<?php echo get_group_logo(200, app()->profileGroup) ?>"/>
+				</a>
+			</div>
+			<div class="user-info">
+				<h4 class="user-name left"><?php echo get_group_details('group_title') ?> <?php echo verify_badge($app->profileGroup) ?></h4>
+			</div>
+			<nav id="profile-menu" class="">
+				<div class="navbar navbar-light">
+					<ul id="menu" class="nav navbar-nav">
+						<?php foreach(get_menus("group-profile") as $menu): ?>
+							<li class="<?php echo ($menu->isActive() == 1) ? 'active' : null ?>">
+								<a ajax="true" href="<?php echo $menu->link ?>"><?php echo $menu->title ?></a>
+							</li>
+						<?php endforeach ?>
+						<?php $group_profile_more = get_menus("group-profile-more") ?>
+						<?php if(!empty($group_profile_more)): ?>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<i class="ion-ios-more"></i>
+								</a>
+								<ul style="width: 200px;" id="profile-more-menu" class="dropdown-menu dropdown-menu-right">
+									<?php foreach($group_profile_more as $menu): ?>
+										<li>
+											<a class="dropdown-item" href="<?php echo $menu->link ?>"><?php echo $menu->title ?></a>
+										</li>
+									<?php endforeach ?>
+									<?php $group_profile_more = get_menus("group-profile-more") ?>
+									<?php if(!empty($group_profile_more)): ?>
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+												<i class="ion-ios-more"></i></a>
+											<ul style="width: 250px;" id="profile-more-menu" class="dropdown-menu">
+												<?php foreach($group_profile_more as $menu): ?>
+													<li>
+														<a ajax="true" class="dropdown-item" href="<?php echo $menu->link ?>"><?php echo $menu->title ?></a>
+													</li>
+												<?php endforeach ?>
+											</ul>
+										</li>
+									<?php endif ?>
+								</ul>
+							</li>
+						<?php endif ?>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<div class="profile-actions">
+			<span class="group-social-share"><?php if($app->profileGroup['privacy'] == 1 && plugin_loaded('sharer')) echo view('sharer::share_link', array('link' => url($app->profileGroup['group_name']))) ?></span>
+			<?php if(is_loggedIn() and !is_group_admin($app->profileGroup, null, false)):?>
+				<?php $status = (is_group_member($app->profileGroup['group_id'])) ? 1 : 0?>
+				<a onclick="return join_group(this)" data-id="<?php echo $app->profileGroup['group_id']?>" class="btn btn-info" data-status="<?php echo $status?>" data-join="<?php echo lang('group::join-group')?>" data-leave="<?php echo lang('group::leave-group')?>" href="">
+					<?php echo ($status)  ? lang('group::leave-group') : lang('group::join-group')?>
+				</a>
+			<?php endif?>
+			<?php if(is_loggedIn() and is_group_admin($app->profileGroup)):?>
+				<a href="<?php echo group_url('edit')?>" ajax="true" class="btn btn-secondary"><i class="ion-edit"></i> <?php _lang('edit')?></a>
+			<?php endif?>
+			<?php if(is_loggedIn() and plugin_loaded('report')):?>
+				<a  data-type="group" data-link="<?php echo group_url(null, $app->profileGroup)?>" class="report-btn btn btn-secondary " href=""><i class="ion-flag"></i></a>
+			<?php endif?>
+			<?php if(is_loggedIn()):?>
+				<span class="dropdown">
+                        <a  href="" class="dropdown-toggle btn btn-secondary" data-toggle="dropdown"><i class="ion-android-more-vertical"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a onclick="return process_user_save(this, 'group', '<?php echo $app->profileGroup['group_id']?>')" href="" class="dropdown-item user-save" data-status="<?php echo (user_saved('group', $app->profileGroup['group_id'])) ? 1 : 0?>">
+                                    <i class="ion-android-bookmark"></i>
+                                    <span><?php echo (user_saved('group', $app->profileGroup['group_id'])) ? lang('unsave-post') : lang('save-post')?></span>
+                                </a>
+                            </li>
+	                        <?php fire_hook('profile.actions.group',null,array()); ?>
+                        </ul>
+                    </span>
+			<?php endif?>
+		</div>
+	</div>
+</div>
+<?php echo $content ?>
+<div class="container" id="crop-avatar">
+	<!-- Cropping modal -->
+	<div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<form id="avatar-crop-form" class="avatar-form" action="<?php echo $url = url('group/change/logo').'?id='.$app->profileGroup['group_id'] ?>" enctype="multipart/form-data" method="post">
+					<?php CSRFProtection::embed() ?>
+					<div class="modal-header">
+						<h4 class="modal-title" id="avatar-modal-label">Change Avatar</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="avatar-body">
+							<!-- Upload image and data -->
+							<div class="avatar-upload">
+								<input type="hidden" class="avatar-src" name="avatar_src">
+								<input type="hidden" class="avatar-data" name="avatar_data">
+								<label for="avatarInput">Local upload</label>
+								<input type="file" class="avatar-input" id="avatarInput" name="avatar_file">
+							</div>
+							<!-- Crop and preview -->
+							<div class="row">
+								<div class="col-md-9">
+									<div class="avatar-wrapper"></div>
+								</div>
+								<div class="col-md-3">
+									<div class="avatar-preview preview-lg"></div>
+									<div class="avatar-preview preview-md"></div>
+									<div class="avatar-preview preview-sm"></div>
+								</div>
+							</div>
+							<div class="row avatar-btns">
+								<div class="col-md-11">
+									<div class="btn-group">
+										<button type="button" class="btn btn-outline-info flip-horizontal ion-refresh" data-method="rotate" data-option="-15" title="<?php echo lang('rotate-left') ?>"></button>
+										<button type="button" class="btn btn-outline-info ion-refresh" data-method="rotate" data-option="15" title="<?php echo lang('rotate-right') ?>"></button>
+									</div>
+									<div class="btn-group">
+										<button type="button" class="btn btn-outline-info fa fa-search-plus" data-method="zoom" data-option="0.1" title="<?php echo lang('zoom-in') ?>"></button>
+										<button type="button" class="btn btn-outline-info fa fa-search-minus" data-method="zoom" data-option="-0.1" title="<?php echo lang('zoom-out') ?>"></button>
+									</div>
+									<div class="btn-group">
+										<button type="button" class="btn btn-outline-info fa fa-arrows-h" data-method="scaleX" data-option="-1" title="<?php echo lang('flip-horizontal') ?>"></button>
+										<button type="button" class="btn btn-outline-info fa fa-arrows-v" data-method="scaleY" data-option="-1" title="<?php echo lang('flip-vertical') ?>"></button>
+									</div>
+									<!--									<div class="btn-group">-->
+									<!--										<button type="button" class="btn btn-outline-info ion-ios-arrow-back" data-method="move" data-option="-10" data-second-option="0" title="--><?php //echo lang('move-left') ?><!--"></button>-->
+									<!--										<button type="button" class="btn btn-outline-info ion-ios-arrow-up" data-method="move" data-option="0" data-second-option="-10" title="--><?php //echo lang('move-up') ?><!--"></button>-->
+									<!--										<button type="button" class="btn btn-outline-info ion-ios-arrow-forward" data-method="move" data-option="10" data-second-option="0" title="--><?php //echo lang('move-right') ?><!--"></button>-->
+									<!--										<button type="button" class="btn btn-outline-info ion-ios-arrow-down" data-method="move" data-option="0" data-second-option="10" title="--><?php //echo lang('move-down') ?><!--"></button>-->
+									<!--									</div>-->
+									<button type="button" class="btn btn-outline-info ion-android-sync" data-method="reset" title="<?php echo lang('reset') ?>"></button>
+								</div>
+								<div class="col-md-1">
+									<button type="submit" class="btn btn-outline-info avatar-save ion-android-send" title="<?php echo lang('done') ?>"></button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="modal-footer">
+					  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div> -->
+				</form>
+			</div>
+			<!-- Loading state -->
+			<div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+		</div>
+	</div><!-- /.modal -->
+</div>

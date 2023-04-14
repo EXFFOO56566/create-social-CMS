@@ -1,0 +1,17 @@
+<div class="box">
+	<div class="title"><?php echo lang("music::musics") ?></div>
+	<div id="musics-list-container" class="box-content clearfix list-listing-container">
+		<?php foreach($musics->results() as $music): ?>
+			<?php echo view('music::music', array('music' => $music, 'playlist' => $playlist)) ?>
+		<?php endforeach ?>
+	</div>
+	<?php if($musics->total): ?>
+		<div class="box-content">
+			<?php echo $musics->append(array('category' => input('category'), 'term' => input('term'), 'type' => 'user-profile'))->links(); ?>
+		</div>
+	<?php else: ?>
+		<div class="box-content">
+			<div class="alert alert-info"><?php echo lang('no-musics-found-here') ?></div>
+		</div>
+	<?php endif ?>
+</div>

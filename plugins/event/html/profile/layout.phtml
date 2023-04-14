@@ -1,0 +1,1116 @@
+<?php //echo view('feed::editormodal')?>
+<div class="container" style="margin-left: 102px">
+	<div class="col-sm-3 lhs-page" style="padding:0px;top:20px;width: 20% !important">
+		<nav id="profile-menu-new-page" class="">
+			<div class="navbar navbar-light">
+				<ul id="menu" class="nav navbar-nav">
+					<?php foreach(get_menus("event-profile") as $menu): ?>
+						<li class="<?php echo ($menu->isActive() == 1) ? 'active' : null ?>">
+							<a ajax="true" href="<?php echo $menu->link ?>"><?php echo $menu->title ?></a>
+						</li>
+					<?php endforeach ?>
+					<?php $group_profile_more = get_menus("group-profile-more"); ?>
+					<?php if(!empty($group_profile_more)): ?>
+						<?php foreach($group_profile_more as $menu): ?>
+							<li class="<?php echo ($menu->isActive() == 1) ? 'active' : null ?>">
+								<a ajax="true" href="<?php echo $menu->link ?>"><?php echo $menu->title ?></a>
+							</li>
+						<?php endforeach; ?>
+					<?php endif; ?>
+					<?php $event_type = isset($app->eventType) ? $app->eventType : null; ?>
+					<li class="active">
+						<h4 class="user-name left"><?php echo ucwords(get_event_details('event_title')) ?></h4>
+					</li>
+					<li class="<?php echo ($event_type == 'upcoming') ? 'active' : null ?>">
+						<a ajax="true" href="<?php echo url_to_pager('events') ?>"><?php echo lang('event::all-events') ?></a>
+					</li>
+					<li class="<?php echo (segment(1) == 'calender') ? 'active' : null ?>">
+						<a ajax="true" href="<?php echo url_to_pager('events-calender', array('slug' => 'upcoming')) ?>"><?php echo lang('event::calender') ?></a>
+					</li>
+					<li class="<?php echo ($event_type == 'birthdays') ? 'active' : null ?>">
+						<a ajax="true" href="<?php echo url_to_pager('events') ?>?type=birthdays"><?php echo lang('event::birthdays') ?></a>
+					</li>
+					<li class="<?php echo ($event_type == 'past') ? 'active' : null ?>">
+						<a ajax="true" href="<?php echo url_to_pager('events') ?>?type=past"><?php echo lang('event::past-events') ?></a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	<div data-width="750" class="profile-container" id="group-profile-container" data-id="<?php echo get_event_details('event_id') ?>">
+		<div id="profile-cover" class="box">
+			<div class="profile-cover-indicator">
+				<img src="<?php echo img('images/loading.gif') ?>"/>
+			</div>
+			<div class="profile-cover-wrapper">
+				<img src="<?php echo get_event_cover(app()->profileEvent, true, 600) ?>"/>
+			</div>
+			<?php if(is_event_admin($app->profileEvent)): ?>
+				<div class="profile-resize-cover-wrapper">
+					<div class="drag-info"><?php echo lang('drag-to-position-cover') ?></div>
+					<img src="<?php echo get_event_cover(app()->profileEvent) ?>"/>
+				</div>
+				<form id="profile-cover-change-form" enctype="multipart/form-data" method="post">
+					<?php CSRFProtection::embed() ?>
+					<div class="dropdown">
+						<span class="file-input"><input accept="image/*" multiple onchange="return upload_event_profile_cover()" type="file" id="user-profile-cover-input" name="image"/> </span>
+						<button class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown">
+							<i class="ion-camera"></i> <?php echo lang('change-cover') ?>
+						</button>
+					</div>
+					<ul style="width: 240px" class="dropdown-menu dropdown-menu-right" id="profile-cover-dropdown-menu">
+						<li>
+							<a class="dropdown-item" onclick="return file_chooser('#user-profile-cover-input')" href=""><?php echo lang('upload-photo') ?>...</a>
+						</li>
+						<li class="hide-in-mobile">
+							<a class="dropdown-item" onclick="return reposition_user_profile_cover()" href=""><?php echo lang('reposition') ?>...</a>
+						</li>
+						<li>
+							<a class="dropdown-item" onclick="return remove_event_profile_cover('<?php echo img("images/cover.jpg") ?>')" href=""><?php echo lang('remove') ?>...</a>
+						</li>
+					</ul>
+				</form>
+				<div class="profile-cover-reposition-button">
+					<input type="hidden" id="profile-cover-resized-top" value="0"/>
+					<a onclick="return cancel_profile_cover_position()" class="btn-danger-outline btn btn-sm" href="#!"><?php echo lang('cancel') ?></a>
+					<a onclick="return save_event_profile_cover()" class="btn btn-success btn-upper btn-sm" href=""><?php echo lang('save') ?></a>
+				</div>
+			<?php endif ?>
+		</div>
+		<div class="profile-actions">
+			<span class="event-social-share"><?php if(plugin_loaded('sharer')) echo view('sharer::share_link', array('link' => url('event/'.$app->profileEvent['event_id']))) ?></span>
+			<?php if(is_loggedIn()): ?>
+				<?php if(is_event_admin($app->profileEvent)): ?>
+					<a ajax="true" href="<?php echo event_url('edit', $app->profileEvent) ?>" class="btn btn-secondary "><i class="ion-edit"></i> <?php echo lang('edit') ?>
+					</a>
+				<?php endif ?>
+			<?php endif ?>
+			<?php if(is_loggedIn() and plugin_loaded('report')): ?>
+				<a data-type="game" data-link="<?php echo event_url(null, $app->profileEvent) ?>" class="report-btn btn btn-secondary " href=""><i class="ion-flag"></i></a>
+			<?php endif ?>
+			<?php if(is_loggedIn()): ?>
+				<span class="dropdown">
+                        <a href="" class="dropdown-toggle btn btn-secondary" data-toggle="dropdown"><i class="ion-android-more-vertical"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a onclick="return process_user_save(this, 'event', '<?php echo $app->profileEvent['event_id'] ?>')" href="" class="dropdown-item user-save" data-status="<?php echo (user_saved('event', $app->profileEvent['event_id'])) ? 1 : 0 ?>">
+                                    <i class="ion-android-bookmark"></i>
+                                    <span><?php echo (user_saved('event', $app->profileEvent['event_id'])) ? lang('unsave-post') : lang('save-post') ?></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </span>
+			<?php endif ?>
+		</div>
+	</div>
+	<?php echo $content ?>
+</div>
+<style>
+
+	.rounded {
+		border-radius: 100px;
+	}
+
+	.preview-card {
+		position: relative;
+	}
+
+	.profile-card {
+		position: absolute;
+		z-index: 99;
+		width: 370px;
+		-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+		box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+		border: solid 2px #d3d3d3;
+
+	}
+
+	.profile-card .card-cover {
+		min-height: 100px;
+		max-height: 100px;
+		overflow: hidden;
+	}
+
+	.profile-card .card-cover img {
+		width: 100%;
+		min-height: 100%;
+	}
+
+	.profile-card .card-panel {
+		padding: 10px;
+		padding-left: 80px;
+	}
+
+	.profile-card .card-avatar {
+		position: absolute;
+		top: 70px;
+		left: 5px;
+		height: 70px;
+		width: 70px;
+		overflow: hidden;
+		padding: 5px;
+		background: #ffffff;
+		border-radius: 5px;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+	}
+
+	.profile-card .card-avatar img {
+		width: 100%;
+		min-height: 100%;
+		border-radius: 5px;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+	}
+
+	.profile-card .card-footer {
+		padding: 10px;
+	}
+
+	.profile-card .info li {
+		margin: 0;
+	}
+
+	.profile-card .info li i {
+		display: inline-block;
+		width: 5%;
+	}
+
+	.profile-container {
+		top: 0px !important;
+		margin-top: 0;
+		position: relative;
+		width: 617px;
+		margin-left: 218px;
+		margin-top: -150px;
+		height: 140px;
+	}
+
+	#profile-cover {
+		background: #ffffff;
+		border-radius: 0 !important;
+		margin-bottom: 0 !important;
+		margin-top: 0 !important;
+	}
+
+	#profile-cover .design-button {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		z-index: 99;
+	}
+
+	#design-pane {
+		display: none;
+	}
+
+	#design-pane .left a {
+		width: 60px;
+		height: 60px;
+		display: block;
+		float: left;
+		margin: 5px;
+		overflow: hidden;
+		border-radius: 5px;
+	}
+
+	#design-pane .left a img {
+		width: 100%;
+		min-height: 100%;
+	}
+
+	#design-pane .design-footer {
+		margin-top: 30px;
+		border-top: solid 1px #d3d3d3;
+		padding-top: 5px;
+	}
+
+	#profile-cover .profile-cover-wrapper,
+	#profile-cover .profile-resize-cover-wrapper {
+		width: 101%;
+		max-height: 311px;
+		overflow: hidden;
+		position: relative;
+	}
+
+	#profile-cover .profile-cover-wrapper img {
+		width: 100%;
+	}
+
+	#profile-cover .profile-resize-cover-wrapper img {
+		position: absolute;
+		width: 100%;
+	}
+
+	#profile-cover .profile-resize-cover-wrapper {
+		display: none;
+		height: 249px;
+		cursor: move;
+		z-index: 97;
+	}
+
+	#profile-cover #profile-cover-change-form {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+
+	#profile-cover .profile-resize-cover-wrapper .drag-info {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		padding: 5px;
+		text-align: center;
+		color: #ffffff;
+		background: rgba(0, 0, 0, 0.6);
+		z-index: 99;
+	}
+
+	#profile-cover .profile-cover-indicator {
+		position: absolute;
+		top: 0;
+		height: 249px;
+		width: 100%;
+		background: rgba(255, 255, 255, 0.8);
+		z-index: 98;
+		display: none;
+	}
+
+	#profile-cover .profile-cover-indicator img {
+		position: relative;
+		margin: auto;
+		display: block;
+		top: 40%;
+		width: 40px;
+	}
+
+	#profile-cover .profile-cover-reposition-button {
+		position: absolute;
+		top: 30px;
+		right: 20px;
+		display: none;
+		z-index: 97;
+	}
+
+	#profile-cover .user-avatar {
+		position: absolute;
+		bottom: 0px;
+		background: #ffffff;
+		padding: 5px;
+		z-index: 99;
+		left: 1rem;
+		border-top: solid 1px #D4D4D4;
+		width: 140px;
+		height: 140px;
+		overflow: hidden;
+		border-radius: 5px;
+	}
+
+	/**
+	* New page design
+	*/
+	.lhs-page .user-info {
+		color: #1d2129;
+		font-family: HelveticaNeue-Light, Helvetica, Arial, sans-serif;
+		font-size: 24px;
+		line-height: 26px;
+		vertical-align: middle;
+		word-wrap: normal;
+	}
+
+	.user-avatar-page-container {
+		position: relative;
+	}
+
+	.user-avatar-page {
+		bottom: 0px;
+		background: #ffffff;
+		padding: 5px;
+		z-index: 99;
+		left: 1rem;
+		border-top: solid 1px #D4D4D4;
+		width: 100%;
+		overflow: hidden;
+		border-radius: 5px;
+		height: 200px;
+	}
+
+	.user-avatar-page img {
+		max-height: 200px !important;
+	}
+
+	.user-avatar-page .profile-image-selector {
+		position: absolute;
+		font-size: 15px;
+		bottom: 0px;
+		left: 0;
+		text-align: center;
+		font-weight: lighter;
+		background: rgba(0, 0, 0, 0.21);
+		color: #ffffff !important;
+		padding: 5px;
+		width: 100%;
+	}
+
+	.user-avatar-page .profile-image-indicator {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 99;
+		background: rgba(0, 0, 0, 0.6);
+		left: 0;
+		display: none;
+	}
+
+	.user-avatar-page > a {
+		width: 100%;
+		overflow: hidden;
+		display: block;
+	}
+
+	.user-avatar-page > img {
+		width: 100%;
+		min-height: 100%
+	}
+
+	.user-avatar-page > a img {
+		width: 100%;
+		min-height: 100%
+	}
+
+	#profile-menu-new-page ul {
+		margin-top: 10px;
+	}
+
+	#profile-menu-new-page ul li {
+		display: block;
+
+	}
+
+	#profile-menu-new-page > .navbar {
+		padding: 0px !important;
+	}
+
+	#profile-menu-new-page ul li a {
+		display: block;
+		color: #555;
+		padding: 7px;
+		font-size: 14px;
+	}
+
+	#profile-menu-new-page ul li:hover {
+		background: rgba(0, 0, 0, .05);
+		transition: 300ms;
+	}
+
+	#profile-menu-new-page ul .active {
+		border-left: 3px solid #4267b2;
+		background: rgba(0, 0, 0, .05);
+		font-weight: bold;
+		transition: 300ms;
+	}
+
+	/**
+	*New page design end
+	**/
+	#profile-cover .user-avatar > a {
+		width: 100%;
+		overflow: hidden;
+		display: block;
+	}
+
+	#profile-cover .user-avatar > img {
+		width: 100%;
+		min-height: 100%
+	}
+
+	#profile-cover .user-avatar > a img {
+		width: 100%;
+		min-height: 100%
+	}
+
+	#profile-cover .profile-image-selector {
+		position: absolute;
+		font-size: 15px;
+		bottom: 0;
+		left: 0;
+		text-align: center;
+		font-weight: lighter;
+		background: rgba(0, 0, 0, 0.21);
+		color: #ffffff !important;
+		padding: 5px;
+		width: 100%;
+	}
+
+	#profile-cover .profile-image-indicator {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 99;
+		background: rgba(0, 0, 0, 0.6);
+		left: 0;
+		display: none;
+	}
+
+	#profile-cover .profile-image-indicator img {
+		width: 30px;
+		height: 30px;
+		display: block;
+		margin: 20% auto;
+	}
+
+	#profile-cover .profile-image-indicator span {
+		display: block;
+		text-align: center;
+		font-weight: bold;
+		color: #ffffff;
+	}
+
+	#profile-menu {
+		position: relative;
+		background: #ffffff;
+		border-top: solid 1px #D4D4D4;
+		padding: 0 !important;
+	}
+
+	#profile-menu .navbar {
+		padding: 0;
+	}
+
+	#profile-menu #menu {
+		left: 160px;
+		padding: 0;
+		margin: 0;
+		position: relative;
+	}
+
+	#profile-menu #menu > li {
+		display: inline-block;
+		padding: 10px;
+		margin: 0 !important;
+		position: relative;
+		border-right: solid 1px #d3d3d3;
+		border-bottom: solid 2px #ffffff;
+	}
+
+	#profile-menu #menu > li:last-child {
+		border: none
+	}
+
+	#profile-menu #menu li a {
+		color: #3A5795;
+		font-weight: bold;
+		font-size: 13px;
+		margin: 0;
+		padding: 0;
+	}
+
+	#profile-menu #menu > li:hover,
+	#profile-menu #menu > li.active {
+		border-bottom: solid 2px #3A5795;
+	}
+
+	#profile-menu #menu .dropdown-menu a {
+		padding: 7px;
+	}
+
+	#profile-menu #menu .dropdown a:after {
+		display: none
+	}
+
+	#profile-menu #menu .dropdown-content a {
+		font-weight: normal;
+	}
+
+	#profile-cover .user-info {
+		position: absolute;
+		bottom: 30px;
+		width: 50%;
+		left: 170px;
+		min-height: 50px;
+	}
+
+	#profile-cover .user-info .user-name {
+		color: #ffffff;
+		font-weight: bold;
+		font-size: 2em;
+		text-shadow: 0 0 2px black;
+		width: 100%;
+	}
+
+	#profile-cover .profile-actions {
+		right: 10px;
+		bottom: 50px;
+		max-width: 45%;
+		height: 40px;
+	}
+
+	.columns-container {
+
+		width: 950px;
+		margin-left: 222px;
+		margin-top: 152px;
+	}
+
+	#profile-side-info li {
+		padding: 12px 10px;
+		color: #828282;
+		border-bottom: solid 1px #F1F1F1;
+	}
+
+	#profile-side-info li:last-child {
+		border: none;
+	}
+
+	#profile-side-info li span {
+		font-weight: bold;
+		color: #000000
+	}
+
+	#profile-side-info li span i {
+		font-size: 15px;
+		position: relative;
+		top: 2px;
+		width: 20px;
+		display: inline-block;
+	}
+
+	.profile-about-menu {
+		padding: 20px 0;
+		border-right: solid 1px #ECECEC;
+	}
+
+	.profile-about-menu li a {
+		padding: 10px;
+		border-bottom: solid 1px #ECECEC;
+		display: block;
+	}
+
+	.profile-about-menu li:first-child a {
+		border-top: solid 1px #ECECEC;
+	}
+
+	.profile-about-menu li a.active {
+		width: 102%;
+		background: #ffffff;
+		border-left: solid 1px #ECECEC;
+	}
+
+	#static-pages {
+		width: 70%;
+		margin: auto;
+		margin-bottom: 30px;
+		color: #000000;
+		font-weight: normal;
+	}
+
+	@media (max-width: 585px) {
+
+		#profile-more-menu {
+			width: 50px !important;
+			left: -120px;
+			top: 50px;
+		}
+
+		#header #header-search {
+			display: none;
+		}
+
+		#header #header-right {
+			display: none !important;
+		}
+
+		/*
+			#header .navbar-brand{
+				display: none !important;
+			}
+		*/
+		#header #mobile-header {
+			display: block !important;
+			list-style-type: none;
+			display: inline-block;
+
+			width: 100%;
+			padding-top: 5px;
+
+		}
+
+		#header #mobile-header > li {
+			width: 14.258%;
+			font-size: 20px;
+			float: left;
+			text-align: center;
+		}
+
+		#header #mobile-header > li > a {
+			font-size: 20px;
+			display: block;
+			color: #97a7bb;
+		}
+
+		#header #mobile-header > li > a:hover {
+			color: #fff;
+		}
+
+		/*we will display the mobile head here*/
+
+	}
+
+	/*version 1.2*/
+	#focus-overlay {
+		height: 100%;
+		width: 100%;
+		background: rgba(0, 0, 0, 0.50);
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 99999;
+	}
+
+	#fb_profile_header {
+		padding-right: 120px;
+	}
+
+	#profile-container {
+		padding-right: 120px;
+		position: relative;
+	}
+
+	#profile-container .container {
+		padding: 0 !important;
+	}
+
+	#profile-container .media .action {
+		top: 50px !important;
+	}
+
+	#profile-container .profile-icons {
+		color: rgb(255, 255, 255);
+		padding: 3px 5px;
+		font-size: 18px;
+		border-radius: 100%;
+	}
+
+	.mother-profile {
+		position: relative;
+	}
+
+	.ads-container {
+		position: fixed;
+		right: 260px;
+		top: 60px;
+		padding: 10px;
+		padding-right: 10px;
+		font-size: 12px;
+		padding-left: 15px;
+		width: 100%;
+		max-width: 140px;
+
+	}
+
+	@media (max-width: 1330px) {
+		.ads-container {
+			right: 200px;
+		}
+	}
+
+	@media (max-width: 1290px) {
+		.ads-container {
+			max-width: 150px;
+		}
+	}
+
+	@media (max-width: 1260px) {
+		.ads-container {
+			max-width: 120px;
+		}
+	}
+
+	@media (max-width: 1200px) {
+		.ads-container {
+			max-width: 120px;
+			right: 0px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.ads-container {
+			display: none;
+		}
+
+		#fb_profile_header {
+			padding-right: 10px !important;
+		}
+
+		#profile-container .container {
+			padding-right: 20px !important;
+			padding-left: 20px !important;
+		}
+
+		#profile-container {
+			padding-right: 10px !important;
+
+		}
+
+	}
+
+	/*end of version 1.2*/
+	@media (max-width: 680px) {
+
+		.col-sm-8, .col-sm-4 {
+			width: 100%;
+		}
+
+		#header #header-search input[type=text] {
+
+		}
+
+		#profile-cover .user-avatar .profile-image-selector {
+			font-size: 11px;
+		}
+
+		#profile-cover button > #for_cam {
+			display: none !important;
+		}
+
+		.navbar-brand {
+
+		}
+
+		#header .navbar-brand img {
+			max-width: 150px;
+		}
+
+		#home-members #members a {
+			width: 100px;
+		}
+
+		.user-avatar {
+			bottom: 20px;
+		}
+
+		#profile-cover .user-avatar {
+			width: 100px;
+			height: 100px;
+			top: 150px;
+			display: block;
+			left: 40%;
+
+		}
+
+		#profile-cover .user-info {
+			display: none;
+		}
+
+		.navbar-brand {
+
+		}
+
+		#header .navbar-brand img {
+			max-width: 150px;
+		}
+
+		#home-members #members a {
+			width: 100px;
+		}
+
+		.user-avatar {
+			bottom: 20px;
+		}
+
+		#profile-cover .user-avatar {
+			width: 100px;
+			height: 100px;
+			left: 40%;
+		}
+
+		#profile-cover .user-info {
+			bottom: 140px;
+		}
+	}
+
+	@media (max-width: 640px) {
+
+		#header #header-search input[type=text] {
+
+		}
+
+		.account-menu-name {
+			display: none !important;
+		}
+
+		#header .navbar-brand img {
+			max-width: 150px;
+		}
+
+		.brand-non-login {
+			display: block;
+		}
+
+		.brand-non-login img {
+			width: 200px;
+		}
+
+	}
+
+	@media (max-width: 585px) {
+
+		#profile-more-menu {
+			width: 50px !important;
+			left: -120px;
+			top: 50px;
+		}
+
+		#header #header-search {
+			display: none;
+		}
+
+		#header .header-menu-trigger {
+			display: none;
+		}
+
+		#header li .count {
+			position: absolute;
+			top: -2px;
+			min-height: 15px;
+			min-width: 15px;
+			background: rgb(250, 62, 62);
+			text-align: center;
+			padding: 1px;
+			left: 48px;
+			border-radius: 3px;
+			font-size: 10px;
+			color: #fff;
+			font-weight: normal;
+		}
+
+		#header #header-right {
+			display: none !important;
+		}
+
+		#header #mobile-header {
+			display: block !important;
+			list-style-type: none;
+			display: inline-block;
+			padding-right: 10px;
+
+			width: 100%;
+			padding-top: 5px;
+
+		}
+
+		#header #mobile-header > li {
+			position: relative;
+			width: 15.83333%;
+			font-size: 20px;
+			float: left;
+			text-align: center;
+		}
+
+		#header #mobile-header > li:last-child {
+			width: 20.8333%;
+			padding-right: 15px;
+		}
+
+		#header #mobile-header > li > a {
+			font-size: 20px;
+			display: block;
+			color: #d2d2d2;
+		}
+
+		#header #mobile-header > li > a:hover {
+			color: #fff;
+
+		}
+
+		/*we will display the mobile head here*/
+
+	}
+
+	@media (max-width: 680px) {
+		#profile-menu {
+			margin-bottom: 10px;
+			padding-bottom: 10px !important;
+			border-bottom: 10px solid #e9eaed;
+		}
+
+		#profile-menu #menu {
+			margin: 0;
+			left: 0;
+			text-align: center;
+
+		}
+
+		#profile-cover .profile_name_mobile {
+			display: block !important;
+			padding: 7px;
+			text-align: center;
+			margin-top: 18px;
+		}
+
+		#profile-cover .profile-actions_mobile {
+			display: block !important;
+			text-align: center;
+			margin-bottom: 10px;
+		}
+
+		/*#profile-menu #menu{
+			display:none !important;
+		}*/
+		.lhs-page {
+			display: none;
+		}
+
+		#rhs-page .user-avatar {
+			display: block !important;
+		}
+
+		.user-info {
+			display: block;
+		}
+
+		#rhs-page {
+			width: 100% !important;
+		}
+
+		.button-action {
+			display: none !important;
+		}
+
+		#page-menu {
+			display: block !important;
+		}
+
+		#profile-cover .profile-actions {
+			display: none !important;
+		}
+
+		#profile-cover .profile_name_mobile > h4 {
+			font-weight: bold;
+			font-size: 1.6em;
+		}
+
+		#profile-menu .user-info {
+			display: none !important;
+		}
+
+		.profile-actions {
+			background: #ffffff;
+			padding: 5px;
+			margin-bottom: 10px;
+			position: relative !important;
+		}
+	}
+
+	.profile-container .group-profile-actions {
+		position: relative !important;
+		right: 10px;
+		bottom: 40px;
+		max-width: 45%;
+		height: 40px;
+		margin-top: 48px;
+	}
+
+	@media (max-width: 560px) {
+		#header #header-search {
+			display: none;
+		}
+
+		.header-action-button {
+			display: none !important;
+		}
+
+		.navbar-brand {
+			position: absolute;
+			left: 25%;
+		}
+
+		#header .navbar-brand img {
+			max-width: 140px;
+		}
+
+		#profile-menu #menu li {
+
+			border: none;
+		}
+
+		#profile-menu #menu li a:hover {
+			border: none !important;
+		}
+
+		#profile-cover .user-avatar {
+			bottom: auto !important;
+			top: 90px !important;
+		}
+
+		#profile-cover .user-info {
+			display: none !important;
+			top: 50px;
+		}
+	}
+
+	@media (max-width: 400px) {
+		#home-members #members a {
+			width: 70px;
+		}
+
+		#header #header-search input[type=text] {
+			width: 5rem;
+		}
+
+		.navbar-brand {
+			left: 10%;
+		}
+	}
+
+	@media (max-width: 450px) {
+		#profile-cover .user-avatar {
+			height: 80px;
+			width: 80px;
+			left: 38%;
+			top: 60px !important;
+		}
+
+		#profile-menu #menu li a {
+			font-size: 11px;
+		}
+	}
+
+	@media (max-width: 400px) {
+		.lg-title {
+			font-size: 20px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		#profile-cover .user-avatar {
+		}
+	}
+
+	@media (max-width: 450px) {
+
+		#profile-cover .user-avatar {
+			height: 80px;
+			width: 80px;
+			left: 38%;
+			top: 90px !important;
+		}
+
+		#profile-cover .profile_name_mobile > h4 {
+			font-weight: bold;
+			font-size: 1.2em;
+			margin-top: 15px;
+		}
+
+		#profile-menu #menu li a {
+			font-size: 11px;
+		}
+
+	}
+
+	.two_column_right_layout {
+		margin-top: 156px !important;
+	}
+</style>

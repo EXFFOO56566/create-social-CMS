@@ -1,0 +1,41 @@
+<div class="wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3" align="center">
+				<a href="<?php echo url('admincp/settings') ?>?type=site-settings&id=general-site-settings" class="main-settings-grid">
+					<i style="color: #3c8296;" class="ion-android-globe"></i>
+					<div><?php echo lang('site-settings') ?></div>
+				</a>
+			</div>
+			<div class="col-sm-3" align="center">
+				<a href="<?php echo url('admincp/settings') ?>?type=user&id=user-site-settings" class="main-settings-grid">
+					<i style="color: #3c8296;" class="ion-android-person"></i>
+					<div><?php echo lang('users-settings') ?></div>
+				</a>
+			</div>
+			<div class="col-sm-3" align="center">
+				<a href="<?php echo url('admincp/settings') ?>?type=integrations&id=payments-integration" class="main-settings-grid">
+					<i style="color: #3c8296;" class="ion-settings"></i>
+					<div><?php echo lang('integrations') ?></div>
+				</a>
+			</div>
+			<div class="col-sm-3" align="center">
+				<a href="<?php echo url('admincp/custom-fields') ?>?type=user" class="main-settings-grid">
+					<i style="color: #ddc364;" class="ion-android-expand"></i>
+					<div><?php echo lang('custom-fields') ?></div>
+				</a>
+			</div>
+			<div class="col-sm-3" align="center">
+				<a href="<?php echo url('admincp/plugins') ?>" class="main-settings-grid">
+					<i style="color: #965555;" class="ion-ios-list-outline"></i>
+					<div><?php echo lang('plugins') ?></div>
+				</a>
+			</div>
+			<div class="col-sm-3" align="center">
+				<a href="<?php echo url('admincp/email/settings') ?>" class="main-settings-grid">
+					<i style="color: #0b4899;" class="ion-android-mail"></i>
+					<div><?php echo lang('email-settings') ?> | <?php echo lang('email-templates') ?></div>
+				</a>
+			</div>
+		</div>
+	</div>

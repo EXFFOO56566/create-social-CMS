@@ -1,0 +1,167 @@
+<div id="dashboard-filter-menu" class="box clearfix">
+	<ul class="pull-left left">
+		<?php foreach(get_menus('marketplace-menu') as $menu): ?>
+			<li><a <?php echo $menu->ajax ? 'ajax="true"' : null ?> <?php echo $menu->tab ? 'onclick="return window.open(\''.$menu->link.'\')"' : null ?> href="<?php echo $menu->tab ? 'javascript:void(0)' : $menu->link ?>"><?php echo lang($menu->title) ?></a></li>
+		<?php endforeach ?>
+		<li class="<?php echo !input('u') ? 'active' : '' ?>">
+			<a href="<?php echo url_to_pager('marketplace') ?>" ajax="true"><?php echo lang('marketplace::listings') ?></a>
+		</li>
+		<li class="<?php echo input('u') == get_userid() ? 'active' : '' ?>">
+			<a href="<?php echo url_to_pager('marketplace') ?>?u=<?php echo get_userid() ?>" ajax="true"><?php echo lang('marketplace::my-listings') ?></a>
+		</li>
+	</ul>
+	<div class="action pull-right">
+		<?php if(is_loggedIn() && user_has_permission('can-create-listing')): ?>
+			<a class="btn btn-info btn-block action-button" href="<?php echo url_to_pager('marketplace-create-listing') ?>" data-toggle="modal" data-target="#marketplace-create-modal"><?php echo lang('marketplace::new-listing') ?></a>
+			<div id="marketplace-create-modal" class="modal fade" role="dialog">
+				<div class="modal-dialog modal-lg1">
+					<div class="modal-content">
+						<form action="<?php echo url_to_pager('marketplace-create-listing') ?>" method="post" enctype="multipart/form-data" class="ajax-form">
+							<?php CSRFProtection::embed() ?>
+							<input type="hidden" name="val[type]" value="create_listing"/>
+							<div class="modal-header">
+								<h4 class="modal-title"><?php echo lang('marketplace::create-listing') ?></h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+							<div class="modal-body">
+								<?php if(!is_loggedIn()): ?>
+									<span class="error"><?php echo lang('marketplace::marketplace-create-login-error') ?></span>
+								<?php endif; ?>
+								<?php $categories = marketplace_get_categories(); ?>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="val[category]"><?php echo lang('marketplace::category') ?>:</label>
+									</div>
+									<div class="bottom">
+										<div class="magic-select" data-name="val[category_id]" data-width="200px">
+											<?php $categories = marketplace_get_categories(); ?>
+											<div class="magic-select-toggle">
+												<?php echo lang('select-category') ?>
+											</div>
+											<div class="magic-select-content">
+												<?php foreach($categories as $category): ?>
+													<div class="magic-select-option" data-value="<?php echo $category['id'] ?>">
+														<?php echo lang($category['title']) ?>
+													</div>
+												<?php endforeach ?>
+											</div>
+										</div>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-category-desc') ?></p>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="val[title]"><?php echo lang('marketplace::title') ?>: </label>
+									</div>
+									<div class="bottom">
+										<input name="val[title]" type="text" class="form-control" required/>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-title-desc') ?></p>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="val[description]"><?php echo lang('marketplace::description') ?>: </label>
+									</div>
+									<div class="bottom">
+										<textarea name="val[description]" class="form-control" maxlength="500"></textarea>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-description-desc') ?></p>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="val[tags]"><?php echo lang('marketplace::tags') ?>: </label>
+									</div>
+									<div class="bottom">
+										<input name="val[tags]" type="text" class="form-control" maxlength="128"/>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-tags-desc') ?>.</p>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="val[location]"><?php echo lang('marketplace::location') ?>: </label>
+									</div>
+									<div class="bottom">
+										<input id="feed-editor-geocomplete" type="text" name="val[location]" class="form-control marketplace-geocomplete" required/>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-location-desc') ?>.</p>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="val[link]"><?php echo lang('marketplace::link') ?>: </label>
+									</div>
+									<div class="bottom">
+										<input type="url" name="val[link]" class="form-control" placeholder="http://domain.com"/>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-link-desc') ?>.</p>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="val[contact]"><?php echo lang('marketplace::contact') ?>: </label>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-contact-desc') ?>.</p>
+									</div>
+									<div class="bottom">
+										<input type="text" name="val[contact]" class="form-control" placeholder="<?php echo lang('marketplace::phone-email') ?>"/>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="val[price]"><?php echo lang('marketplace::price') ?>: </label>
+									</div>
+									<div class="bottom">
+										<input name="val[price]" type="text" class="form-control" placeholder="<?php echo config('currency', '$') ?> 0.00"/>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-price-desc') ?>.</p>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label" for="image"><?php echo lang('marketplace::image') ?>: </label>
+									</div>
+									<div class="bottom">
+										<div class="magic-input-image-preview" data-name="image">
+											<span class="dimension"></span>
+										</div>
+										<p class="form-description"><?php echo lang('marketplace::create-listing-image-desc') ?></p>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label"><?php echo lang('host') ?></label>
+									</div>
+									<div class="bottom">
+										<div class="magic-select" data-name="val[entity]" data-width="250px">
+											<div class="magic-select-toggle">
+												<img src="<?php echo get_avatar(75) ?>" class="thumb" />
+												<?php echo get_user_name(); ?>
+											</div>
+											<div class="magic-select-content slimscroll" data-height="200px">
+												<div class="magic-select-option" data-value="user-<?php echo get_userid() ?>">
+													<img src="<?php echo get_avatar(75) ?>" class="thumb" />
+													<?php echo get_user_name(); ?>
+												</div>
+												<?php fire_hook('entity.select.list') ?>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="field">
+									<div class="top">
+										<label class="control-label"><?php echo lang('privacy') ?></label>
+									</div>
+									<div class="bottom">
+										<?php fire_hook('privacy.select'); ?>
+									</div>
+								</div>
+								<?php fire_hook("listing.create.more.fields", null, array()); ?>
+							</div>
+							<div class="modal-footer">
+								<div class="submit">
+									<input type="submit" value="<?php echo lang('marketplace::create') ?>" class="btn btn-info action-button"/>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		<?php endif ?>
+	</div>
+</div>

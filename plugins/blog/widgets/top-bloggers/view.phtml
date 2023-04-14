@@ -1,0 +1,51 @@
+<?php $blogs = top_bloggers(); ?>
+<?php // if($blogs->total):?>
+	<div class="box">
+		<div class="title">
+			<?php echo lang('blog::top-bloggers') ?>
+
+		</div>
+		<div class="box-content">
+			<?php $sn = 0;
+			foreach($blogs as $blog): $sn++;
+				$user = find_user($blog['blogger_id']) ?>
+				<?php if($sn == 1): ?>
+					<div class="blogger hovercard" style="border: none !important;">
+						<div class="cardheader">
+						</div>
+						<div class="avatar">
+							<img alt="" src="<?php echo get_avatar(200, $user) ?>">
+						</div>
+						<div class="info">
+							<p>
+								<a ajax="true" href="<?php echo profile_url(null, $user) ?>"><strong><?php echo get_user_name($user) ?></strong></a><br/>
+								<?php $blogger = $blog['blogger_id'];
+								$cnt = count_top_blogger_blogs($blogger);
+								echo $cnt; ?> <?php if($cnt > 1): echo lang('blog::blogs'); else: echo lang('blog::blog'); endif; ?>
+							</p>
+						</div>
+					</div>
+				<?php else: ?>
+					<div class="media media-sm">
+						<div class="media-left">
+							<div class="media-object">
+								<img style="border-radius: 50%;" src="<?php echo get_avatar(200, $user) ?>"/>
+							</div>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading" style="margin-top:0">
+								<a ajax="true"
+								   href="<?php echo profile_url($user) ?>"><?php echo get_user_name($user) ?></a>
+							</h4>
+							<span class="help-block" style="display: block;font-size:12px">
+                                    <?php $blogger = $blog['blogger_id'];
+                                    $cnt = count_top_blogger_blogs($blogger);
+                                    echo $cnt; ?><?php if($cnt > 1): echo lang('blog::blogs'); else: echo lang('blog::blog'); endif; ?>
+                                </span>
+						</div>
+					</div>
+				<?php endif; ?>
+			<?php endforeach ?>
+		</div>
+	</div>
+<?php // endif?>

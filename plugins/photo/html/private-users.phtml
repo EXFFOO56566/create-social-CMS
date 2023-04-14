@@ -1,0 +1,14 @@
+<?php $users = get_user_data('album_private_exception');?>
+<?php if ($users != ""):?>
+<?php $users = unserialize($users)?>
+<?php foreach ($users as $user):?>
+<?php $user = find_user($user)?>
+    <div class="private-photo-user-<?php echo $user['id'] ?>">
+        <span class="user" id="private-photo-user-<?php echo $user['id'] ?>">
+    <?php echo get_user_name($user) ?>
+            <input type="hidden" name="val[user][]" value="<?php echo $user['id'] ?>">
+	<a href><i class="ion-close" data-id="<?php echo $user['id'] ?>" onclick=" return remove_private_photo_user(this)"></i></a>
+</span>
+    </div>
+<?php endforeach; ?>
+<?php endif;?>

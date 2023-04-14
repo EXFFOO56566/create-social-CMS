@@ -1,0 +1,243 @@
+<div id="chat-boxes-container">
+	<div class="friends-list-open-container">
+		<div class="friends-list-open">
+			<i class="icon ion-chatboxes"></i>
+		</div>
+	</div>
+	<div class="chat-box-template">
+		<div class="chat-box">
+			<div class="head">
+				<div class="actions">
+					<?php echo fire_hook('mediachat.button.voice.init'); ?>
+					<?php echo fire_hook('mediachat.button.video.init'); ?>
+					<a href="" class="minimize-button"><i class="ion-ios-minus-empty"></i></a>
+					<a href="" class="close-button"><i class="ion-android-close"></i></a>
+				</div>
+			</div>
+			<div data-offset="0" data-sending="<?php echo lang('chat::sending') ?>" class="message-list nice-scroller"
+			     data-height="255px"></div>
+			<div class="editor">
+				<form action="" method="post">
+					<?php CSRFProtection::embed() ?>
+					<input type="hidden" name="val[cid]" class="message-cid-input"/>
+					<div class="clearfix">
+						<div class="textarea">
+                            <textarea class="chat-box-editor-textarea" placeholder="<?php echo lang('chat::write-a-message') ?>" name="val[message]"></textarea>
+						</div>
+						<div class="actions">
+							<?php if(config('enable-chat-voice-message', 1)): ?>
+								<div href="#" id="chat-editor-voice-recorder" class="chat-editor-voice-recorder voice-recorder">
+									<input name="voice" type="hidden" value="" class="voice-input"/>
+									<a href="#" class="control">
+										<i class="ion-mic-a record"></i>
+										<i class="ion-stop stop"></i>
+									</a>
+									<div class="actions">
+										<a class="ion-close close" href="#"></a>
+										<a class="ion-play play" href="#"></a>
+									</div>
+								</div>
+							<?php endif; ?>
+							<?php if(plugin_loaded('emoticons')): ?>
+								<span style="position: relative">
+									<div class="emoticon-box emoticon-bottom"></div>
+									<a data-target="chat-group-modal-editor-textarea" data-action="1" title="<?php echo lang('emoticons::add-emoticons') ?>" class="emoticon-button a" href="javascript::void(0)"><i class="ion-android-sad emo-button"></i></a>
+								</span>
+							<?php endif ?>
+							<a id="chat-gif-selector" href="#" class="chat-gif-selector gif-selector">
+								<i class="gif-icon"></i>
+								<div class="chat-gif-box gif-box" data-callback="Chat.onGIFClick">
+									<div class="gif-box-head">
+										<span><?php echo lang('gif') ?></span>
+										<i class="gif-box-close-button ion-close"></i>
+									</div>
+									<div class="gif-box-body">
+										<input type="text" class="form-control chat-gif-search-input gif-search-input" placeholder="<?php echo lang('gif-search') ?>"/>
+										<div class="gif-search-result"></div>
+									</div>
+									<div class="gif-box-arrow"></div>
+									<input name="gif" type="hidden" value="" class="chat-gif-input gif-input"/>
+								</div>
+							</a>
+							<span class="file-input"><input type="file" class="chat-box-image-input" name="image"/></span>
+							<a href="#" class="chat-box-image-selector"><i class="ion-image"></i></a>
+							<span class="file-input"><input type="file" class="chat-box-file-input" name="file"/></span>
+							<a href="" class="chat-box-file-selector"><i class="ion-android-attach"></i></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="chat-boxes-wrapper"></div>
+	<div class="chat-tabs-container"></div>
+	<div class="onlines-container">
+		<div class="chat-opener-head clearfix">
+			<div class="btn-group">
+				<a onclick="return switch_chat_onlines_type('friend')" class="btn btn-sm btn-info friend active " href=""><?php echo lang('chat::friends') ?></a>
+				<a onclick="return switch_chat_onlines_type('group')" class="btn btn-sm btn-info group " href=""><?php echo lang('chat::groups') ?></a>
+				<a href="" data-toggle="dropdown" class="dropdown-button btn btn-sm btn-info"><span class="online-status <?php echo get_online_status_icon() ?>"></span></a>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li><a onclick="return change_online_status(0, 'online-icon')" class="dropdown-item" href=""><span class="online-status online-icon"></span><?php echo lang('chat::online') ?></a></li>
+					<li><a onclick="return change_online_status(1, 'busy-icon')" class="dropdown-item" href=""><span class="online-status busy-icon"></span><?php echo lang('chat::busy') ?></a></li>
+					<li><a onclick="return change_online_status(2, 'invisible-icon')" class="dropdown-item" href=""><span class="online-status invisible-icon"></span><?php echo lang('chat::invisible') ?></a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="main">
+			<div class="online-lists slimscroll" data-height="100%">
+				<div class="online-friend-list lists ">
+					<?php echo view('chat::load-onlines', array('users' => array_merge(chat_get_onlines(), get_few_offlines()))); ?>
+				</div>
+				<div class="online-group-list lists">
+					<?php echo view('chat::load-groups'); ?>
+				</div>
+			</div>
+			<div class="online-search">
+				<?php CSRFProtection::embed() ?>
+				<button class="search-button"><i class="ion-ios-search"></i></button>
+				<input type="text" placeholder="<?php echo lang('chat::search') ?>" data-result="#chat-boxes-container .online-friend-list"/>
+				<button class="group-chat-button" data-toggle="modal" data-target="#chat-group-modal"><i class="ion-plus"></i></button>
+				<?php fire_hook('chat.more-footer.button') ?>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="chat-group-modal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form id="chat-group-modal-form" action="<?php echo url('chat/send'); ?>" method="post" enctype="multipart/form-data">
+				<div class="ajax-form-loading"></div>
+				<?php CSRFProtection::embed() ?>
+				<input type="hidden" name="val[cid]" class="chat-group-modal-cid-input"/>
+				<div class="modal-form-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<p class="modal-title"><?php echo lang('chat::group-chat') ?></p>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-8 friends">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="online-search">
+										<input type="text" placeholder="<?php echo lang('chat::search') ?>" data-result="#chat-group-modal .online-friend-list"/>
+									</div>
+								</div>
+							</div>
+							<div class="row online-lists slimscroll" data-height="280px">
+								<div class="col-md-12 online-friend-list">
+									<?php $users = chat_get_onlines(); ?>
+									<?php if(count($users) > 0): ?>
+										<?php foreach($users as $user): ?>
+											<?php $canStream = plugin_loaded('mediachat') && mediachat_can_user_stream($user['id']) ? 'true' : 'false'; ?>
+											<a onclick="return Chat.open(null, '<?php echo $user['id'] ?>', '<?php echo htmlentities(addslashes(get_user_name($user))) ?>', '<?php echo get_avatar(75, $user) ?>', null, null, <?php echo $canStream ?>)" href="">
+												<div class="media media-sm">
+													<div class="media-left">
+														<div class="media-object">
+															<img src="<?php echo get_avatar(75, $user) ?>"/>
+														</div>
+													</div>
+													<div class="media-body">
+														<h6 class="media-heading"><?php echo get_user_name($user) ?></h6>
+														<?php if($user['online_time'] < time() - 50): ?>
+															<span class="action"><?php echo timeAgoMin($user['online_time']) ?></span>
+														<?php else: ?>
+															<span class="online-status <?php echo get_online_status_icon($user) ?>"></span>
+														<?php endif ?>
+													</div>
+												</div>
+											</a>
+										<?php endforeach; ?>
+									<?php else: ?>
+										<div><?php echo lang('chat::no-friends-online') ?></div>
+									<?php endif ?>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 chat-group-members">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="selected">
+										<?php echo lang('selected') ?>
+										<span class="count">0</span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="list">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="message-editor">
+						<div>
+                            <textarea id="chat-group-modal-editor-textarea" placeholder="<?php echo lang('chat::write-a-message') ?>" name="val[message]"></textarea>
+							<div>
+								<span class="pull-left">
+									<span class="hidden-sm-down"><?php echo lang('chat::press-enter-to-send') ?></span>
+								</span>
+								<span class="pull-right message-editor-actions" style="position: relative">
+									<ul>
+										<li>
+											<?php if(config('enable-chat-voice-message', 1)): ?>
+												<div href="#" id="modal-alt-chat-editor-voice-recorder" class="modal-alt-chat-editor-voice-recorder alt-chat-editor-voice-recorder chat-editor-voice-recorder voice-recorder">
+													<input name="voice" type="hidden" value="" class="voice-input"/>
+													<a href="#" class="control">
+														<i class="ion-mic-a record"></i>
+														<i class="ion-stop stop"></i>
+													</a>
+													<div class="actions">
+														<a class="ion-close close" href="#"></a>
+														<a class="ion-play play" href="#"></a>
+													</div>
+												</div>
+											<?php endif; ?>
+										</li>
+										<?php if(plugin_loaded('emoticons')): ?>
+											<li style="position: relative;">
+												<div class="emoticon-box emoticon-bottom"></div>
+												<a data-target="chat-group-modal-editor-textarea" data-action="1" title="<?php echo lang('emoticons::add-emoticons') ?>" class="emoticon-button" href="javascript::void(0)"><i class="ion-android-sad emo-button"></i></a>
+												<span class="file-input"><input multiple type="file" name=""/></span>
+											</li>
+										<?php endif ?>
+										<li>
+											<a id="modal-alt-chat-gif-selector" href="#" class="modal-alt-chat-gif-selector alt-chat-gif-selector chat-gif-selector gif-selector">
+												<i class="gif-icon"></i>
+												<div class="chat-gif-box gif-box" data-callback="Chat.onGIFClick">
+													<div class="gif-box-head">
+														<span><?php echo lang('gif') ?></span>
+														<i class="gif-box-close-button ion-close"></i>
+													</div>
+													<div class="gif-box-body">
+														<input type="text" class="form-control chat-gif-search-input gif-search-input" placeholder="<?php echo lang('gif-search') ?>"/>
+														<div class="gif-search-result"></div>
+													</div>
+													<div class="gif-box-arrow"></div>
+													<input name="gif" type="hidden" value="" class="chat-gif-input gif-input"/>
+												</div>
+											</a>
+										</li>
+										<li>
+											<a onclick="return file_chooser('#chat-group-modal-message-image-input')" href=""><i class="ion-image"></i></a>
+											<span class="file-input"><input onchange="chat_message_upload()" type="file" id="chat-group-modal-message-image-input" name="image"/></span>
+										</li>
+										<li>
+											<a href="" onclick="return file_chooser('#chat-group-modal-message-file-input')"><i class="ion-android-attach"></i></a>
+											<span class="file-input"><input onchange="chat_message_upload()" type="file" id="chat-group-modal-message-file-input" name="file"/></span>
+										</li>
+									</ul>
+								</span>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

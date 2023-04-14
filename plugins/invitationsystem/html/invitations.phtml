@@ -1,0 +1,33 @@
+<div id="invitationsystem-invitation" class="box">
+	<div class="title">
+		<?php echo lang('invitationsystem::invitations').' - '.get_user_name($user) ?>
+		<button style="vertical-align: center" class="btn btn-secondary invitationsystem-invitation-code-modal-button pull-right" data-invitation-code="<?php echo $invitation_code['code'] ?>" data-invitation-signup-link="<?php echo url('signup?invitation_code='.$invitation_code['code']) ?>" data-invitation-code-expiry-time="<?php echo $invitation_code['expiry_time'] ?>"><?php echo lang('invitationsystem::show-invitation-code') ?></button>
+	</div>
+	<div id="invitationsystem-invitation-invited-list" class="box-content">
+		<?php foreach($inviteds->results() as $invited): ?>
+			<?php $invited = find_user($invited['invited_id']) ?>
+			<a href="<?php echo profile_url(null, $invited) ?>" class="user">
+				<div class="i">
+					<img src="<?php echo get_avatar(75, $invited) ?>"/>
+				</div>
+				<div class="d"><?php echo get_user_name($invited) ?><?php if($invited['country']): ?>,
+						<i class="ion-ios-location"></i> <?php echo ucwords($invited['country']) ?><?php endif ?>
+				</div>
+			</a>
+		<?php endforeach ?>
+	</div>
+	<div class="box-content">
+		<?php if($inviteds->total): ?>
+			<?php if($inviteds->total > config('pagination-length-forum', 20)): ?>
+				<?php echo $inviteds->links(true) ?>
+			<?php endif ?>
+		<?php else: ?>
+			<div class="alert alert-info"><?php echo lang('invitationsystem::no-invited-user') ?></div>
+		<?php endif ?>
+	</div>
+	<?php if($inviter): ?>
+		<div class="foot">
+			<span class="p"> <?php echo lang('invitationsystem::invited-by').': </span><span class="v">'.get_user_name($inviter) ?></span>
+		</div>
+	<?php endif; ?>
+</div>

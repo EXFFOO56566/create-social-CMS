@@ -1,0 +1,103 @@
+<div class="portable-signup">
+	<form class="signup-form" action="<?php echo url_to_pager('signup') ?>" method="post">
+		<?php CSRFProtection::embed() ?>
+		<div class="form-group">
+			<div class="row">
+				<div class="col-md-6">
+					<input class="form-control" value="<?php echo input('val.first_name') ?>" type="text" name="val[first_name]" placeholder='<?php echo lang('first-name') ?>' autocomplete="off"/>
+				</div>
+				<div class="col-md-6">
+					<input class="form-control" value="<?php echo input('val.last_name') ?>" type="text" name="val[last_name]" placeholder="<?php echo lang('last-name') ?>" autocomplete="off"/>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<input class="form-control" value="<?php echo input('val.username') ?>" type="text" name="val[username]" placeholder="<?php echo lang('username') ?>" autocomplete="off"/>
+		</div>
+		<div class="form-group">
+			<input id="email_phonenumber" class="form-control" value="<?php echo input('val.email_address') ?>" type="text" name="val[email_address]" placeholder="<?php echo lang('email-address') ?>" autocomplete="off"/>
+		</div>
+		<div class="form-group">
+			<input class="form-control" value="<?php echo input('val.password') ?>" type="password" name="val[password]" placeholder="<?php echo lang('password') ?>" autocomplete="off"/>
+		</div>
+		<div class="form-group">
+			<input class="form-control" value="<?php echo input('val.cpassword') ?>" type="password" name="val[cpassword]" placeholder="<?php echo lang('confirm-password') ?>" autocomplete="off"/>
+		</div>
+		<?php $show_all_signup_fields = isset($show_all_signup_fields) ? $show_all_signup_fields : 0; if($show_all_signup_fields): ?>
+			<div class="form-group">
+				<div class="magic-select" data-name="val[country]" data-width="100%">
+					<?php load_functions('country') ?>
+					<?php $countries = get_countries() ?>
+					<?php $country_name = input('val.country') ?>
+					<input type="hidden" name="val[country]" value="<?php echo $country_name ?>" class="magic-select-value" />
+					<div class="magic-select-toggle">
+						<?php if(in_array($country_name, $countries)): ?>
+							<?php echo ucwords($country_name) ?>
+						<?php else: ?>
+							<?php echo lang('select-country') ?>
+						<?php endif; ?>
+					</div>
+					<div class="magic-select-content slimscroll" data-height="200px">
+						<?php foreach($countries as $country => $name): ?>
+							<div class="magic-select-option" data-value="<?php echo $name ?>">
+								<?php echo ucwords($name) ?>
+							</div>
+						<?php endforeach ?>
+					</div>
+				</div>
+			</div>
+			<?php if(config('enable-gender', true)): ?>
+				<div class="form-group">
+					<div class="magic-select" data-name="val[gender]" data-width="100%">
+						<?php $genders = array('male' => lang('male'), 'female' => lang('female')) ?>
+						<?php $gender = input('val.gender') ?>
+						<input type="hidden" name="val[gender]" value="<?php echo $gender ?>" class="magic-select-value" />
+						<div class="magic-select-toggle">
+							<?php if(isset($genders[$gender])): ?>
+								<?php echo $genders[$gender] ?>
+							<?php else: ?>
+								<?php echo lang('select-gender') ?>
+							<?php endif; ?>
+						</div>
+						<div class="magic-select-content">
+							<?php foreach($genders as $gender => $gender_name): ?>
+								<div class="magic-select-option" data-value="<?php echo $gender ?>">
+									<?php echo $gender_name ?>
+								</div>
+							<?php endforeach ?>
+						</div>
+					</div>
+				</div>
+			<?php endif ?>
+            <?php fire_hook('enable.gender.exception'); ?>
+			<?php if(config('enable-birthdate', true)): ?>
+				<?php echo view('birthdate/form', array('day' => input('val.birth_day'), 'month' => input('val.birth_month'), 'year' => input('val.birth_year'), 'type' => 0)) ?>
+			<?php endif ?>
+		<?php endif; ?>
+		<?php echo fire_hook('signup.form.extend', null, array('is_portable' => true)) ?>
+		<div class="signup-tc"><input id="signup-tos" type="checkbox" name="val[tos]" value="1" /><label for="signup-tos"><?php echo lang('signup-tos') ?></label></div>
+		<?php foreach(get_form_custom_fields('user') as $field): ?>
+			<?php echo view("custom-field/display", array('field' => $field, 'offDescription' => true, 'type' => 0)) ?>
+		<?php endforeach ?>
+		<?php if(get_setting("enable-captcha")): ?>
+			<?php if(get_setting("enable-captcha") == '1'): ?>
+				<div class="row captcha">
+					<div class="col-md-6">
+						<input class="form-control" type="text" placeholder="<?php echo lang('enter-text-below') ?>" name="captcha" id="captcha-input"/>
+					</div>
+					<div class="col s6">
+						<img id="captcha-image" src="<?php echo url("captcha.php") ?>"/>
+						<a onclick="document.getElementById('captcha-image').src='<?php echo url('captcha.php') ?>?'+Math.random();    document.getElementById('captcha-input').focus();    "><i class="ion-ios-reload"></i></a><br/>
+					</div>
+				</div>
+			<?php else: ?>
+				<div class="g-recaptcha" data-sitekey="<?php echo config('recaptcha-key'); ?>"></div>
+				<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=en"></script>
+			<?php endif ?>
+		<?php endif ?>
+		<?php fire_hook('signup.footer'); ?>
+		<div class="form-group">
+			<button id="register" class="btn" style="margin-top:20px;display: inline-block"><?php echo lang('register') ?></button>
+		</div>
+	</form>
+</div>

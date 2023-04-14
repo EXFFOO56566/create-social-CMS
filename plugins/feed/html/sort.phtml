@@ -1,0 +1,98 @@
+<div class="sort-feed-menu">
+	<div class="menu-items">
+		<div class="menu-item">
+			<a data-type="all"
+			   class="ion-navicon-round <?php echo input('sortby') == 'all' || input('sortby') == '' ? 'active' : '' ?>"
+			   ajax="true"
+			   href="<?php echo url_to_pager('feed'); ?>"
+			   title="<?php echo lang('sortfeed::all') ?>"
+			   data-toggle="tooltip"
+			   data-original-title="<?php echo lang('sortfeed::all') ?>"></a>
+		</div>
+		<div class="menu-item">
+			<a data-type="photo"
+			   class="ion-images <?php echo input('sortby') == 'photo' ? 'active' : '' ?>"
+			   ajax="true"
+			   href="<?php echo url_to_pager("feed").'?sortby=photo&orderby='.input('orderby'); ?>"
+			   data-toggle="tooltip"
+			   data-original-title="<?php echo lang('sortfeed::photos') ?>"></a>
+		</div>
+		<div class="menu-item">
+			<a data-type="videos"
+			   class="ion-ios-film <?php echo input('sortby') == 'videos' ? 'active' : '' ?>"
+			   ajax="true"
+			   href="<?php echo url_to_pager("feed").'?sortby=videos&orderby='.input('orderby'); ?>"
+			   title="<?php echo lang('sortfeed::videos') ?>"
+			   data-toggle="tooltip"
+			   data-original-title="<?php echo lang('sortfeed::videos') ?>"></a>
+		</div>
+		<div class="menu-item">
+			<a data-type="musics"
+			   class="ion-ios-musical-notes <?php echo input('sortby') == 'musics' ? 'active' : '' ?>"
+			   ajax="true"
+			   href="<?php echo url_to_pager("feed").'?sortby=musics&orderby='.input('orderby'); ?>"
+			   title="<?php echo lang('sortfeed::musics') ?>"
+			   data-toggle="tooltip"
+			   data-original-title="<?php echo lang('sortfeed::musics') ?>"></a>
+		</div>
+		<div class="menu-item">
+			<a data-type="polls"
+			   class="ion-stats-bars <?php echo input('sortby') == 'polls' ? 'active' : '' ?>"
+			   ajax="true"
+			   href="<?php echo url_to_pager("feed").'?sortby=polls&orderby='.input('orderby'); ?>"
+			   title="<?php echo lang('sortfeed::polls') ?>"
+			   data-toggle="tooltip"
+			   data-original-title="<?php echo lang('sortfeed::polls') ?>"></a>
+		</div>
+		<div class="menu-item">
+			<a data-type="files"
+			   class="ion-document-text <?php echo input('sortby') == 'files' ? 'active' : '' ?>"
+			   ajax="true"
+			   href="<?php echo url_to_pager("feed").'?sortby=files&orderby='.input('orderby'); ?>"
+			   onclick="sortFeed.sortBy = 'files'"
+			   title="<?php echo lang('sortfeed::files') ?>"
+			   data-toggle="tooltip"
+			   data-original-title="<?php echo lang('sortfeed::files') ?>"></a>
+		</div>
+		<div class="menu-item">
+			<a data-type="text"
+			   class="ion-ios-list-outline <?php echo input('sortby') == 'text' ? 'active' : '' ?>"
+			   ajax="true"
+			   href="<?php echo url_to_pager("feed").'?sortby=text&orderby='.input('orderby'); ?>"
+			   title="<?php echo lang('sortfeed::text') ?>"
+			   data-toggle="tooltip"
+			   data-original-title="<?php echo lang('sortfeed::text') ?>"></a>
+		</div>
+		<div class="menu-item dropdown order">
+			<?php if(input('orderby') == 'top'): ?>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="ion-ios-pulse-strong"
+					   data-toggle="tooltip"
+					   title="<?php echo lang('sortfeed::top') ?>"
+					   data-original-title="<?php echo lang('sortfeed::top') ?>"></i>
+				</a>
+			<?php else: ?>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<i class="ion-ios-settings-strong"
+					   data-toggle="tooltip"
+					   title="<?php echo lang('sortfeed::recent') ?>"
+					   data-original-title="<?php echo lang('sortfeed::recent') ?>"></i>
+				</a>
+			<?php endif; ?>
+			<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="sort-feed-filter">
+				<li>
+					<a class="dropdown-item" href="<?php echo url_to_pager("feed").'?orderby=recent&sortby='.input('sortby'); ?>" ajax="true" data-type="recent">
+						<i class="ion-ios-settings-strong"></i>
+						<span><?php echo lang('sortfeed::recent') ?></span>
+					</a>
+				</li>
+				<li>
+					<a class="dropdown-item" href="<?php echo url_to_pager("feed").'?orderby=top&sortby='.input('sortby'); ?>" ajax="true" data-type="top">
+						<i class="ion-ios-pulse-strong"></i>
+						<span><?php echo lang('sortfeed::top') ?></span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

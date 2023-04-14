@@ -1,0 +1,17 @@
+<div class="card-cover">
+	<img src="<?php echo get_group_cover($group, false) ?>"/>
+</div>
+<div class="card-panel">
+	<h6 class="card-title">
+		<a href="<?php echo group_url(null, $group) ?>"><?php echo $group['group_title'] ?></a> <?php echo verify_badge($group) ?>
+	</h6>
+	<?php if(is_loggedIn()): ?>
+		<?php $status = (is_group_member($group['group_id'])) ? 1 : 0 ?>
+		<a onclick="return join_group(this)" data-id="<?php echo $group['group_id'] ?>" class="btn btn-info" data-status="<?php echo $status ?>" data-join="<?php echo lang('group::join-group') ?>" data-leave="<?php echo lang('group::leave-group') ?>" href="">
+			<?php echo ($status) ? lang('group::leave-group') : lang('group::join-group') ?>
+		</a>
+	<?php endif ?>
+</div>
+<div class="card-avatar">
+	<img src="<?php echo get_group_logo(75, $group) ?>"/>
+</div>

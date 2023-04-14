@@ -1,0 +1,71 @@
+<div class="wrapper">
+	<div class="wrapper-title">
+		<?php echo lang('help::manage-help') ?>
+		<a href="<?php echo url_to_pager('admincp-help-add') ?>"><?php echo lang('help::add-help') ?></a> |
+		<a href="<?php echo url_to_pager('admincp-help-add') ?>?category=1"><?php echo lang('help::add-category') ?></a>
+	</div>
+	<div class="wrapper-content">
+		<div class="list-table-container">
+			<div class="row list-table-select-actions hide" data-group="users">
+				<div class="col-sm-12">
+					<a href="<?php echo url_to_pager('admin-help-batch-action') ?>?action=delete"
+					   class="action-link list-table-select-action" data-group="users"><?php echo lang('delete') ?></a>
+					<?php fire_hook('admin.user.list.actions'); ?>
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-striped list-table">
+					<thead>
+					<tr>
+						<th>
+							<div class="list-table-select" data-group="users"
+							     data-id="0"></div>
+						</th>
+						<th>ID</th>
+						<th><?php echo lang('help::title') ?></th>
+						<th><?php echo lang('help::category') ?></th>
+						<th><?php echo lang('help::modify-time') ?></th>
+						<th><?php echo lang('actions') ?></th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach($helps->results() as $help): ?>
+						<tr class="item" id="<?php echo $help['id'] ?>">
+							<td>
+								<div class="list-table-select" data-group="users"
+								     data-id="<?php echo $help['id'] ?>"></div>
+							</td>
+							<td><?php echo $help['id'] ?></td>
+							<td><?php echo lang($help['title']) ?></td>
+							<td><?php
+								$category = get_help($help['category']);
+								echo $category['title'];
+								?></td>
+							<td>
+								<?php echo date('d F Y  g:ia', $help['modify_time']) ?>
+							</td>
+
+							<td>
+								<div class="dropdown actions">
+									<a href="#" data-toggle="dropdown">
+										<i class="ion-android-settings"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a ajax="true" class="ion-edit"
+										   href='<?php echo url_to_pager('admincp-help-manage').'?action=edit&id='.$help['id'] ?>'></a>
+										|
+										<a ajax="true" class="admin-confirm ion-android-delete"
+										   href="<?php echo url_to_pager('admincp-help-manage').'?action=delete&id='.$help['id'] ?>"></a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<?php echo $helps->links() ?>
+	</div>
+</div>

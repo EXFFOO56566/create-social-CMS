@@ -1,0 +1,6 @@
+<input value="<?php echo $coupon ?>" class="validate-coupon-input" type='text' placeholder='Enter coupon code' size='20' name='val[promotion_coupon]'/>
+<button onclick="return check_coupon_validity()" id="validate-coupon" class="validate-coupon btn btn-primary"> Use Coupon</button>
+<div id="promotion-coupon-indicator" style="display: none">
+	<img style="height: 20px;float: right;margin-bottom: 23px;margin-right: 295px;margin-top: -30px;" src="<?php echo img('images/loading.gif') ?>">
+</div>
+<span id="promotion-coupon-error" style="display: none;" class="alert-danger"> <?php echo lang('coupon-error') ?></span>
